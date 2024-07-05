@@ -1,0 +1,141 @@
+﻿
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Defaulter List</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Defaulter List</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Main content -->
+            <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+            <div class="col-lg-3 form-group offset-lg-4 offset-md-0 col-sm-12 col-md-6 offset-sm-0"> <input type="search" id="srch" class="form-control has-Search" onkeyup="cc()" placeholder="Search" /></div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">DataTable with default features</h3>
+                </div>
+                <script>
+                    function cc() {
+
+                        var v = $('#srch').val();
+
+                        $.ajax({
+                            url: '/Report/defaulter',
+                            type: 'POST',
+                            data: {
+                                search1: v
+
+                            },
+                            success: function (data) {
+
+                                if (data == "[]") {
+
+                                    var table = $('#example1').DataTable();
+                                    table.clear();
+                                    table.draw();
+                                } else {
+                                    var table = $('#example1').DataTable();
+                                    table.clear();
+
+
+                                    var obj = JSON.parse(data);
+                                    var tr;
+
+                                    //Append each row to html table
+                                    for (var i = 0; i < obj.length; i++) {
+                                        tr = $('<tr/>');
+                                        tr.append("<td>" + obj[i].Reg_No + "</td>");
+                                        tr.append("<td>" + obj[i].Applicant_Name + "</td>");
+                                        tr.append("<td>" + obj[i].Cell_No + "</td>");
+
+
+
+
+
+
+                                        tr.append("<td>" + obj[i].Net.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                        tr.append("<td>" + obj[i].Paid_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                        tr.append("<td>" + obj[i].due.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                        tr.append("<td>" + obj[i].defaulter.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                        tr.append("<td>" + obj[i].last_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                        tr.append("<td>" + obj[i].Pocession_Payment.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+
+                                        var today = new Date(obj[i].last_paid_date);
+                                        var dd = today.getDate();
+
+                                        var mm = today.getMonth() + 1;
+                                        var yyyy = today.getFullYear();
+                                        if (dd < 10) {
+                                            dd = '0' + dd;
+                                        }
+
+                                        if (mm < 10) {
+                                            mm = '0' + mm;
+                                        }
+                                        today = yyyy + '-' + mm + '-' + dd;
+
+                                        tr.append("<td>" + today + "</td>");
+                                   
+                                        table.row.add(tr);
+
+                                        table.draw();
+
+
+                                    }
+                                }
+
+                            }
+                        });
+
+
+                    }
+                </script>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">Ref#</th>
+                                <th style="width: 10%">Member Name</th>
+
+                                <th style="width: 10%">Phone No</th>
+
+                                <th style="width: 10%">Net Price</th>
+                                <th style="width: 10%">Paid Amount</th>
+                                <th style="width: 10%">Due Amount</th>
+                                <th style="width: 10%">Defaulter Amount</th>
+                                <th style="width: 10%">Last Paid Amount</th>
+                                <th style="width: 10%">Last Paid Date</th>
+                                <th style="width: 10%">Pocession</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+

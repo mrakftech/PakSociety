@@ -1,0 +1,166 @@
+﻿@model Society.Data.Employee
+    @using Society.Data
+@{
+    ViewBag.Title = "Add_Employee";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+
+
+<div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add New Employee</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Employee Add</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form action="Add_Employee" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Employee Details</h3>
+                            </div>
+                            <div class="card-body">
+
+
+
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">User Name</label>
+                                    <input type="text" class="form-control" placeholder="CNIC (61101400000001)"
+                                            name="CNIC" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Joining Date</label>
+                                    <input type="date" class="form-control" name="Joining_Date" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputClientCompany">First Name</label>
+                                    <input type="text" class="form-control" placeholder="FirstName" name="F_Name"
+                                           required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputClientCompany">Last Name</label>
+                                    <input type="text" class="form-control" placeholder="LastName" name="L_Name"
+                                           required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Date of Birth</label>
+                                    <input type="date" class="form-control" name="DOB" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Email Address</label>
+                                    <input type="text" class="form-control" placeholder="Email Address" name="Email" />
+                                </div>
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Address</label>
+                                    <input type="text" class="form-control" placeholder="Address" 
+                                           name="Address" id="Address" />
+                                </div>
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Designation</label>
+                                    <input type="text" class="form-control" placeholder="Email Address" name="Designation" />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Phone Number</label>
+                                    <input type="text" class="form-control" placeholder="Phone Number" name="Phone_Number" />
+                                </div>
+
+
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Gender</label>
+                                    <select type="text" class="form-control"
+                                            name="Gender">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Martial Status</label>
+                                    <select type="text" class="form-control"
+                                            name="Martial_Status">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        <option value="Married">Married</option>
+                                        <option value="UnMarried">UnMarried</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Type</label>
+                                    <select type="text" class="form-control"
+                                            name="Type">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        <option>Admin</option>
+                                        <option>Employee</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Roles</label>
+                                    <select type="text" class="form-control"
+                                            name="Roles_ID">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        @foreach (role r in ViewBag.roles)
+                                        {
+                                            <option value="@r.Roles_ID">@r.Title</option>
+                                        }
+
+                                        
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Status</label>
+                                    <select type="text" class="form-control"
+                                            name="Status">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        <option value="True">Active</option>
+                                        <option value="False">UnActive</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Password</label>
+                                    <input type="text" class="form-control" placeholder="Phone Number" name="Password" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Profile Image</label>
+                                    <input type="file" class="form-control"  placeholder="Profile_Picture" name="Profile_Picture" />
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input type="submit" value="Add Employee" class="btn btn-success float-right">
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+
+}

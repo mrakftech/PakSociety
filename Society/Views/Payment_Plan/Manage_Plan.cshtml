@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Society.Data.Installment_Plan>
+@{
+    ViewBag.Title = "Manage_Plan";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>Payment Plan</h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                    <li class="breadcrumb-item active">Accounts</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-10 offset-md-11">
+                            <div class="card-tools">
+                                <a href="/Payment_Plan/Add_Plan" class="btn btn-primary"> Add New</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 10%">Unit No</th>
+                                    <th style="width: 10%">Unit Type</th>
+                                    <th style="width: 10%">Booking</th>
+                                    @*<th style="width: 10%">Confirmation</th>
+                                    <th style="width: 10%">No of Monthly</th>
+                                    <th style="width: 10%">Total Monthly</th>*@
+                                    <th style="width: 10%">No of Quaterly</th>
+                                    <th style="width: 10%">Total Quaterly</th>
+                                    <th style="width: 10%">Scheme</th>
+                                    @*<th style="width: 10%">Pocession</th>*@
+                                    <th style="width: 10%">Total</th>
+                                    <th style="width: 10%">Action</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+                            @foreach (var x in Model)
+                            {
+                        <tr>
+                            <td>@count</td>
+                            <td>@x.Plan_Name</td>
+                            <td>@x.Plot_Type</td>
+                            @{double amount = (double)x.Booking;
+                                //double amount1 = (double)x.Allocation;
+                                //double amount3 = (double)x.Monthly;
+                                double amount4 = (double)x.Quatlerly_installment;
+                                //double amount5 = (double)x.Pocession;
+                                double amount6 = (double)x.Total_Price;
+                            }
+                            <td>@amount.ToString("n2")</td>
+                            @*<td>@amount1.ToString("n2")</td>
+
+                            <td>@x.No_Of_Monthly</td>
+                            <td>@amount3.ToString("n2")</td>*@
+                            <td>@x.NoOfQuaterly</td>
+
+                            <td>@amount4.ToString("n2")</td>
+                            
+                            @if (x.Scheme == true)
+                            {
+
+                                <td><span class="badge badge-success">New</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="badge badge-warning">Old</span></td>
+                            }
+
+                            @*<td>@amount5.ToString("n2")</td>*@
+                            <td>@amount6.ToString("n2")</td>
+                            <td>
+                                <a title="member" class="btn btn-outline-info btn-sm m-1" href="/Payment_Plan/ShowMember?id=@x.ID"><i class="fas fa-file-alt"></i></a>
+                                <a title="delete" href="/Payment_Plan/Delete?id=@x.ID" onclick="return confirm('Are you sure U Want to delete Record?')" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+
+                            </td>
+                        </tr>
+                                count = count + 1;
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+                                }

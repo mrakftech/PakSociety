@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Society.Data.OpenFile>
+@{
+    ViewBag.Title = "Manage_Shifts";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form runat="server">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Open File</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Open File</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+                            <div class="col-md-10 offset-md-11">
+
+
+
+
+
+
+
+                                <div class="card-tools">
+                                    <a href="/OpenFiles/AddNew_OpenFile" class="btn btn-primary"> Add New</a>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">PB#</th>
+                                    <th style="width: 20%">IssueDate</th>
+                                    <th style="width: 20%">RefNo</th>
+                                    <th style="width: 20%">Dealer</th>
+                                    <th style="width: 20%">Balance</th>
+                                    <th style="width: 30%">Action</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@x.PBNo</td>
+                                    <td>@{
+                                        var data = new DateTime();
+                                        if (x.IssueDate != null) { data =(DateTime) x.IssueDate; } }@data.ToString("dd-MM-yy")</td>
+                                    <td>@x.RefNo</td>
+                                    <td>@x.Dealer</td>
+                                    <td>@x.Balance</td>
+                                    <td>
+                                        <a class="btn btn-info btn-sm m-1" href="/OpenFiles/Update?id=@x.Id"><i class="fas fa-pencil-alt"></i></a>
+                                        <a class="btn btn-danger btn-sm m-1" href="/OpenFiles/Delete?id=@x.Id"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}

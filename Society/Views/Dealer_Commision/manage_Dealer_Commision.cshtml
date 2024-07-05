@@ -1,0 +1,307 @@
+﻿@model dynamic
+    @using Society.Data
+
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Dealer Commision</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Dealer Commision</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+      <div class=" col-md-6 col-sm-12 offset-lg-10 offset-sm-0 offset-md-0 ">
+
+
+
+
+
+
+
+          <div class="card-tools">
+              @if (Model.Dealer_Commsion_ID == null)
+              {
+
+                  <a onclick="markinstallmentpaidOpenModelDealer(@Model.Dealer_Commsion_ID)" class="btn btn-primary disabled col-lg-3 col-md-6 col-sm-12 ml-3"> Add New</a>
+              }
+              else
+              { <a onclick="markinstallmentpaidOpenModelDealer(@Model.Dealer_Commsion_ID)" class="btn btn-primary col-lg-3 col-md-6 col-sm-12 ml-3"> Add New</a>
+              }
+
+          </div>
+
+
+
+
+
+      </div>
+        <section class="content">
+
+
+
+
+            <div class="modal" tabindex="-1" role="dialog" id="modelPayInstallment">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Dealer Payment</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputName">Payment Date:</label>
+                                        <input type="date" id="txtPaymentDate" class="form-control"
+                                               placeholder="Payment Date" name="txtPaymentDate" required value="@DateTime.Today.ToString("yyyy-MM-dd")">
+
+                                        <input type="hidden" name="ID" id="ID" value="" />
+                                        <input type="hidden" name="Dealer_Commsion_ID" id="Dealer_Commsion_ID" value="" />
+                                    </div>
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputName">Payment Amount:</label>
+                                        <input type="text" id="txtPaymentAmount" class="form-control amount" readonly
+                                               placeholder="Payment Amount" name="txtPaymentAmount" onclick="addComma('amount');" required>
+
+                                    </div>
+
+                                    <script>
+                                        function addComma(id) {
+                                            $("." + id).keyup(function (event) {
+
+                                                // skip for arrow keys
+                                                if (event.which >= 37 && event.which <= 40) return;
+
+                                                // format number
+                                                $(this).val(function (index, value) {
+                                                    return value
+                                                        .replace(/\D/g, "")
+                                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                                        ;
+                                                });
+                                            });
+                                        }</script>
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputName">Payment Mode:</label>
+                                        <select type="text" name="Payment_mode" class="form-control"
+                                                placeholder="Payment Mode" onchange="select_check_no1(this)">
+
+                                            <option value="BPV">Bank</option>
+                                            <option value="CPV">Cash</option>
+                                           
+                                        </select>
+                                    </div>
+                                    <script>
+                                        function select_check_no1(ctrl) {
+
+                                            if (ctrl.value == "BPV") {
+                                                $('#checkno').show();
+                                                $('#check_date').show();
+                                            }
+                                            else {
+
+                                                $('#check_date').hide();
+                                            }
+                                            var type = ctrl.value;
+                                            $.ajax({
+                                                url: '/Member/Change',
+                                                type: 'POST',
+                                                data: {
+                                                    type: type
+
+                                                },
+                                                success: function (data) {
+
+                                                    $('#secondledger').empty();
+                                                    $('#secondledger').html('');
+                                                    var options = '';
+                                                    options += '';
+                                                    for (var i = 0; i < data.length; i++) {
+                                                        options += '<option value="' + data[i].Ledger_Complete_Code + '">' + data[i].Ledger_Account_Title + '</option>';
+                                                    }
+
+                                                    $('#secondledger').append(options);
+
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                    <div class="form-group col-6 float-left" id="checkno">
+                                        <label for="inputName">Narration:</label>
+                                        <input type="text" id="checknumber" class="form-control"
+                                               placeholder="Narration" name="checknumber">
+                                    </div>
+                                    <div class="form-group col-6 float-left" id="check_date">
+                                        <label for="inputName">Cheque Date:</label>
+                                        <input type="date" id="checkdate" class="form-control"
+                                               placeholder="Check Number" name="checkDate">
+                                    </div>
+                                    <div class="form-group col-3 float-left">
+                                        <label for="inputName">Debit Account:</label>
+                                        <select type="text" name="firstledger" id="firstledger" class="form-control" required
+                                                placeholder="Payment Mode">
+
+
+                                            <option value="@Model.credit_account.Ledger_Complete_Code">@Model.credit_account.Ledger_Account_Title</option>
+
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="ID"/>
+                                    <div class="form-group col-3 float-left">
+                                        <label for="inputName">&nbsp;</label>
+                                        <select type="text" name="firsttype" class="form-control"
+                                                placeholder="Payment Mode" required>
+                                            <option value="D">Debit</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-3 float-left">
+                                        <label for="inputName">Credit Account:</label>
+                                        <select type="text" name="secondledger" id="secondledger" class="form-control"
+                                                placeholder="Payment Mode" required>
+                                            @foreach (Ledger_Account l in Model.ledger)
+                                            {
+
+                                                <option value="@l.Ledger_Complete_Code">@l.Ledger_Account_Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-3 float-left">
+                                        <label for="inputName">&nbsp;</label>
+                                        <select type="text" name="secondtype" class="form-control"
+                                                placeholder="Payment Mode">
+                                            <option value="C">Credit</option>
+
+
+                                        </select>
+                                    </div>
+                                  
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputName">Image Proof:</label>
+                                        <input type="file" id="txtPaymentModeImage" class="form-control"
+                                               onchange="previewFormImageFile('txtPaymentModeImage','imgPreviewInstalmentImage')"
+                                               name="txtPaymentModeImage">
+                                    </div>
+
+
+
+                                    <input type="hidden" id="comment" class="form-control"
+                                           placeholder="Voucher Number" name="comment">
+
+
+                                   
+                                </div>
+                                <div class="modal-footer" style="margin-top:400px">
+                                    <input type="submit" class="btn btn-primary" value="Save" onclick="this.form.submit();this.disabled=true;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                               
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">DataTable with default features</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">Dealer Name</th>
+                                <th style="width: 20%">Reg_No</th>
+                                <th style="width: 20%">Due Date</th>
+                                <th style="width: 20%">Pay Date</th>
+                                <th style="width: 20%">Due Amount</th>
+                                <th style="width: 10%">Status</th>
+
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+
+                        @foreach (Dealer_Commision_Detail x in Model.dealer_data)
+                        {
+                    <tr>
+
+                        <td>@x.Dealer_Commision.Dealer.Company_Name</td>
+                        <td>@x.Dealer_Commision.Member.Plots.FirstOrDefault(o => o.Member_ID == x.Dealer_Commision.Member_id).Reg_No</td>
+                        <td>@x.Due_date.ToString("dd-MM-yyyy")</td>
+                        @if(x.Pay_date == null)
+                        {
+
+
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            DateTime d =(DateTime) x.Pay_date;
+                            <td>@d.ToString("dd-MM-yyyy")</td>
+                        }
+
+                        <td>@x.Due_Amount.ToString("n0")</td>
+
+                        @if (x.Status == false)
+                        {
+                            <td><span class="badge badge-warning">Un Paid</span> </td>
+                        }
+                        else
+                        {
+                            <td><span class="badge badge-success">Paid</span></td>
+                        }
+                        @if (x.Status == false)
+                        {
+                        <td>
+                            <button onclick="markinstallmentpaidOpenModel('@x.ID', '@x.Due_Amount', '@x.Dealer_Commsion_ID')" class="btn btn-primary btn-sm m-1" title="Paid"><i class="fas fa-folder"></i></button>
+                        </td>}
+                    else { <td>
+    <button onclick="markinstallmentpaidOpenModel('@x.ID','@x.Due_Amount')" disabled class="btn btn-primary btn-sm m-1" title="Paid"><i class="fas fa-folder"></i></button>
+</td>}
+                    </tr>
+}
+
+
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        function markinstallmentpaidOpenModel(id, amount, Dealer_Commsion_ID) {
+            $('#ID').val(id);
+            $('#Dealer_Commsion_ID').val(Dealer_Commsion_ID);
+            $('#txtPaymentAmount').val(amount);
+            $('#txtPaymentAmount').attr("readonly", true);
+            $('#modelPayInstallment').modal({
+                show: true,
+                backdrop: false,
+            })
+        }
+        function markinstallmentpaidOpenModelDealer(Dealer_Commsion_ID) {
+            $('#ID').val(0);
+            $('#txtPaymentAmount').val(0);
+            $('#Dealer_Commsion_ID').val(Dealer_Commsion_ID);
+            $('#txtPaymentAmount').attr("readonly", false) ;
+            $('#modelPayInstallment').modal({
+                show: true,
+                backdrop: false,
+            })
+        }
+    </script>
+}

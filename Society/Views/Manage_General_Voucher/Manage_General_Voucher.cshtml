@@ -1,0 +1,275 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "Manage_General_Voucher";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper" id="load">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Bank Payment Vouchers</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Vouchers</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="card card-primary card-tabs">
+                        <div class="card-header p-0 pt-1">
+                            <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                                <li class="pt-2 px-3">
+                                    <h3 class="card-title">Jurnal Vouchers</h3>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill"
+                                       href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home"
+                                       aria-selected="true">Pending</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill"
+                                       href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile"
+                                       aria-selected="false">Checked</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill"
+                                       href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages"
+                                       aria-selected="false">Approved</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Manage_Bank_Rec_Voucher/Add_Bank_Rec_Voucher?t=JV" class="btn btn-success"> Add New</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-two-tabContent">
+                                <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel"
+                                     aria-labelledby="custom-tabs-two-home-tab">
+                                    <table class="table table-striped projects">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 1%">#</th>
+                                                <th style="width: 9%">Voucher#</th>
+                                                <th style="width: 10%">Voucher Date</th>
+
+                                                <th>Particulars</th>
+                                                <th>Amount</th>
+                                                <th style="width: 20%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (reciept_vouchers x in Model.Pending_Amount)
+                                            {
+                                                if (x.IsApproved == 0 && x.IsChecked == 0)
+                                                {
+                                                    <tr>
+                                                        <td>@x.RV_ID</td>
+                                                        <td>@x.VoucherNum</td>
+                                                        <td>@x.VoucherDate.ToString()</td>
+
+                                                        <td>@x.Comments</td>
+                                                        @{var a = x.reciept_voucher_payment.Where(o => o.TransType == "C").Select(o => o.Amount).ToList().Sum();
+
+                                                            var b = x.reciept_voucher_payment.Where(o => o.TransType == "D").Select(o => o.Amount).ToList().Sum();
+                                                        }
+                                                        <td>Dr:Rs   @a Cr:Rs @b</td>
+                                                        <td class="project-actions text-right">
+                                                            <a class="btn btn-secondary btn-sm m-1" title="Preview" target="_blank" href="/Manage_Bank_Rec_Voucher/voucherpreview?VoucherNum=@x.VoucherNum"><i class="fas fa-eye"></i> </a>
+
+                                                            <a class="btn btn-warning btn-sm m-1" title="Check" href="javascript:markVoucherChecked('@x.VoucherNum','C')"><i class="fas fa-check"></i> </a>
+                                                        </td>
+                                                    </tr>
+                                                                }
+
+                                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
+                                     aria-labelledby="custom-tabs-two-profile-tab">
+                                    <table class="table table-striped projects">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 1%">#</th>
+                                                <th style="width: 9%">Voucher#</th>
+                                                <th style="width: 10%">Voucher Date</th>
+
+                                                <th>Particulars</th>
+                                                <th>Amount</th>
+                                                <th style="width: 20%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (reciept_vouchers x in Model.Pending_Amount)
+                                            {
+                                                if (x.IsApproved == 0 && x.IsChecked == 1)
+                                                {
+                                                    <tr>
+                                                        <td>@x.RV_ID</td>
+                                                        <td>@x.VoucherNum</td>
+                                                        <td>@x.VoucherDate.ToString()</td>
+
+                                                        <td>@x.Comments</td>
+                                                        @{var a = x.reciept_voucher_payment.Where(o => o.TransType == "C").Select(o => o.Amount).ToList().Sum();
+
+                                                            var b = x.reciept_voucher_payment.Where(o => o.TransType == "D").Select(o => o.Amount).ToList().Sum();
+                                                        }
+                                                        <td>Dr:Rs   @a Cr:Rs @b</td>
+                                                        <td class="project-actions text-right">
+                                                            <a class="btn btn-secondary btn-sm m-1" title="Preview" target="_blank" href="/Manage_Bank_Rec_Voucher/voucherpreview?VoucherNum=@x.VoucherNum"><i class="fas fa-eye"></i> </a>
+
+                                                            <a class="btn btn-danger btn-sm m-1" title="un-Check" href="javascript:markVoucherChecked('@x.VoucherNum','U')"><i class="fas fa-trash"></i> </a>
+                                                            <a class="btn btn-success btn-sm m-1" title="Approve" href="javascript:markVoucherApproved('@x.VoucherNum','C')"><i class="fas fa-certificate"></i> </a>
+                                                        </td>
+                                                    </tr>
+                                                                }
+
+                                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel"
+                                     aria-labelledby="custom-tabs-two-messages-tab">
+                                    <table class="table table-striped projects">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 1%">#</th>
+                                                <th style="width: 9%">Voucher#</th>
+                                                <th style="width: 10%">Voucher Date</th>
+
+                                                <th>Particulars</th>
+                                                <th>Amount</th>
+                                                <th style="width: 20%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (reciept_vouchers x in Model.Pending_Amount)
+                                            {
+                                                if (x.IsApproved == 1 && x.IsChecked == 1)
+                                                {
+                                                    <tr>
+                                                        <td>@x.RV_ID</td>
+                                                        <td>@x.VoucherNum</td>
+                                                        <td>@x.VoucherDate.ToString()</td>
+
+                                                        <td>@x.Comments</td>
+                                                        @{var a = x.reciept_voucher_payment.Where(o => o.TransType == "C").Select(o => o.Amount).ToList().Sum();
+
+                                                            var b = x.reciept_voucher_payment.Where(o => o.TransType == "D").Select(o => o.Amount).ToList().Sum();
+                                                        }
+                                                        <td>Dr:Rs   @a Cr:Rs @b</td>
+                                                        <td class="project-actions text-right">
+                                                            <a class="btn btn-secondary btn-sm m-1" title="Preview" target="_blank" href="/Manage_Bank_Rec_Voucher/voucherpreview?VoucherNum=@x.VoucherNum"><i class="fas fa-eye"></i> </a>
+
+                                                            <a class="btn btn-danger btn-sm m-1" title="un-Check" href="javascript:markVoucherApproved('@x.VoucherNum','U')"><i class="fas fa-trash"></i> </a>
+
+                                                        </td>
+                                                    </tr>
+                                                                }
+
+                                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <script>
+
+
+                                    function markVoucherChecked(id, c) {
+                                        var msg = "";
+                                        if (c === 'C') {
+                                            msg = "Are you sure you want to mark this voucher checked?";
+                                        } else {
+                                            msg = "Are you sure you want to mark this voucher un-checked?";
+                                        }
+                                        var res = confirm(msg);
+                                        if (res) {
+                                            $.ajax({
+                                                url: "/Manage_Bank_Rec_Voucher/checkVoucher",
+                                                type: "POST",
+                                                data: {
+                                                    ID: id,
+                                                    Type: c
+                                                },
+                                                cache: false,
+                                                success: function (data) {
+                                                    //  dataResult = JSON.parse(dataResult);
+                                                    if (data == 200) {
+                                                        if (c === 'C') {
+                                                            msg = "Voucher marked as Checked Successfully.";
+                                                        } else {
+                                                            msg = "Voucher marked as Un-Checked Successfully.";
+                                                        }
+                                                        alert(msg);
+
+
+
+                                                        window.location.href = "/Manage_General_Voucher/Manage_General_Voucher";
+
+                                                    } else {
+                                                        $.alert('Something went wrong.');
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    function markVoucherApproved(id, c) {
+                                        var msg = "";
+                                        if (c === 'C') {
+                                            msg = "Are you sure you want to mark this voucher approved?";
+                                        } else {
+                                            msg = "Are you sure you want to mark this voucher un-approved?";
+                                        }
+                                        var res = confirm(msg);
+                                        if (res) {
+                                            $.ajax({
+                                                url: "/Manage_Bank_Rec_Voucher/approvedVoucher",
+                                                type: "POST",
+                                                data: {
+                                                    ID: id,
+                                                    type: c
+                                                },
+                                                cache: false,
+                                                success: function (data) {
+
+                                                    if (data == 200) {
+                                                        if (c === 'C') {
+                                                            msg = "Voucher marked as Approved Successfully.";
+                                                        } else {
+                                                            msg = "Voucher marked as Un-Approved Successfully.";
+                                                        }
+                                                        alert(msg);
+                                                        window.location.href = "/Manage_General_Voucher/Manage_General_Voucher";
+                                                    } else {
+                                                        $.alert('Something went wrong.');
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+                                                            }
+
+

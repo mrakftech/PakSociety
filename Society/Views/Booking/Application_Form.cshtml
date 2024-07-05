@@ -1,0 +1,634 @@
+﻿@model dynamic
+    @using Society.Data;
+@{
+    ViewBag.Title = "Application_Form";
+}
+
+<div class="content-wrapper" id="load">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Member's Information</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Member</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header p-0 pt-1">
+                        <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                           
+                            <li class="nav-item" style="width:210px;text-align:center">
+                                <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill"
+                                   href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home"
+                                   aria-selected="true">Application Form</a>
+                            </li>
+                            <li class="nav-item"style="width:210px;text-align:center" >
+                                <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill"
+                                   href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile"
+                                   aria-selected="false">Member Registration</a>
+                            </li>
+                            <li class="nav-item"style="width:210px;text-align:center" >
+                                <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill"
+                                   href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages"
+                                   aria-selected="false">Plot Allocation</a>
+                            </li>
+                            <li class="nav-item"style="width:210px;text-align:center" >
+                                <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill"
+                                   href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages"
+                                   aria-selected="false">Member Payment</a>
+                            </li>
+                            <li class="nav-item"style="width:210px;text-align:center" >
+                                <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill"
+                                   href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages"
+                                   aria-selected="false">Plot Allocation</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="custom-tabs-two-tabContent">
+                            <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel"
+                                 aria-labelledby="custom-tabs-two-home-tab">
+
+                                <div class="card-body">
+                                    <div class="form-group col-1 float-left">
+                                        <input type="hidden" id="Member__ID" name="Member__ID" value="@Model.member.Member__ID" />
+                                        <label for="inputName">Applicant_Name</label>
+                                        <select type="text" id="Applicant_Start_Text" class="form-control" placeholder="Genger" name="Applicant_Start_Text" required>
+                                            @if (Model.member.Applicant_Start_Text == "Mr.")
+                                            {
+
+                                                <option selected>Mr.</option>
+
+
+                                                <option>Mrs.</option>
+                                            }
+                                            else
+                                            {
+                                                <option selected>Mrs.</option>
+                                                <option>Mr.</option>
+                                            }
+
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-5 float-left" style="margin-top:8px">
+                                        <label for="inputName"></label>
+                                        <input type="text" id="Applicant_Name" class="form-control" value="@Model.member.Applicant_Name" placeholder="Applicant_Name" name="Applicant_Name" required />
+                                    </div>
+
+
+                                    <div class="form-group col-1 float-left">
+                                        <label for="inputName">Father_Husband_Name</label>
+                                        <select type="text" id="Father_Husband_Start_Text" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Start_Text" required>
+                                            @if (Model.member.Father_Husband_Start_Text == "Mr.")
+                                            {
+
+                                                <option selected>Mr.</option>
+
+
+                                                <option>Mrs.</option>
+                                            }
+                                            else
+                                            {
+                                                <option selected>Mrs.</option>
+                                                <option>Mr.</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-5 float-left" style="margin-top:8px">
+                                        <label for="inputName"></label>
+                                        <input type="text" id="Father_Husband_Name" value="@Model.member.Father_Husband_Name" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Name" required />
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputName">Application Date :</label>
+                                        <input type="date" id="Application_Date" value="@Model.member.Application_Date" class="form-control" placeholder="Application Date" name="Application_Date" required />
+                                    </div>
+
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputName">Form Number</label>
+                                        <input type="text" id="Form_No" class="form-control" value="@Model.member.Form_No" placeholder="Form_No" name="Form_No" />
+                                    </div>
+
+
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputName">CNIC #</label>
+                                        <input type="text" id="CNIC" class="form-control" value="@Model.member.CNIC" placeholder="CNIC" name="CNIC" required />
+                                    </div>
+
+
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputName">Gender</label>
+                                        <select type="text" id="Genger" class="form-control" placeholder="Genger" name="Genger" required>
+                                            @if (Model.member.Genger == "Male")
+                                            {
+
+                                                <option selected>Male</option>
+
+
+                                                <option>Female</option>
+                                            }
+                                            else
+                                            {
+                                                <option selected>Female</option>
+                                                <option>Male</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputClientCompany">Occupation</label>
+                                        <input type="text" class="form-control" value="@Model.member.Occupation" placeholder="Occupation" name="Occupation" id="Occupation" required />
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Desigantion</label>
+                                        <input type="text" class="form-control" value="@Model.member.Desigantion" placeholder="Desigantion" name="Desigantion" id="Desigantion" required />
+                                    </div>
+
+
+
+
+
+
+
+
+
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputProjectLeader">Present_Postel_Address</label>
+                                        <textarea type="email" class="form-control" placeholder="Present_Postel_Address" name="Present_Postel_Address" id="Present_Postel_Address" required>@Model.member.Present_Postel_Address</textarea>
+                                    </div>
+
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputProjectLeader">Permenent_Postel_Address</label>
+                                        <textarea type="email" class="form-control" placeholder="Permenent_Postel_Address" name="Permenent_Postel_Address" id="Permenent_Postel_Address" required>@Model.member.Permenent_Postel_Address</textarea>
+                                    </div>
+
+
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Phone Office</label>
+                                        <input type="text" class="form-control" value="@Model.member.Office_No" placeholder="Office_No" required name="Office_No" id="Office_No" />
+                                    </div>
+
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Cell_No</label>
+                                        <input type="text" class="form-control" value="@Model.member.Cell_No" placeholder="Cell_No" required name="Cell_No" id="Cell_No" />
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Email</label>
+                                        <input type="Email" class="form-control" value="@Model.member.Email" placeholder="Email" required name="Email" id="Email" />
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Residence</label>
+                                        <input type="text" class="form-control" placeholder="Residence" value="@Model.member.Residence" required name="Residence" id="Residence" />
+                                    </div>
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputProjectLeader">Referred_By</label>
+                                        <select type="text" class="form-control" placeholder="Residence" required name="Referred_By" id="Referred_By">
+                                            <option>Select Item</option>
+                                            @foreach (Dealer d in Model.dealer)
+                                            {
+                                                if (d.Dealer_ID == Model.member.Referred_By)
+                                                {
+                                                    <option selected value="@d.Dealer_ID">@d.Dealer_Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@d.Dealer_ID">@d.Dealer_Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-4  float-left">
+                                        <label for="inputProjectLeader">Nominee_Name</label>
+                                        <input type="text" class="form-control" placeholder="Nominee_Name" value="@Model.member.Nominee_Name" required name="Nominee_Name" id="Nominee_Name" />
+                                    </div>
+                                    <div class="form-group col-4  float-left">
+                                        <label for="inputProjectLeader">Nominee_CNIC</label>
+                                        <input type="text" class="form-control" placeholder="Nominee_CNIC" value="@Model.member.Nominee_CNIC" required name="Nominee_CNIC" id="Nominee_CNIC" />
+                                    </div>
+                                    <div class="form-group col-4  float-left">
+                                        <label for="inputProjectLeader">Relation</label>
+                                        <input type="text" class="form-control" placeholder="Relation" value="@Model.member.Relation" required name="Relation" id="Relation" />
+                                    </div>
+                                    <div class="form-group col-4  float-left">
+                                        <label for="inputProjectLeader">Nominee_Phone_No</label>
+                                        <input type="text" class="form-control" placeholder="Nominee_Phone_No" value="@Model.member.Nominee_Phone_No" required name="Nominee_Phone_No" id="Nominee_Phone_No" />
+                                    </div>
+                                    <div class="form-group col-6 float-left">
+                                        <label for="inputProjectLeader">Nominee_Address</label>
+                                        <textarea type="email" class="form-control" placeholder="Nominee_Address" name="Nominee_Address" id="Nominee_Address" required>@Model.member.Nominee_Address</textarea>
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Plot_Category</label>
+                                        <select type="text" class="form-control" placeholder="Residence" required name="Plot_Catagory_ID" id="Plot_Catagory_ID">
+                                            <option>Select Item</option>
+                                            @foreach (Plot_Category plot in Model.plot_category)
+                                            {
+                                                if (plot.Plot_Category_ID == Model.member.Plot_Category_ID)
+                                                {
+                                                    <option selected value="@plot.Plot_Category_ID">@plot.Category_Title</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@plot.Plot_Category_ID">@plot.Category_Title</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-4 float-left">
+                                        <label for="inputProjectLeader">Plot_Size</label>
+                                        <select type="text" class="form-control" placeholder="Residence" required name="Plot_Size" id="Plot_Size">
+                                            <option>Select Item</option>
+                                            @foreach (Plot_Size plot in Model.plot_size)
+                                            {
+                                                if (plot.Plot_Size_ID == Model.member.Plot_Size_ID)
+                                                {
+                                                    <option selected value="@plot.Plot_Size_ID">@plot.Plot_Size_Title</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@plot.Plot_Size_ID">@plot.Plot_Size_Title</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-4 float-left offset-8">
+                                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.member.Profile_Img))" style="width: 200px;height: 150px;" />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <input value="Update Information" onclick="insert_member_registration()" class="btn btn-success float-right">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <script>
+                                function insert_member_registration() {
+                                    var id = $('#Member__ID').val();
+                                    $.ajax({
+                                        url: '/Booking/insert_member_registration',
+                                        type: 'POST',
+                                        data: {
+                                            id: id
+
+
+                                        },
+                                        cache: false,
+                                        success: function (data) {
+                                            
+                                            var obj = JSON.parse(data);
+                                            $("#custom-tabs-two-home-tab").removeClass("active"); //Hide all content
+                                            $("#custom-tabs-two-profile-tab").addClass("active").show();
+                                            $("#custom-tabs-two-home").removeClass("active");//Activate first tab
+                                            $("#custom-tabs-two-profile").addClass("show active").show();
+                                            document.getElementById('Reg_CNIC').innerHTML += '' + obj.CNIC + '';;
+                                            document.getElementById('Reg_Name').innerHTML += ''+ obj.Applicant_Name +'';;
+                                            document.getElementById('Reg_Father').innerHTML += '' + obj.Father_Husband_Start_Text+'' + obj.Father_Husband_Name + '';;
+                                            document.getElementById('Reg_Address').innerHTML += '' + obj.Permenent_Postel_Address + '';;
+                                            $('#Registration_ID').val(obj.Registration_ID);
+                                            $('html,body').scrollTop(0);
+                                            
+                                           
+                                        }
+
+
+
+                                    });
+
+                                }
+                            </script>
+                            <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
+                                 aria-labelledby="custom-tabs-two-profile-tab">
+                               
+
+                                <div class="card-body">
+                                    <div class="form-group col-4 float-right" style="margin-right:100px">
+                                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.member.Profile_Img))" style="width: 200px;height: 150px;" />
+                                    </div>
+
+                                    <div class="form-group col-6  float-left" id="Reg_CNIC">
+                                        <label for="inputName">CNIC</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    </div>
+
+                                    <div class="form-group col-6  float-left" id="Reg_Name">
+                                        <label for="inputName">Name</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    </div>
+
+                                    <div class="form-group col-6  float-left" id="Reg_Father">
+                                        <label for="inputName">F/H name</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div class="form-group col-6  float-left" id="Reg_Address">
+                                        <label for="inputName">Address</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    
+
+
+                                </div>
+
+                                    <section>
+                                        <div class="card-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            <div class="row">
+                                                <div class="form-group col-4   float-left">
+                                                    <label for="inputProjectLeader">Registration No</label>
+                                                    <input type="text" class="form-control" placeholder="Registration No" required name="Registration_No" id="Registration_No" />
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="Registration_ID" id="Registration_ID"/>
+                                            <div class="row">
+                                                <div class="form-group col-4   float-left">
+                                                    <label for="inputProjectLeader">Registration date</label>
+                                                    <input type="date" class="form-control" placeholder="Registration date" required name="Registration_date" id="Registration_date" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-4   float-left">
+                                                    <label for="inputProjectLeader">Amount Paid</label>
+                                                    <input type="text" class="form-control" placeholder="Amount Paid" required name="Amount_Paid" id="Amount_Paid" />
+                                                </div>
+                                            </div>
+                                            <div class="row"style="margin-top:20px">
+                                                <div class="col-12">
+                                                    <input onclick="update_member_registration()"  value="Update Information" class="btn btn-success">
+                                                </div>
+                                            </div>
+
+                                            <script>
+                                                function update_member_registration() {
+                                                    var Registration_No = $('#Registration_No').val();
+                                                    var Registration_date = $('#Registration_date').val();
+                                                    var Amount_Paid = $('#Amount_Paid').val();
+                                                    var id = $('#Registration_ID').val();
+                                                    $.ajax({
+                                                        url: '/Booking/update_member_registration',
+                                                        type: 'POST',
+                                                        data: {
+                                                            id: id,
+                                                            Registration_No: Registration_No,
+                                                            Registration_date: Registration_date,
+                                                            Amount_Paid: Amount_Paid
+
+
+
+                                                        },
+                                                        cache: false,
+                                                        success: function (data) {
+
+                                                            var obj = JSON.parse(data); 
+                                                            $("#custom-tabs-two-profile-tab").removeClass("active"); //Hide all content
+                                                            $("#custom-tabs-two-messages-tab").addClass("active").show();
+                                                            $("#custom-tabs-two-profile").removeClass("active");//Activate first tab
+                                                            $("#custom-tabs-two-messages").addClass("show active").show();
+                                                         //   document.getElementById('Reg_CNIC').innerHTML += '' + obj.CNIC + '';;
+                                                          //  document.getElementById('Reg_Name').innerHTML += '' + obj.Applicant_Name + '';;
+                                                          //  document.getElementById('Reg_Father').innerHTML += '' + obj.Father_Husband_Start_Text + '' + obj.Father_Husband_Name + '';;
+                                                         //   document.getElementById('Reg_Address').innerHTML += '' + obj.Permenent_Postel_Address + '';;
+                                                            $('html,body').scrollTop(0);
+
+
+
+                                                        }
+
+
+
+                                                    });
+
+                                                }
+                                            </script>
+
+
+
+                                        </div>
+                                    </section>
+                                
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel"
+                                 aria-labelledby="custom-tabs-two-messages-tab">
+                                <div class="card-body">
+                                    <div class="form-group col-4 float-right" style="margin-right:100px">
+                                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.member.Profile_Img))" style="width: 200px;height: 150px;" />
+                                    </div>
+
+                                    <div class="form-group col-6  float-left" id="Reg_CNIC">
+                                        <label for="inputName">CNIC</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    </div>
+
+                                    <div class="form-group col-6  float-left" id="Reg_Name">
+                                        <label for="inputName">Name</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    </div>
+
+                                    <div class="form-group col-6  float-left" id="Reg_Father">
+                                        <label for="inputName">F/H name</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div class="form-group col-6  float-left" id="Reg_Address">
+                                        <label for="inputName">Address</label>:&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+
+
+
+                                </div>
+
+                                <section>
+                                    <div class="card-body">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        <div class="row">
+                                            <div class="form-group col-4   float-left">
+                                                <label for="inputProjectLeader">Plot Allocated</label>
+                                                <input type="text" class="form-control" placeholder="Plot Allocated" required name="Plot_Allocated" id="Plot_Allocated" />
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="Registration_ID" id="Registration_ID" />
+                                        <div class="row">
+                                            <div class="form-group col-4   float-left">
+                                                <label for="inputProjectLeader">Allocated date</label>
+                                                <input type="date" class="form-control" placeholder="Registration date" required name="Allocation_Date" id="Allocation_Date" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-4   float-left">
+                                                <label for="inputProjectLeader">Plot Category</label>
+                                                <input type="text" class="form-control" placeholder="Plot_Category_ID" required name="Plot_Category_ID" id="Plot_Category_ID" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top:20px">
+                                            <div class="col-12">
+                                                <input onclick="insert_plot_allocation()" value="Update Information" class="btn btn-success">
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            function insert_plot_allocation() {
+                                                var Plot_Allocated = $('#Plot_Allocated').val();
+                                                var Allocation_Date = $('#Allocation_Date').val();
+                                                var Plot_Category_ID = $('#Plot_Category_ID').val();
+                                                var id = $('#Registration_ID').val();
+                                                $.ajax({
+                                                    url: '/Booking/insert_plot_allocation',
+                                                    type: 'POST',
+                                                    data: {
+                                                        id: id,
+                                                        Plot_Allocated: Plot_Allocated,
+                                                        Allocation_Date: Allocation_Date,
+                                                        Plot_Category_ID: Plot_Category_ID
+
+
+
+                                                    },
+                                                    cache: false,
+                                                    success: function (data) {
+
+                                                        var obj = JSON.parse(data);
+                                                        $("#custom-tabs-two-profile-tab").removeClass("active"); //Hide all content
+                                                        $("#custom-tabs-two-messages-tab").addClass("active").show();
+                                                        $("#custom-tabs-two-profile").removeClass("active");//Activate first tab
+                                                        $("#custom-tabs-two-messages").addClass("show active").show();
+                                                        //   document.getElementById('Reg_CNIC').innerHTML += '' + obj.CNIC + '';;
+                                                        //  document.getElementById('Reg_Name').innerHTML += '' + obj.Applicant_Name + '';;
+                                                        //  document.getElementById('Reg_Father').innerHTML += '' + obj.Father_Husband_Start_Text + '' + obj.Father_Husband_Name + '';;
+                                                        //   document.getElementById('Reg_Address').innerHTML += '' + obj.Permenent_Postel_Address + '';;
+
+                                                        $('html,body').scrollTop(0);
+
+
+                                                    }
+
+
+
+                                                });
+
+                                            }
+                                        </script>
+
+
+
+                                    </div>
+                                </section>
+                            </div>
+
+                            <script>
+
+
+                                function markVoucherChecked(id, c) {
+                                    var msg = "";
+                                    if (c === 'C') {
+                                        msg = "Are you sure you want to mark this voucher checked?";
+                                    } else {
+                                        msg = "Are you sure you want to mark this voucher un-checked?";
+                                    }
+                                    var res = confirm(msg);
+                                    if (res) {
+                                        $.ajax({
+                                            url: "/SWC_Manage_Bank_Rec_Voucher/checkVoucher",
+                                            type: "POST",
+                                            data: {
+                                                ID: id,
+                                                Type: c
+                                            },
+                                            cache: false,
+                                            success: function (data) {
+                                                //  dataResult = JSON.parse(dataResult);
+                                                if (data == 200) {
+                                                    if (c === 'C') {
+                                                        msg = "Voucher marked as Checked Successfully.";
+                                                    } else {
+                                                        msg = "Voucher marked as Un-Checked Successfully.";
+                                                    }
+                                                    alert(msg);
+
+
+
+                                                    window.location.href = "/SWC_Manage_Bank_Rec_Voucher/Manage_Bank_Rec_Voucher";
+
+                                                } else {
+                                                    $.alert('Something went wrong.');
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                                function markVoucherApproved(id, c) {
+                                    var msg = "";
+                                    if (c === 'C') {
+                                        msg = "Are you sure you want to mark this voucher approved?";
+                                    } else {
+                                        msg = "Are you sure you want to mark this voucher un-approved?";
+                                    }
+                                    var res = confirm(msg);
+                                    if (res) {
+                                        $.ajax({
+                                            url: "/SWC_Manage_Bank_Rec_Voucher/approvedVoucher",
+                                            type: "POST",
+                                            data: {
+                                                ID: id,
+                                                type: c
+                                            },
+                                            cache: false,
+                                            success: function (data) {
+
+                                                if (data == 200) {
+                                                    if (c === 'C') {
+                                                        msg = "Voucher marked as Approved Successfully.";
+                                                    } else {
+                                                        msg = "Voucher marked as Un-Approved Successfully.";
+                                                    }
+                                                    alert(msg);
+                                                    window.location.href = "/SWC_Manage_Bank_Rec_Voucher/Manage_Bank_Rec_Voucher";
+                                                } else {
+                                                    $.alert('Something went wrong.');
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

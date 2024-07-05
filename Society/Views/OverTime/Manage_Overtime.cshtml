@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Society.Data.OverTime>
+@{
+    ViewBag.Title = "Manage_Overtime";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form runat="server">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">OverTime List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">OverTime List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">#</th>
+                                    <th style="width: 15%">Employee Name</th>
+                                    <th style="width: 15%">No Of Hours</th>
+                                    <th style="width: 15%">Rate Per Hour</th>
+                                    <th style="width: 15%">Total Amount</th>
+                                    <th style="width: 15%">Month</th>
+                                    <th>Month</th>
+
+
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@x.Employee.F_Name @x.Employee.L_Name</td>
+                                    <td>@x.No_Of_Hours</td>
+                                    <td>@x.Rate_Per_Hour</td>
+                                    <td>@x.Total_Amount</td>
+
+                                    <td>@x.Month.ToString("dd-MM-yyyy")</td>
+
+                                </tr>
+
+                                count = count + 1;
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+                                }
+

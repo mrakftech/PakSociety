@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Society.Data.Payment_Plan>
+@{
+    ViewBag.Title = "Installment_Report";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Installment List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Member List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 2%">Ref#</th>
+                                    <th style="width: 2%">#</th>
+                                    <th style="width: 13%">Member Name</th>
+                                    <th style="width: 10%">CNIC</th>
+                                    <th style="width: 10%">Unit Price</th>
+                                    <th style="width: 10%">Paid Amount</th>
+                                    <th style="width: 15%">No Of Installment</th>
+                                    <th style="width: 13%">Paid Installment</th>
+                              
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+                            @foreach (var x in Model)
+                            {
+                        <tr>
+                            <td>@x.Plot.Reg_No</td>
+                            <td>@count</td>
+                            <td>@x.Plot.Member.Applicant_Name</td>
+                            <td>@x.Plot.Member.CNIC</td>
+                            <td>@x.Net_Price_Plot</td>
+
+                            <td>@x.Installments.Sum(o => o.Monthly_Paid)</td>
+
+                            <td>@x.Installments.Count()</td>
+
+                            <td>@x.Installments.Where(o => o.IsPaid == true).Count()</td>
+                           
+                        </tr>
+                                            count = count + 1;
+                                        }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+                                        }

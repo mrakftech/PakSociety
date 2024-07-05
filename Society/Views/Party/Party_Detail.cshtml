@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Society.Data.Party>
+@{
+    ViewBag.Title = "Party_Detail";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Party Detail</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Party</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">DataTable with default features</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">Ref#</th>
+                                <th style="width: 20%">Client Name</th>
+                                <th style="width: 20%">Phone Number</th>
+                                <th style="width: 20%">Balance</th>
+
+                                <th style="width: 20%">Plot No</th>
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                      
+    @foreach (var x in Model)
+    {
+                    <tr>
+                        
+                        <td>@x.Member.Plots.FirstOrDefault(o => o.Member_ID == x.Member_ID).Reg_No </td>
+                        <td>@x.Member.Applicant_Name</td>
+                        <td>@x.Member.Cell_No</td>
+                        <td>@x.Balance</td>
+
+                        <td>@x.Member.Plots.FirstOrDefault(o => o.Member_ID == x.Member_ID).Plot_No</td>
+                        <td><a href="/Party/View?id=@x.ID" class="btn btn-primary btn-sm m-1"><i class="fas fa-folder"></i></a>
+                            </td>
+                    </tr>
+    }
+                           
+</table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+}

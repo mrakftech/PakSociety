@@ -1,0 +1,112 @@
+﻿@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add New File</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">File Add</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">File Details</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Issue Date: </label>
+
+                                    <input type="date" id="IssueDate" class="form-control" placeholder="IssueDate" name="IssueDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Type: </label>
+
+                                    <input type="text" id="Type" class="form-control" placeholder="Type" name="Type" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">PB No: </label>
+
+                                    <input type="text" id="PBNo" class="form-control" placeholder="PBNo" name="PBNo"  />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Size: </label>
+
+                                    <input type="text" id="Size" class="form-control" placeholder="Size" name="Size" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Dealer: </label>
+
+                                    <input type="text" id="Dealer" class="form-control" placeholder="Dealer" name="Dealer"  />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">ReIssued: </label>
+
+                                    <input type="text" id="ReIssued" class="form-control" placeholder="ReIssued" name="ReIssued" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Status: </label>
+
+                                    <input type="text" id="Status" class="form-control" placeholder="Status" name="Status" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">RefNo: </label>
+
+                                    <input type="number" id="RefNo" class="form-control" placeholder="RefNo" name="RefNo" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Closer: </label>
+
+                                    <input type="text" id="Closer" class="form-control" placeholder="Closer" name="Closer" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">RateofFile: </label>
+
+                                    <input type="text" id="RateofFile" class="form-control" placeholder="RateofFile" name="RateofFile" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">RateMatured: </label>
+
+                                    <input type="text" id="RateMatured" class="form-control" placeholder="RateMatured" name="RateMatured" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Balance: </label>
+
+                                    <input type="text" id="Balance" class="form-control" placeholder="Balance" name="Balance" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row float-right">
+                    <div class="col-12">
+                        <input type="submit" value="Add New File" class="btn btn-success float-right">
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+
+}
+

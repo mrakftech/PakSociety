@@ -1,0 +1,1092 @@
+﻿@model dynamic
+@using Society.Data
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+
+
+<div style="margin: 8px 8px">
+        <div class="content-wrapper divToPrint" style="background-color:white">
+            <form id="form" runat="server" method="post">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">DAILY REPORT</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">DAILY REPORT</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content " id="skip">
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-dark">
+                                <div class="card-header">
+                                    <h3 class="card-title">DAILY REPORTS</h3>
+                                </div>
+                                <div class="card-body">
+
+
+
+
+
+                                    <div class="form-group col-sm-12 col-lg-4 float-left">
+
+                                        ENTRY DATE(START RANGE)
+                                        <input type="date" id="entryFirst" class="form-control" placeholder="Date" oninput="toggleFields()" name="recStartDateFrontend" />
+
+                                    </div>
+                                    <div class="form-group col-sm-12 col-lg-4 float-left">
+
+                                        ENTRY DATE(END RANGE)
+                                        <input type="date" id="entrySecond" class="form-control" placeholder="Date" oninput="toggleFields()" name="recEndDateFrontend" />
+                                    </div>
+
+                                    @*<div class="form-group col-sm-12 col-lg-4 float-left">
+
+                                        CREATED DATE(START RANGE)
+                                        <input type="date" id="createdFirst" class="form-control" placeholder="Date" oninput="toggleFields()" name="createdStartDateFrontend" />
+
+                                    </div>
+                                    <div class="form-group col-sm-12 col-lg-4 float-left">
+
+                                        CREATED DATE(END RANGE)
+                                        <input type="date" id="createdSecond" class="form-control" placeholder="Date" oninput="toggleFields()" name="createdEndDateFrontend" />
+                                    </div>*@
+
+
+                                    <div class="col-sm-12 col-lg-4 form-group  float-left">&nbsp;<input type="submit"  id="srch" class="form-control btn btn-dark" placeholder="Search" value="Search"/></div>
+                                    <div class="col-sm-12 col-lg-4 form-group  float-left">&nbsp;<input type="button" id="srch" class="form-control  btn btn-success" placeholder="Search" value="Print" onclick="window.print();" /></div>
+
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div><script>
+                        function toggleFields() {
+                            var entryfirstValue = document.getElementById('entryFirst').value;
+                            var entrysecondValue = document.getElementById('entrySecond').value;
+                            var createdfirstValue = document.getElementById('createdFirst').value;
+                            var createdsecondValue = document.getElementById('createdSecond').value;
+                            var entryfirst= document.getElementById('entryFirst');
+                            var entrysecond = document.getElementById('entrySecond');
+                            var createdfirst = document.getElementById('createdFirst');
+                            var createdsecond = document.getElementById('createdSecond');
+
+                            if (entryfirstValue !== '') {
+                                entrysecond.required = true;
+                            } else if (entrysecondValue !== '') {
+                                entryfirst.required = true;
+                            } else {
+                                entryfirst.required = false;
+                                entrysecond.required = false;
+                            }
+                            if (createdfirstValue !== '') {
+                                createdsecond.required = true;
+                            } else if (createdsecondValue !== '') {
+                                createdfirst.required = true;
+                            } else {
+                                createdfirst.required = false;
+                                createdsecond.required = false;
+                            }
+                        }</script>
+                    
+                    @{ DateTime d1 = DateTime.Today;}
+                </section>
+                <style>
+                    @@media print {
+                        body * {
+                            visibility: hidden;
+                        }
+                        #name:before {
+
+                             @if (TempData["Message"] != null) { DateTime d = Convert.ToDateTime(TempData["Message"].ToString());
+                                 d1 = d;
+                             }
+                            content: "DAILY REPORTS( @if (TempData["Message"] != null) { @d1.ToString("dd-MM-yyyy")})";
+
+                        }
+                        #skip, #skip * {
+                            visibility: hidden;
+                            height: 0px;
+                        }
+
+
+                        #img:before {
+                            content:"LAKE VIEW HEIGHTS";
+
+                        }
+                        #name, #name * {
+                            height: 50px;
+                            font-size: x-large;
+                            text-align: center;
+                            font-family: 'Century Gothic';
+                            font-weight:bold;
+                        }
+                            #img, #img * {
+                                height: 50px;
+                                font-size:xx-large;
+                                text-align: center;
+                      font-family:'Century Gothic';
+                      font-weight:bolder;
+
+                            }
+                        .divToPrint, .divToPrint * {
+
+                            visibility: visible;
+                        }
+                    }
+                </style>
+                <div id="img"></div>
+                <div id="name"></div>
+                <div>
+                    @if (ViewBag.allotments != null && ViewBag.allotments.Count != 0)
+                    {<section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">REGISTRATION</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">Member Name</th>
+                                                        <th style="width: 12%">Reg Date</th>
+                                                        <th style="width: 12%">CNIC</th>
+                                                        <th style="width: 12%">Size</th>
+                                                        <th style="width: 15%">Address</th>
+                                                        <th style="width: 15%">Status</th>
+
+                                                    </tr>
+                                                </thead>
+                                                @foreach (Payment_Plan x in ViewBag.allotments)
+                                                {
+                                                    <tr>
+                                                        <td>@x.Plot.Reg_No</td>
+                                                        <td>@x.Plot.Member.Applicant_Name</td>
+                                                        <td>@x.Plot.Member.Application_Date.ToString("dd-MM-yyyy")</td>
+                                                        <td>@x.Plot.Member.CNIC</td>
+                                                        <td>@x.Plot.Installment_Plan.Plan_Name</td>
+
+
+
+                                                        <td>@x.Plot.Member.Permenent_Postel_Address</td>
+                                                        @if (x.Plot.Member.Status == true)
+                                                        {
+
+                                                            <td><span class="badge badge-success">Active</span></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><span class="badge badge-warning">Canceled</span></td>
+                                                        }
+
+
+
+
+                                                    </tr>
+                                                }
+
+
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">ALLOTMENTS</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+
+
+
+                    @if (ViewBag.adjustpayment != null && ViewBag.adjustpayment.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Possession Charges</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">FROM Ref#</th>
+                                                        <th style="width: 15%">TO Ref#</th>
+                                                        <th style="width: 12%">Transfer Date</th>
+                                                        <th style="width: 12%">Amount</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                @foreach (Payment_Transfer x in ViewBag.adjustpayment)
+                                                {
+                                                    <tr>
+                                                        <td>@x.From_EB</td>
+                                                        <td>@x.To_EB</td>
+                                                        <td>@x.Date.ToString("dd-MM-yyyy")</td>
+                                                        <td>@x.Amount</td>
+
+
+
+
+
+
+
+                                                    </tr>
+                                                }
+
+
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Possession Charges</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+
+                    <h3> <b> PAYMENT RECEIVE</b></h3>
+
+                    @if (ViewBag.Cash_rec != null && ViewBag.Cash_rec.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">CASH</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">Customer Name</th>
+                                                        <th style="width: 12%">Voucher No</th>
+                                                        <th style="width: 12%">Narration</th>
+                                                        <th style="width: 12%">Entry Date</th>
+                                                        <th style="width: 12%">Amount</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                @{ double total_cash_received = 0;}
+                                                @foreach (reciept_vouchers x in ViewBag.Cash_rec)
+                                                {
+                                                    var id = x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member_ID;
+                                                    <tr>
+                                                        @if (id == null)
+                                                        {
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Plots.FirstOrDefault(o => o.Member_ID == id).Reg_No</td>
+                                                            <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Applicant_Name</td>
+                                                        }
+                                                        <td>@x.Manual_Voucher_No</td>
+                                                        <td>@x.Comments</td>
+                                                        <td>@x.VoucherDate.ToString("dd-MMM-yyyy")</td>
+                                                        <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount.ToString("n2")</td>
+                                                        @{total_cash_received = total_cash_received + x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount;}
+
+
+
+
+
+                                                    </tr>
+                                                }
+
+                                                <tr>
+                                                    <td colspan="5" style="font-weight:bolder">Total CASH RECEIVED</td>
+                                                    <td colspan="4" style="font-weight:bolder">@total_cash_received.ToString("n0")</td>
+
+                                                </tr>
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">CASH</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                    @if (ViewBag.Bank_rec != null && ViewBag.Bank_rec.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">BANK</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">Customer Name</th>
+                                                        <th style="width: 12%">Voucher No</th>
+                                                        <th style="width: 12%">Narration</th>
+                                                        <th style="width: 12%">Entry Date</th>
+                                                        <th style="width: 12%">Amount</th>
+
+
+                                                    </tr>
+                                                </thead>@{ double total_bank_received= 0;}
+                                                @foreach (reciept_vouchers x in ViewBag.Bank_rec)
+                                                {
+                                                    var id = x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member_ID;
+                                            <tr>
+                                                @if (id == null)
+                                                {
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Plots.FirstOrDefault(o => o.Member_ID == id).Reg_No</td>
+                                                    <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Applicant_Name</td>
+                                                }
+
+
+                                                <td>@x.Manual_Voucher_No</td>
+                                                <td>@x.Comments</td>
+                                                <td>@x.VoucherDate.ToString("dd-MMM-yyyy")</td>
+                                                <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount.ToString("n2")</td>
+                                                @{total_bank_received = total_bank_received + x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount;}
+
+
+
+
+
+                                            </tr>
+                                                }
+
+                                            <tr>
+                                                <td colspan="5" style="font-weight:bolder">Total BANK RECEIVED</td>
+                                                <td colspan="4" style="font-weight:bolder">@total_bank_received.ToString("n0")</td>
+                                              
+                                            </tr>
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Bank</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                     @if (ViewBag.adjustment != null && ViewBag.adjustment.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">ADJUSTMENT</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">Customer Name</th>
+                                                        <th style="width: 12%">Voucher No</th>
+                                                        <th style="width: 12%">Narration</th>
+                                                        <th style="width: 12%">Amount</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                @{ double total_cash_received = 0;}
+                                                @foreach (reciept_vouchers x in ViewBag.adjustment)
+                                                {
+                                                    var id = x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member_ID;
+                                                    <tr>
+                                                        @if (id == null)
+                                                        {
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Plots.FirstOrDefault(o => o.Member_ID == id).Reg_No</td>
+                                                            <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Applicant_Name</td>
+                                                        }
+                                                        <td>@x.Manual_Voucher_No</td>
+                                                        <td>@x.Comments</td>
+                                                        <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount.ToString("n2")</td>
+                                                        @{total_cash_received = total_cash_received + x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount;}
+
+
+
+
+
+                                                    </tr>
+                                                }
+
+                                                <tr>
+                                                    <td colspan="4" style="font-weight:bolder">Total ADJUSTMENT RECEIVED</td>
+                                                    <td colspan="4" style="font-weight:bolder">@total_cash_received.ToString("n0")</td>
+
+                                                </tr>
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">ADJUSTMENT</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                    <h3> <b> PAID AMOUNT</b></h3>
+                    @if (ViewBag.Cash_pay != null && ViewBag.Cash_pay.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">CASH</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">Customer Name</th>
+                                                        <th style="width: 12%">Voucher No</th>
+                                                        <th style="width: 12%">Narration</th>
+                                                        <th style="width: 12%">Amount</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                @{ double total_cash_paid = 0;}
+                                                @foreach (reciept_vouchers x in ViewBag.Cash_pay)
+                                                {
+                                                    var id = x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member_ID;
+                                                    <tr>
+                                                        @if (id == null)
+                                                        {
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Plots.FirstOrDefault(o => o.Member_ID == id).Reg_No</td>
+                                                            <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Applicant_Name</td>
+                                                        }
+                                                        <td>@x.Manual_Voucher_No</td>
+                                                        <td>@x.Comments</td>
+                                                        <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount.ToString("n2")</td>
+                                                        @{ total_cash_paid = total_cash_paid + x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount;}
+
+
+
+
+
+                                                    </tr>
+                                                }
+
+
+                                                <tr>
+                                                    <td colspan="4" style="font-weight:bolder">Total CASH PAID</td>
+                                                    <td colspan="4" style="font-weight:bolder">@total_cash_paid.ToString("n0")</td>
+
+                                                </tr>
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Cash</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                    @if (ViewBag.Bank_pay != null && ViewBag.Bank_pay.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">BANK</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">Customer Name</th>
+                                                        <th style="width: 12%">Voucher No</th>
+                                                        <th style="width: 12%">Narration</th>
+                                                        <th style="width: 12%">Amount</th>
+
+
+                                                    </tr>
+                                                </thead>  @{ double total_bank_paid = 0;}
+                                                @foreach (reciept_vouchers x in ViewBag.Bank_pay)
+                                                {
+                                                    var id = x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member_ID;
+                                            <tr>
+                                                @if (id == null)
+                                                {
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Plots.FirstOrDefault(o => o.Member_ID == id).Reg_No</td>
+                                                    <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Ledger_Account.Member.Applicant_Name</td>
+                                                }
+                                                <td>@x.Manual_Voucher_No</td>
+                                                <td>@x.Comments</td>
+                                                <td>@x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount.ToString("n2")</td>
+
+                                                @{ total_bank_paid = total_bank_paid + x.reciept_voucher_payment.FirstOrDefault(o => o.RV_ID == x.RV_ID).Amount;}
+
+
+
+
+                                            </tr>
+                                                }
+
+
+                                                <tr>
+                                                    <td colspan="4" style="font-weight:bolder">Total BANK PAID</td>
+                                                    <td colspan="4" style="font-weight:bolder">@total_bank_paid.ToString("n0")</td>
+
+                                                </tr>
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">BANK</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <h3> <b> TRANSFER DETAILS</b></h3>
+                    @if (ViewBag.Transfer_file != null && ViewBag.Transfer_file.Count != 0)
+                    {
+
+
+
+
+
+
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">TRANSFER DETAILS</h3>
+                                        </div>
+
+
+
+
+
+
+
+                                        <!-- /.card-header -->
+                                        <div class="card-body p-0">
+                                            <table class="table table-striped projects">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 5%">Ref#</th>
+                                                        <th style="width: 15%">FROM</th>
+                                                        <th style="width: 12%">TO</th>
+
+
+
+                                                    </tr>
+                                                </thead>
+                                                @foreach (File_Transfer x in ViewBag.Transfer_file)
+                                                {
+                                                    <tr>
+                                                        <td>@x.EB_No</td>
+                                                        <td>@x.From_Name (@x.From_CNIC)</td>
+                                                        <td>@x.To_Name (@x.To_CNIC)</td>
+
+
+
+
+
+
+
+                                                    </tr>
+                                                }
+
+
+
+
+                                            </table>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+                        <section class="content">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">TRANSFER DETAILS</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div>No Record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                </div>
+
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+
+            </form>
+        </div>
+    </div>
+
+}

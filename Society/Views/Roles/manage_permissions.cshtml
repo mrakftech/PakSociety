@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Society.Data.role>
+@{
+    ViewBag.Title = "manage_permissions";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Role Permissions</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Role Permissions</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Role Permissions</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table">
+                        <tr>
+                            <th style="width: 35%;"></th>
+                            <td style="width: 30%;">
+                                <label>Select User Role</label>
+                                <select class="form-control custom-select col-12" name="txtRole" id="txtRole"
+                                        onchange="getRolePermissionData()">
+                                    <option value="" selected disabled>Select Role</option>
+                                    @foreach (var a in Model)
+                                    {
+                                        <option value="@a.Roles_ID">@a.Title</option>
+                                    }
+                                </select>
+                            </td>
+                            <th style="width: 35%;"></th>
+                        </tr>
+                    </table>
+
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">#</th>
+                                <th style="width: 30%">Title</th>
+                                <th style="width: 15%">Permission</th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody id="tblbodyRolesAndPerms">
+                        </tbody>
+                    </table>
+
+                    <script>
+                        function getRolePermissionData() {
+                            var res = $("#txtRole option:selected").val();
+                            if (res != -1) {
+                                $.ajax({
+                                    url: "/Roles/getRolePermissionDataByRoleID",
+                                    type: "POST",
+                                    data: {
+                                        ID: res
+                                    },
+                                    cache: false,
+                                    success: function (data) {
+
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+
+                                        var obj = JSON.parse(data);
+
+                                        var tr;
+
+                                        for (var i = 0; i < obj.length; i++) {
+
+                                            tr = $('<tr>');
+                                            tr.append("<td>" + obj[i].Roles_Permission_ID + "</td>");
+
+                                            tr.append("<td>" + obj[i].Module_Key + "</td>");
+                                            if (obj[i].Target == false) {
+                                                tr.append("<td><input type='checkbox' onclick='updateRolePermission(" + obj[i].Roles_Permission_ID + ")' ></td>");
+                                            } else {
+                                                tr.append("<td><input type='checkbox' onclick='updateRolePermission(" + obj[i].Roles_Permission_ID + ")' checked></td>");
+                                            }
+
+
+                                            // <input type="checkbox" onclick="updateRolePermission('.$row['ID'].',\'CanView\')" name="chkView'.$row['ID'].'" '.$CanView.' '.$icanedit.' />
+                                            table.row.add(tr);
+
+                                            table.draw();
+                                        }
+
+
+                                    }
+                                });
+                            }
+                        }
+
+                        function updateRolePermission(id) {
+
+                            $.ajax({
+                                url: "/Roles/update_roles",
+                                type: "POST",
+                                data: {
+                                    ID: id
+
+                                },
+                                cache: false,
+                                success: function (dataResult) { }
+                            });
+                        }
+                    </script>
+                </div>
+            </div>
+        </section>
+    </div>
+}

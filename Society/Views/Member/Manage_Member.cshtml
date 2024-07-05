@@ -1,0 +1,482 @@
+﻿@model IEnumerable<Society.Data.Payment_Plan>
+@{
+    ViewBag.Title = "Manage_Member";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <style>
+        /* CSS styles for the loader and dim background */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            transform: rotate(45deg);
+        }
+
+            .loader:before,
+            .loader:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+
+            .loader:before {
+                border: 5px solid #145c31;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+                animation: loader-spin 1s linear infinite;
+            }
+
+            .loader:after {
+                border: 5px solid #f9e7b3;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+                animation: loader-spin-reverse 1s linear infinite;
+            }
+
+        @@keyframes loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes loader-spin-reverse {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        /* Hide the loader container when loader = false */
+        .hide {
+            display: none;
+        }
+    </style>
+    <div id="loader-container" class="loader-container hide">
+        <!-- Loader element -->
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        // JavaScript code to toggle the loader
+
+        // Initial value of loader variable
+
+        // Function to toggle the loader
+        function toggleLoader(toggle) {
+            var loader = toggle;
+
+            var loaderContainer = document.getElementById('loader-container');
+
+            if (loader) {
+                loaderContainer.classList.add('hide');
+            } else {
+                loaderContainer.classList.remove('hide');
+            }
+
+            // Update the loader variable
+            loader = !loader;
+        }
+    </script>
+
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color: white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Member List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Member List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="col-lg-3 form-group offset-lg-4 offset-md-0 col-sm-12 col-md-6 offset-sm-0">
+                            <a class="btn btn-primary col-12" href="/member/manage_member?isall=true">
+                                SHOW ALL RECORDS
+
+                            </a>
+                        </div>
+                        <div class="col-lg-3 form-group offset-lg-4 offset-md-0 col-sm-12 col-md-6 offset-sm-0">
+                            <select type="search" id="srch1" class="form-control">
+
+                                <option selected>Ref#</option>
+                                <option>APPLICATION#</option>
+                                <option>Unit No</option>
+                                <option>CNIC</option>
+                                <option>Member Name</option>
+                                <option>Size</option>
+
+                            </select>
+                        </div>
+                        <div class="input-group col-lg-3 form-group offset-lg-4 offset-md-0 col-sm-12 col-md-6 offset-sm-0">
+                            <input type="search" id="srch" class="form-control form-control-lg" placeholder="Type here" style="height:40px">
+                            <div class="input-group-append">
+                                <span type="submit" style="height:40px" onclick="cc()" class="btn btn-lg btn-default">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <script>
+                            function cc() {
+                                toggleLoader(false);
+                                var v1 = $('#srch1').val();
+                                if (v1 == null) {
+                                    alert("select type");
+                                } else {
+                                    var v = $('#srch').val();
+
+                                    $.ajax({
+                                        url: '/Member/result',
+                                        type: 'POST',
+                                        data: {
+                                            search1: v,
+                                            search2: v1
+                                        },
+                                        success: function (data) {
+
+                                            toggleLoader(true);
+                                            if (data == "[]") {
+
+                                                var table = $('#example1').DataTable();
+                                                table.clear();
+                                                table.draw();
+                                            } else {
+                                                var table = $('#example1').DataTable();
+                                                table.clear();
+
+
+                                                var obj = JSON.parse(data);
+                                                var tr;
+
+                                                //Append each row to html table
+                                                for (var i = 0; i < obj.length; i++) {
+                                                    tr = $('<tr/>');
+                                                    tr.append("<td>" + obj[i].Reg_No + "</td>");
+                                                    tr.append("<td>" + obj[i].Applicant_Name + "</td>");
+
+
+
+                                                    var today = new Date(obj[i].Date);
+                                                    var dd = today.getDate();
+
+                                                    var mm = today.getMonth() + 1;
+                                                    var yyyy = today.getFullYear();
+                                                    if (dd < 10) {
+                                                        dd = '0' + dd;
+                                                    }
+
+                                                    if (mm < 10) {
+                                                        mm = '0' + mm;
+                                                    }
+                                                    today = dd + '-' + mm + '-' + yyyy;
+
+                                                    var today1 = new Date(obj[i].createdDate);
+                                                    var dd = today1.getDate();
+
+                                                    var mm = today1.getMonth() + 1;
+                                                    var yyyy = today1.getFullYear();
+                                                    if (dd < 10) {
+                                                        dd = '0' + dd;
+                                                    }
+
+                                                    if (mm < 10) {
+                                                        mm = '0' + mm;
+                                                    }
+                                                    today1 = dd + '-' + mm + '-' + yyyy;
+                                                    tr.append("<td>" + today + "</td>");
+                                                    tr.append("<td>" + obj[i].CNIC + "</td>");
+                                                    tr.append("<td>" + obj[i].Plan_Name + "</td>");
+                                                    let first = parseFloat(obj[i].first);
+                                                    let second = parseFloat(obj[i].second);
+                                                    let third = (second / first) * 100;
+
+                                                    tr.append(`<td class="project_progress">
+                                                                                                                                                                                                                                                                <div class="progress progress-md">
+                                                                                                                                                                                                                                                                    <div class="progress-bar bg-green " role="progressbar" aria-valuenow=`+ third.toFixed(2) + ` aria-valuemin="0" aria-valuemax="100" style="width:` + third.toFixed(2) + `%">
+                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                <small>
+                                                                                                                                                                                                                                                                   <b> `+ third.toFixed(0) + ` %  AMOUNT PAID(` + second.toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,') + `)</b>
+                                                                                                                                                                                                                                                                </small>
+                                                                                                                                                                                                                                                            </td>`);
+                                                    var Status = obj[i].Status;
+                                                    var status1 = obj[i].Refund_Check;
+                                                    if (status1 == true) {
+                                                        if (Status == true) {
+                                                            tr.append("<td>" + "<span class='badge badge-success'>Active</span>" + "</td>");
+                                                        } else {
+                                                            tr.append("<td>" + "<span class='badge badge-warning'>Canceled</span><span class='badge badge-warning'>Refunded</span>" + "</td>");
+                                                        }
+
+                                                    } else {
+                                                        if (Status == true) {
+                                                            if (obj[i].isBlock == true) {
+                                                                tr.append("<td>" + "<span class='badge badge-danger'>Blocked</span>" + "</td>");
+
+                                                            } else {
+
+                                                                tr.append("<td>" + "<span class='badge badge-success'>Active</span>" + "</td>");
+                                                            }
+                                                        } else {
+                                                            tr.append("<td>" + "<span class='badge badge-warning'>Canceled</span><span class='badge badge-warning'>Transfer</span>" + "</td>");
+                                                        }
+                                                    }
+
+
+                                                    //if (x.Plot.Member.Refund_Check == true)
+                                                    //    {
+
+
+                                                    //<span class="badge badge-warning">Refund</span>
+
+                                                    // }
+                                                    //  else {<span class="badge badge-warning">Transfer</span> }
+                                                    tr.append("<td>" + obj[i].Dealer_Name + "</td>");
+
+                                                    tr.append("<td>" + `<a title="installment" class="btn btn-outline-info btn-sm m-1" href="/Member/view_installment?ID=` + obj[i].Member_ID + `"><i class="fas fa-file-alt"></i></a><a title="Update" href="/Member/Update_Member?id=` + obj[i].Member_ID + `" class="btn btn-outline-success btn-sm m-1"><i class="fas fa-user"></i></a><a title="delete" href="/Member/Delete?id=` + obj[i].Member_ID + `" onclick="return confirm('Are you sure you want to delete Record?')" class="btn btn-outline-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+                                                                                                                                                                                                                         <br />
+                                                                                                                                                                                                                                                        <span style="font-size:x-small;font-weight:bolder">Created By :(${obj[i].F_Name} ${obj[i].L_Name})</span>
+
+                                                                                                                                                                                                                                                  <span style="font-size:x-small;font-weight:bolder">Created Date :( ${today1})</span>
+
+                                                                                                                     ` + "</td>");
+                                                    table.row.add(tr);
+
+                                                    table.draw();
+
+
+                                                }
+                                            }
+
+                                        }
+                                    });
+                                }
+
+                            }
+                        </script>
+
+
+                        <div class=" col-md-6 col-sm-12 offset-lg-11 offset-sm-0 offset-md-0 ">
+
+
+
+
+
+
+
+                            <div class="card-tools">
+                                <a href="/Member/Add_Member" class="btn btn-primary col-lg-2 col-md-6 col-sm-12 "> Add New</a>
+
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">Ref#</th>
+                                    <th style="width: 15%">Member Name</th>
+                                    <th style="width: 12%">Reg Date</th>
+                                    <th style="width: 13%">CNIC</th>
+                                    <th style="width: 10%">Unit No</th>
+                                    <th style="width: 10%">Unit Size</th>
+                                    <th style="width: 12%">Progress</th>
+                                    <th style="width: 8%">Status</th>
+                                    @*<th style="width: 8%">Dealer</th>*@
+                                    <th style="width: 20%">Action</th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@x.Plot.Reg_No</td>
+                                    <td>@x.Plot.Member.Applicant_Name</td>
+                                    <td>@x.Plot.Member.Application_Date.ToString("dd-MM-yyyy")</td>
+                                    <td>@x.Plot.Member.CNIC</td>
+                                    <td>@x.Plot.Installment_Plan.Plan_Name</td>
+                                    <td>@x.Plot.Installment_Plan.Size</td>
+                                    @{ double first = (double)x.Installments.Sum(o => o.Amount_Paid);
+                                        double second = (double)x.Installments.Sum(o => o.Monthly_Paid);
+                                        var percentage = (int)((second / first) * 100);
+                                        var lastPaidMonth = x.Installments.Where(o => o.Paid_Month != null).OrderBy(o => o.Paid_Month).LastOrDefault();
+                                        DateTime find;
+                                        int difference = 0;
+                                        if (lastPaidMonth != null)
+                                        {
+                                            find = (DateTime)lastPaidMonth.Paid_Month;
+
+                                            difference = (DateTime.Now.Year - find.Year) * 12 + DateTime.Now.Month - find.Month;
+                                        }
+                                    }
+
+                                    <td class="project_progress">
+                                        <div class="progress progress-md">
+                                            <div class="progress-bar bg-green " role="progressbar" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100" style="width: @percentage%">
+                                            </div>
+                                        </div>
+                                        <small>
+                                            <b>  @percentage %  AMOUNT PAID(@second.ToString("n0"))</b>
+                                        </small>
+                                    </td>
+
+                                    @if (x.Plot.Member.Status == true)
+                                    {
+                                        if (difference >= 6 && x.Installments.Any(n => n.IsPaid == false && n.Amount_Paid != 0))
+                                        {
+                                            <td> <span class="badge badge-danger">Blocked</span></td>
+
+
+
+                                        }
+                                        else if (x.Installments.All(o => o.Monthly_Paid == 0))
+                                        {
+                                            <td> <span class="badge badge-danger">Blocked</span></td>
+
+                                        }
+                                        else
+                                        {
+
+                                            <td><span class="badge badge-success">Active</span></td>
+                                        }
+
+
+
+
+                                    }
+                                    else
+                                    {
+
+
+                                        <td>
+
+                                            <span class="badge badge-warning">Canceled</span>
+                                            @if (x.Plot.Member.Refund_Check == true)
+                                            {
+
+
+                                                <span class="badge badge-warning">Refund</span>
+
+                                            }
+                                            else
+                                            {<span class="badge badge-warning">Transfer</span>}
+
+                                        </td>
+                                    }
+                                    @*<td>@x.Plot.Member.Dealer_Name</td>*@
+                                    <td>
+                                        <a title="installment" class="btn btn-outline-info btn-sm m-1" href="/Member/view_installment?ID=@x.Plot.Member_ID"><i class="fas fa-file-alt"></i></a>
+                                        <a title="Update" href="/Member/Update_Member?id=@x.Plot.Member_ID" class="btn btn-outline-success btn-sm m-1"><i class="fas fa-user"></i></a>
+                                        <a title="delete" href="/Member/Delete?id=@x.Plot.Member_ID" onclick="return confirm('Are you sure you want to delete Record?')" class="btn btn-outline-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+                                        <br />
+                                        <span style="font-size:x-small;font-weight:bolder">Created By :(@x.Plot.Member.Employee.F_Name @x.Plot.Member.Employee.L_Name)</span>
+                                        @{var data = DateTime.MinValue; if (x.Plot.Member.createdDate != null) { data = (DateTime)x.Plot.Member.createdDate; } }
+                                        @if (data != DateTime.MinValue)
+                                        {
+
+                                            <span style="font-size:x-small;font-weight:bolder">Created Date :(@data.ToString("dd-MMM-yyyy"))</span>
+                                        }
+
+                                    </td>
+
+
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

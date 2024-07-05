@@ -1,0 +1,221 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "Add_Ledger_Account";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Ledger Account</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Accounts</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Add New Ledger Account </h3>
+                </div>
+                <form method="POST" action="" id="formAccControl">
+                    <div class="card-body">
+                        <div class="col-md-3 float-left">
+                            <label>Element Account:</label>
+                            <input type="hidden" name="txtelementaccounttitle" id="txtelementaccounttitle" />
+                            <input type="hidden" name="txtcontrolaccounttitle" id="txtcontrolaccounttitle" />
+                            <select name="txtAccountCode" id="txtAccountCode" class="form-control"
+                                    onchange="onChangeElementAccount()">
+                                <option value="-1">Select</option>
+
+                                @foreach (Element_Account x in Model.Element_List)
+                                {
+                                    <option value='@x.Element_Account_Code' data-title="@x.Account_Title">@x.Account_Title</option>
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label>Control Account:</label>
+
+                            <select name="txtConAccountCode" id="txtConAccountCode" class="form-control"
+                                    onchange="onChangeControlAccount()">
+                            </select>
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label>Ledger Account Code:</label>
+                            <input type="text" placeholder="Control Account Code" name="txtAccountLedCode"
+                                   id="txtAccountLedCode" class="form-control" readonly />
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label>Ledger Account Title:</label>
+                            <input type="text" placeholder="Control Account Title" name="txtAccountLedTitle"
+                                   id="txtAccountLedTitle" class="form-control" required />
+                            <input type="hidden" name="txtAccountLedCodeHidd" id="txtAccountLedCodeHidd" value="" />
+                        </div>
+                        <input type="hidden" name="controlid" id="controlid" />
+                        <input type="hidden" name="elementid" id="elementid" />
+
+                        <button class=" col-md-2 btn btn-primary" style="margin-top:30px" onclick="addnewAccountElement()">
+                            Add
+                            Now
+                        </button>
+
+                        <script>
+                            function onChangeElementAccount() {
+
+                                var x1 = $('#txtAccountCode option:selected');
+                                var title = x1.data('title');
+
+                                $('#txtelementaccounttitle').val(title);
+                                var x = $('#txtAccountCode option:selected').val();
+                                $.ajax({
+                                    url: '/Ledger_Account/result',
+                                    type: 'POST',
+                                    data: {
+                                        EleAcc: x,
+                                    },
+                                    success: function (data) {
+
+                                        $('#txtAccountLedCode').val(x + "." + 0 + "." + 0);
+                                        $('#txtConAccountCode').empty();
+                                        $('#txtConAccountCode').html('');
+                                        var options = '';
+                                        options += '<option value="Select">Select</option>';
+                                        for (var i = 0; i < data.length; i++) {
+                                            options += '<option value="' + data[i].code + '"  data-title="' + data[i].title + '" data-elementid="' + data[i].element_id + '" data-controlid="' + data[i].control_id + '">' + data[i].title + '</option>';
+                                        }
+
+                                        $('#txtConAccountCode').append(options);
+
+                                    }
+                                });
+                                //alert(x);
+                            }
+
+                            function onChangeControlAccount() {
+                                var x2 = $('#txtConAccountCode option:selected');
+                                var title = x2.data('title');
+                                var elementid = x2.data('elementid');
+                                var controlid = x2.data('controlid');
+                                $('#txtcontrolaccounttitle').val(title);
+                                var x = $('#txtAccountCode option:selected').val();
+                                var y = $('#txtConAccountCode option:selected').val();
+                                $.ajax({
+                                    url: '/Ledger_Account/result2',
+                                    type: 'post',
+                                    data: {
+                                        EleAcc: x,
+                                        ConAcc: y,
+                                    },
+                                    success: function (data) {
+                                        $('#elementid').val(elementid);
+                                        $('#controlid').val(controlid);
+
+                                        $('#txtAccountLedCodeHidd').val(data + 1);
+                                        if (x != '-1' && y != '-1') {
+                                            $('#txtAccountLedCode').val(x + "." + y + "." + (data + 1));
+                                        }
+                                    }
+                                });
+                                //alert(x);
+                            }
+
+                            function addnewAccountElement() {
+                                var title = $.trim($('#txtAccountLedTitle').val());
+                                var code = $.trim($('#txtAccountLedCode').val());
+                                if (title === '') {
+                                    alert('Enter account title.');
+                                } else if (code === '') {
+                                    alert('Enter account code.');
+                                } else {
+                                    $('#formAccControl').submit();
+                                }
+                            }
+                        </script>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Ledger Account</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">#</th>
+                                <th style="width: 15%">Element Account Title</th>
+                                <th style="width: 15%">Control Account Title</th>
+                                <th style="width: 15%">Ledger Account Code</th>
+                                <th style="width: 20%">Ledger Account Title</th>
+                                <th style="width: 15%">Balance</th>
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Ledger_Account x in Model.Ledger_List)
+                            {
+                                <tr>
+                                    <td>@x.ID </td>
+                                    <td>@x.Element_Account_Title</td>
+                                    <td>@x.Control_Account_Title</td>
+                                    <td>@x.Ledger_Complete_Code</td>
+                                    <td>@x.Ledger_Account_Title</td>
+                                    @{ double d =(double) x.Balance; }
+                                    <td>@d.ToString("n2")</td>
+                                    <td> <a href="javascript:addNewRole('@x.Ledger_Account_Title','@x.ID')" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a></td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        function addNewRole(val, id) {
+            var role = prompt("Enter New Account Title", val);
+            var id = id;
+            role = $.trim(role);
+            if (role == "") {
+                alert("Enter valid Account title.");
+            } else {
+                $.ajax({
+                    url: "/Ledger_Account/Update_Ledger_Account",
+                    type: "POST",
+                    data: {
+                        title: role,
+                        id: id
+                    },
+                    cache: false,
+                    success: function (data) {
+
+                        if (data == true) {
+                            alert('title Updated Successfully.');
+                            window.location.href = "/Ledger_Account/Add_Ledger_Account";
+                        } else { $.alert('Something went wrong.'); }
+                    }
+                });
+            }
+        }
+    </script>
+}
+

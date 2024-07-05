@@ -1,0 +1,173 @@
+﻿@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add New Dealer</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Dealer Add</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Dealer Details</h3>
+                            </div>
+                            <div class="card-body">
+
+
+                                <div class="form-group offset-9 col-3">
+                                    <label for="inputName">Registration Date</label>
+                                    <input type="date" class="form-control"
+                                           name="Reg_Date" required />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputName">Name of Firm/Company</label><span style="color:red">*</span>
+                                    <input type="text" class="form-control" placeholder="Company_Name"
+                                           name="Company_Name" required />
+                                </div>
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputProjectLeader">Full Address</label><span style="color:red">*</span>
+                                    <textarea type="text" class="form-control" placeholder="Company Address" required
+                                              name="Company_Address" id="Address"></textarea>
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputProjectLeader">Telephone No</label><span style="color:red">*</span>
+                                    <input type="text" class="form-control" placeholder="Person Number" name="Person_Phone" required />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputProjectLeader">Mailing Address</label>
+                                    <input type="email" class="form-control" placeholder="Email Address" name="Person_Email" />
+                                </div>
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputName">Name & Address of Banker</label>
+                                    <textarea type="text" class="form-control" placeholder="Addressbanker"
+                                              name="Addressbanker"></textarea>
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputName">Particular of Director/party/proprietor Name 1</label><span style="color:red">*</span>
+                                    <input type="text" class="form-control" placeholder="PartyName1" name="PartyName1" required />
+                                </div>
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputName">Particular of Director/party/proprietor Name 2</label><span style="color:red">*</span>
+                                    <input type="text" class="form-control" placeholder="PartyName2" name="PartyName2" required />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputName">Year of Establishment</label>
+                                    <input type="text" class="form-control" placeholder="YearOfEstablished" name="YearOfEstablished" />
+                                </div>
+                                <div class="form-group col-12"><h3 class=" font-weight-bold font-weight-500">Chief Executive/owner:</h3> </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Name</label>
+                                    <input type="text" class="form-control" placeholder="Name" name="CEOName" />
+                                </div>
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">CNIC No</label>
+                                    <input type="text" class="form-control" placeholder="CNIC" name="CEOCNIC" />
+                                </div>
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Qualification</label>
+                                    <input type="text" class="form-control" placeholder="CEOQualification" name="CEOQualification" />
+                                </div>
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Residential Address</label>
+                                    <input type="text" class="form-control" placeholder="ResidentialAddress" name="ResidentialAddress" />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Telephone</label>
+                                    <input type="text" class="form-control" placeholder="Telephone" name="Telephone" />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">NTN</label>
+                                    <input type="text" class="form-control" placeholder="NTN" name="NTN" />
+                                </div>
+
+                                <div class="form-group col-12"><h3 class=" font-weight-bold font-weight-500">Dealer Price:</h3> </div>
+
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Plot Price (Pr Sq Ft)</label>
+                                    <input type="number" class="form-control" placeholder="ApartmentPrice" name="DealerAppartmentPrice" />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Office Price (Pr Sq Ft)</label>
+                                    <input type="number" class="form-control" placeholder="OfficePrice" name="DealerOfficePrice" />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Shop Price (Pr Sq Ft)</label>
+                                    <input type="number" class="form-control" placeholder="ShopPrice" name="DealerShopPrice" />
+                                </div>
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Pent House Price (Pr Sq Ft)</label>
+                                    <input type="number" class="form-control" placeholder="PentHousePrice" name="DealerPentHousePrice" />
+                                </div>
+
+
+                                <div class="form-group col-12 ">
+                                    <label for="inputClientCompany">Dealer Type</label>
+                                    <select type="text" class="form-control" onchange="delaer_change(this)" placeholder="" id="dealerType" name="dealerType">
+
+                                        <option value="1" selected>Main Dealer</option>
+                                        <option value="2">Sub Dealer</option>
+                                    </select>
+                                </div>
+                                <script>
+                                    function delaer_change(ctrl) {
+                                        if (ctrl.value == 1) {
+
+                                            $('#testtest').hide();
+                                        } else {
+
+                                            $('#testtest').show();
+                                        }
+                                    }
+                                </script>
+                                <div class="form-group col-12" id="testtest" style="display:none;">
+                                    <label for="inputClientCompany">Main Dealer</label>
+                                    <select type="text" class="form-control" placeholder="" id="ParentDealerId" name="ParentDealerId">
+                                        @foreach (Society.Data.Dealer a in ViewBag.dealer)
+                                        {
+                                            <option value="@a.Dealer_ID">@a.Company_Name</option>
+                                        }
+                                    </select>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input type="submit" value="Add Dealer" class="btn btn-success float-right">
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+
+}
+

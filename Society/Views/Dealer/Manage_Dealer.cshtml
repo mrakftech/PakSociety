@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Society.Data.Dealer>
+
+
+
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" ||ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Dealer</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Dealer</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">                     
+                            <div class="offset-11">                               
+                                    <a href="/Dealer/Add_Dealer" class="btn btn-primary"> Add New</a>
+                            </div>
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    @*<th>Reg#</th>*@
+                                    <th>Company Name</th>
+                                    <th>Dealer Name</th>
+                                    <th>Reg Date</th>
+                                    <th>CNIC</th>
+                                    <th>C-Cell No</th>
+                                    <th>C-Address</th>
+                                    @*<th>Status</th>
+                                    <th>Percentage</th>*@
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var x in Model)
+                            {
+                        <tr>
+                            @*<td>@x.Reg_No</td>*@
+                            <td>@x.Company_Name</td>
+                            @*<td>@x.Contact_Person_Name</td>*@
+                            <td>@x.CEOName</td>
+                            @if (x.Reg_Date != null)
+                            {
+
+                                DateTime d = (DateTime)x.Reg_Date;
+                                <td>@d.ToString("dd-MM-yyyy")</td>
+                            }
+
+                            <td>@x.Person_CNIC</td>
+
+                            <td>@x.Company_Phone</td>
+                            <td>@x.Company_Address</td>
+                            @*@if (x.Status == true)
+                            {
+
+                                <td><span class="badge badge-success">Agency</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="badge badge-warning">Indivdual</span></td>
+                            }*@
+
+
+
+                            @*<td>@x.Percentage</td>*@
+                            <td>
+                               
+                                <a title="Update" href="/Dealer/Update_Dealer?id=@x.Dealer_ID" class="btn btn-success btn-sm m-1"><i class="fas fa-user"></i></a>
+                               <a title="delete" href="/Dealer/Delete?id=@x.Dealer_ID" onclick="return confirm('Are you sure U Want to delete Record?')" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+
+

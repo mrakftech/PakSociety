@@ -1,0 +1,270 @@
+﻿@model IEnumerable<Society.Data.Installment>
+@{
+    ViewBag.Title = "Monthly_Paid";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form id="submit" method="POST">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Monthly Installment List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Member List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div><section class="content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+                            <div class="col-md-3 offset-4">
+                                <input type="month" class="form-control" id="month" onchange="sub()" />
+                            </div>
+                            <div class="toggler-wrapper local-filter" style="margin-top:6px;margin-left:50px"><label class="_33fw587 NveTX4Z"><input type="checkbox" id="check" onclick="lick()"><span class="J8BZ6cq"></span></label></div><b style="margin-top:6px">Paid Member</b>
+
+
+
+                        </div>
+                        <script>
+
+                            function sub() {
+
+                                var month = $('#month').val();
+                                var checkBox = document.getElementById("check");
+                                if (checkBox.checked == true) {
+                                    var chk = "true";
+                                } else {
+                                    chk = "false";
+                                }
+                                $.ajax({
+                                    url: '/Report/Monthly_Paid',
+                                    type: 'POST',
+                                    data: {
+                                        month: month,
+                                        chk: chk
+
+
+                                    },
+                                    cache: false,
+                                    success: function (data) {
+
+                                        if (data == false) {
+                                            var table = $('#example1').DataTable();
+                                            table.clear();
+                                            table.draw();
+                                        }
+
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+
+
+                                        var obj = JSON.parse(data);
+                                        var tr;
+                                        count = 1;
+                                        //Append each row to html table
+                                        for (var i = 0; i < obj.length; i++) {
+                                            tr = $('<tr/>');
+                                            tr.append("<td>" + count + "</td>");
+                                            tr.append("<td>" + obj[i].Applicant_Name + "</td>");
+                                            tr.append("<td>" + obj[i].CNIC + "</td>");
+                                            tr.append("<td>" + obj[i].Net_Price + "</td>");
+
+
+
+                                            var today = new Date(obj[i].Month);
+                                            var dd = today.getDate();
+
+                                            var mm = today.getMonth() + 1;
+                                            var yyyy = today.getFullYear();
+                                            if (dd < 10) {
+                                                dd = '0' + dd;
+                                            }
+
+                                            if (mm < 10) {
+                                                mm = '0' + mm;
+                                            }
+                                            today = yyyy + '-' + mm + '-' + dd;
+
+                                            tr.append("<td>" + today + "</td>");
+
+                                            tr.append("<td>" + obj[i].Installment_No + "</td>");
+
+                                            tr.append("<td>" + obj[i].Amount + "</td>");
+                                            if (obj[i].unpaid == "unpaid") {
+                                                tr.append("<td>" + "<span class='badge badge-danger'>" + obj[i].unpaid + "</span>" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + "<span class='badge badge-success'>" + obj[i].unpaid + "</span>" + "</td>");
+                                            }
+
+
+
+
+                                            table.row.add(tr);
+
+                                            table.draw();
+                                            count++;
+
+
+
+                                        }
+                                    }
+
+
+
+                                });
+                            }
+                            function lick() {
+                                var month = $('#month').val();
+                                if (month == "") {
+                                    $('#month').focus();
+                                } else {
+                                    var checkBox = document.getElementById("check");
+                                    if (checkBox.checked == true) {
+                                        var chk = "true";
+                                    } else {
+                                        chk = "false";
+                                    }
+                                    $.ajax({
+                                        url: '/Report/Monthly_Paid',
+                                        type: 'POST',
+                                        data: {
+                                            month: month,
+                                            chk: chk
+
+
+                                        },
+                                        cache: false,
+                                        success: function (data) {
+
+                                            if (data == false) {
+                                                var table = $('#example1').DataTable();
+                                                table.clear();
+                                                table.draw();
+                                            }
+
+                                            var table = $('#example1').DataTable();
+                                            table.clear();
+
+
+                                            var obj = JSON.parse(data);
+                                            var tr;
+                                            count = 1;
+                                            //Append each row to html table
+                                            for (var i = 0; i < obj.length; i++) {
+                                                tr = $('<tr/>');
+                                                tr.append("<td>" + count + "</td>");
+                                                tr.append("<td>" + obj[i].Applicant_Name + "</td>");
+                                                tr.append("<td>" + obj[i].CNIC + "</td>");
+                                                tr.append("<td>" + obj[i].Net_Price + "</td>");
+
+
+
+                                                var today = new Date(obj[i].Month);
+                                                var dd = today.getDate();
+
+                                                var mm = today.getMonth() + 1;
+                                                var yyyy = today.getFullYear();
+                                                if (dd < 10) {
+                                                    dd = '0' + dd;
+                                                }
+
+                                                if (mm < 10) {
+                                                    mm = '0' + mm;
+                                                }
+                                                today = yyyy + '-' + mm + '-' + dd;
+
+                                                tr.append("<td>" + today + "</td>");
+
+                                                tr.append("<td>" + obj[i].Installment_No + "</td>");
+
+                                                tr.append("<td>" + obj[i].Amount + "</td>");
+
+                                                if (obj[i].unpaid == "unpaid") {
+                                                    tr.append("<td>" + "<span class='badge badge-danger'>" + obj[i].unpaid + "</span>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<span class='badge badge-success'>" + obj[i].unpaid + "</span>" + "</td>");
+                                                }
+
+
+
+                                                table.row.add(tr);
+
+                                                table.draw();
+                                                count++;
+
+
+
+                                            }
+                                        }
+
+
+
+                                    });
+                                }
+
+                            }
+
+
+                        </script>
+
+                    </div>
+
+                </section>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 2%">#</th>
+                                    <th style="width: 13%">Member Name</th>
+                                    <th style="width: 10%">CNIC</th>
+                                    <th style="width: 10%">Unit Price</th>
+                                    <th style="width: 15%">Payment Date</th>
+                                    <th style="width: 15%">Installment No</th>
+                                    <th style="width: 13%">Amount Paid</th>
+                                    <th style="width: 15%">Status</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@x.Payment_Plan.Plot.Member.Applicant_Name</td>
+                                    <td>@x.Payment_Plan.Plot.Member.CNIC</td>
+                                    <td>@x.Payment_Plan.Net_Price_Plot</td>
+                                    <td>@x.Payment_Month.ToString("dd-MM-yyyy")</td>
+                                    <td>@x.Installment_No</td>
+                                    <td>@x.Amount_Paid</td>
+                                    <td><span class="badge badge-danger">Un Paid</span></td>
+                                </tr>
+                                count = count + 1;
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+                                }

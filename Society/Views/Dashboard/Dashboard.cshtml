@@ -1,0 +1,458 @@
+﻿@model dynamic
+<div class="wrapper">
+    <!-- Navbar -->
+    <!-- /.navbar -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Dashboard</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/Login/Login">Logout</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>@Model.member<sup style="font-size: 20px">All</sup></h3>
+
+                                <p>Total Unit Sales</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>@Model.paid<sup style="font-size: 20px">@DateTime.Now.ToString("MMMM")</sup></h3>
+
+                                <p>Installment Received</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-android-checkmark-circle"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>@Model.not_paid<sup style="font-size: 20px">@DateTime.Now.ToString("MMMM")</sup></h3>
+
+                                <p>Installment Pending</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-android-alert"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                @{ double defaulter = 0;}
+                                @if (Model.defaulter != null)
+                                {
+                                  defaulter = Model.defaulter;
+                                }
+                                <h3>@defaulter.ToString("n0")</h3>
+
+                                <p>Defaulter Amount</p>
+                            </div>
+                        <div class="icon">
+                            <i class="ion ion-alert-circled"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Monthly Sales Report</h5>
+
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <p class="text-center">
+                                        <strong>@DateTime.Now.AddMonths(-1).ToString("dd-MMM-yyyy") - @DateTime.Now.ToString("dd-MMM-yyyy")</strong>
+                                    </p>
+
+                                    <div class="chart">
+                                        <!-- Sales Chart Canvas -->
+                                        <canvas id="salesChart" height="180" style="height: 180px;"></canvas>
+                                    </div>
+                                    <!-- /.chart-responsive -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-md-3">
+                                    <p class="text-center">
+                                        <strong>Details @DateTime.Now.AddMonths(-1).ToString("dd-MMM-yyyy") - @DateTime.Now.ToString("dd-MMM-yyyy")</strong>
+                                    </p>
+
+                                    <div class="progress-group">
+                                        Units Sales
+                                        <span class="float-right"><b>@Model.plotSales</b>/300</span>
+                                        <div class="progress progress-sm">
+                                            
+                                            <div class="progress-bar bg-primary" style="width:
+                                                @Model.plotSalesPer%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+
+                                    <div class="progress-group">
+                                        Payment Transfers
+                                        <span class="float-right"><b>@Model.paymentTransfer</b>/300</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-danger" style="width: @Model.paymentTransferPer%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">File Transfers</span>
+                                        <span class="float-right"><b>@Model.fileTransfer</b>/300</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-success" style="width: @Model.fileTransferPer%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        @{ var refund = Model.refund / 500 * 100;}
+                                        Refunds
+                                        <span class="float-right"><b>@Model.refund</b>/300</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-warning" style="width: @Model.refundPer%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- ./card-body -->
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block border-right">
+                                        <h5 class="description-header">Rs:@{double monthlySales = 0; if(Model.monthlySales != null) { monthlySales =(double) Model.monthlySales;}}@monthlySales.ToString("n0")</h5>
+                                        <span class="description-text">TOTAL SALE AMOUNT</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block border-right">
+                                        <h5 class="description-header">Rs:@{double refundAmount = Model.refundAmount;}@refundAmount.ToString("n0") </h5>
+                                        <span class="description-text">TOTAL REFUND AMOUNT</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block border-right">
+                                        <h5 class="description-header">Rs:@{double received = Model.received == null ? 0 : Model.received;}@received.ToString("n0")</h5>
+                                        <span class="description-text">TOTAL RECEIVED AMOUNT</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block">
+                                        <h5 class="description-header">@{double toBeReceived = 0;
+                                            if(Model.toBeReceived != null)
+                                            {
+                                                toBeReceived = Model.toBeReceived;
+                                            }
+                }@toBeReceived.ToString("n0")</h5>
+                                        <span class="description-text">TO BE RECEIVED</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+            <div class="row">
+
+
+                <!-- /.col -->
+
+                <div class="col-md-6">
+                    <!-- Bar chart -->
+                    <div class="card card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="far fa-chart-bar"></i>
+                                Monthly Receiving Amounts
+                            </h3>
+
+                        </div>
+                        <div class="card-body">
+                            <div class="bar-chart" style="height: 300px;"></div>
+                        </div>
+                        <!-- /.card-body-->
+                    </div>
+                    <!-- /.card -->
+                    <!-- Donut chart -->
+                    <!-- /.card -->
+                </div>
+                <div class="col-md-6">
+                    <div class="card  card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="far fa-chart-bar"></i>
+                                Size Wise Chart
+                            </h3>
+
+                        </div>
+                        <div class="card-body">
+                            <div class="donut-chart" style="height: 300px;"></div>
+                        </div>
+                        <!-- /.card-body-->
+                    </div>
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- Content Wrapper. Contains page content -->
+<!-- /.content-wrapper -->
+<!-- Control Sidebar -->
+</div>
+<script>
+    function getPreviousSixMonths() {
+        const today = new Date();
+        const currentMonth = today.getMonth();
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const result = [];
+        for (let i = 5; i >= 0; i--) {
+            const monthIndex = (currentMonth - i + 12) % 12;
+            result.push([-i * 1 + 6, months[monthIndex]]);
+        }
+
+        return result;
+    }
+
+    // Usage
+
+
+    // Usage
+    const previousSixMonths = getPreviousSixMonths();
+
+    function getDatesOneMonthAgoShort() {
+        const today = new Date();
+        const result = [];
+        let currentDate = new Date(today);
+
+        // Go back one month from today's date
+        currentDate.setMonth(currentDate.getMonth() - 1);
+
+        const options = { day: 'numeric', month: 'short' };
+        const dateFormatter = new Intl.DateTimeFormat('en-US', options);
+
+        // Iterate from today's date to the date one month ago and add each date to the result array
+        while (currentDate <= today) {
+            const formattedDate = dateFormatter.format(currentDate);
+            result.push(formattedDate);
+            currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+        }
+
+        return result;
+    }
+    $(function () {
+        const datesOneMonthAgoShort = getDatesOneMonthAgoShort();
+
+
+
+        var salesChartCanvas = $('#salesChart').get(0).getContext('2d')
+        var myJsArray = @Html.Raw(Json.Encode(Model.chartdata));
+        console.log(myJsArray);
+        var salesChartData = {
+            labels: datesOneMonthAgoShort,
+            datasets: [
+                {
+                    label: 'Total Sales',
+                    backgroundColor: '#145c31',
+                    borderColor: '#145c31',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: myJsArray
+                }
+            ]
+        }
+
+        var salesChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: true
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: true
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: true
+                    }
+                }]
+            }
+        }
+
+        // This will get the first returned node in the jQuery collection.
+        // eslint-disable-next-line no-unused-vars
+        var salesChart = new Chart(salesChartCanvas, {
+            type: 'line',
+            data: salesChartData,
+            options: salesChartOptions
+        }
+        )
+        /*
+         * BAR CHART
+         * ---------
+         */
+        const previousSixMonths = getPreviousSixMonths();
+
+        var bar_data = {
+            data: [[1, 10], [2, 8], [3, 4], [4, 13], [5, 17], [6, 16]],
+            bars: { show: true }
+        }
+        $.plot('.bar-chart', [bar_data], {
+            grid: {
+                borderWidth: 1,
+                borderColor: '#f3f3f3',
+                tickColor: '#f3f3f3'
+            },
+            series: {
+                bars: {
+                    show: true, barWidth: 0.5, align: 'center',
+                },
+            },
+            colors: ['#3c8dbc'],
+            xaxis: {
+                ticks: previousSixMonths
+            }
+        })
+        /* END BAR CHART */
+
+        /*
+         * DONUT CHART
+         * -----------
+         */
+
+        var donutData = [
+            {
+                label: '25 x 50',
+                data: 30,
+                color: '#3c8dbc'
+            },
+            {
+                label: '30 x 60',
+                data: 20,
+                color: '#0073b7'
+            },
+            {
+                label: '1 Kanal',
+                data: 50,
+                color: '#00c0ef'
+            }
+        ]
+        $.plot('.donut-chart', donutData, {
+            series: {
+                pie: {
+                    show: true,
+                    radius: 1,
+                    innerRadius: 0.5,
+                    label: {
+                        show: true,
+                        radius: 2 / 3,
+                        formatter: labelFormatter,
+                        threshold: 0.1
+                    }
+
+                }
+            },
+            legend: {
+                show: false
+            }
+        })
+        /*
+         * END DONUT CHART
+         */
+
+    })
+
+    /*
+     * Custom Label formatter
+     * ----------------------
+     */
+    function labelFormatter(label, series) {
+        return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
+            + label
+            + '<br>'
+            + Math.round(series.percent) + '%</div>'
+    }
+</script>
+
+<!-- ./wrapper -->
+<!-- jQuery -->
+<!-- Bootstrap 4 -->
+<!-- FLOT CHARTS -->
+<!-- AdminLTE for demo purposes -->
+<!-- Page specific script -->

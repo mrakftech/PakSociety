@@ -1,0 +1,70 @@
+﻿@model Society.Data.Shift
+@{
+    ViewBag.Title = "Update_Shift";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Update Shift</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Shift Update</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Shift Details</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Shift Name</label>
+
+                                    <input type="text" id="Shift_Name" required class="form-control" placeholder="Shift_Name"
+                                           name="Shift_Name" value="@Model.Shift_Name" />
+                                </div>
+                                <input type="hidden" id="Shift_ID" name="Shift_ID" value="@Model.Shift_ID" />
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Start Time</label>
+                                    <input type="time" id="StartTime" class="form-control" placeholder="Gross Weight"
+                                           name="StartTime" value="@Model.StartTime" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputClientCompany">End Time</label>
+                                    <input type="time" maxlength="11" id="EndTime" class="form-control" placeholder="Net Weight"
+                                           name="EndTime" value="@Model.EndTime" />
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input type="submit" value="Add New Shift" class="btn btn-success float-right" />
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+}

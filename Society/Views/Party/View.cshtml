@@ -1,0 +1,90 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "View";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Party Detail</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Party</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">PArty</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">Ref#</th>
+                                <th style="width: 15%">Payment Date</th>
+                                <th style="width: 15%">Client Name</th>
+
+
+                                <th style="width: 15%">Paid Amount </th>
+                                <th style="width: 20%">receipt Head</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Party_Detail x in Model.a)
+                            {
+                            <tr>
+                                <td>@x.Party.Member.Plots.FirstOrDefault(o => o.Member_ID == x.Party.Member_ID).Reg_No </td>
+                                <td>@x.Pay_Date.ToString("dd-MM-yyyy")</td>
+                                <td>@x.Party.Member.Applicant_Name</td>
+
+
+                                @{var res = x.Current_Amount - x.Previous_Amount;}
+                                <td>@res</td>
+                                @{ var val = Convert.ToInt32(x.Head);
+                                    foreach (Ledger_Account l in Model.ledger)
+                                    {
+                                        if (l.ID == val)
+                                        {
+                                            <td>@l.Ledger_Account_Title</td>
+}
+
+
+                                    }
+                                }
+
+                            <td>
+                                <a href="/Party/print?id=@x.ID" class="btn btn-primary btn-sm m-1" target="_blank">Print</a>
+                                @if (x.voucher_check == true)
+                                {<a href="/Party/delete?id=@x.ID" onclick="return confirm('Are you sure U Want to delete Record?')" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>}
+                            </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+}

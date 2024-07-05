@@ -1,0 +1,1246 @@
+﻿
+@{
+    ViewBag.Title = "Add_Plan";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Payment Plan</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Payment Plan</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form method="POST" id="form" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Cost Of Plot</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Price Of Plot:<span style="color:red">*</span></label>
+                                    <input type="number" id="Gross_Price_Plot" class="form-control" placeholder="Price Of Plot" onkeyup="t_amount()" name="Total_Price" required />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Size:<span style="color:red">*</span></label>
+                                    <input type="text" class="form-control" placeholder="Size" name="Size" required />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Plan Name:<span style="color:red">*</span></label>
+                                    <input type="text" class="form-control" placeholder="Plan Name" name="Plan_Name" required />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Plot Type:<span style="color:red">*</span></label>
+                                    <select type="text" class="form-control" placeholder="Scheme Name" name="Plot_Type" required>
+
+                                        <option>NPF members</option>
+                                        <option>non NPF members</option>
+                                    </select>
+                                </div>
+                                <div class="col-4 float-left form-group">
+                                    <label for="inputName">Scheme:</label>
+                                    <div class="toggler-wrapper local-filter" style="margin-top:6px"><label class="_33fw587 NveTX4Z"><input type="checkbox" id="old" onclick="radio_update()"><span class="J8BZ6cq"></span></label><b style="margin-bottom:10px">NEW</b></div>
+                                </div>
+                                <input type="hidden" id="Scheme" name="Scheme" value="false" />
+                                <script>
+                                    function radio_update() {
+                                        var x = document.getElementById('old').checked;
+                                        if (document.getElementById('old').checked == true) {
+
+                                            $('#Scheme').val("true");
+
+                                        } else if (document.getElementById('old').checked == false) {
+                                            $('#Scheme').val("false");
+
+                                        }
+                                    }
+                                </script>
+
+                                <script>
+                                    function t_amount() {
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        $('#Net_Price_Plot').val(amount);
+                                        $('#remaining_amount').val(amount);
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Down_Payment').val("0");
+                                        $('#allocation_a').val("0");
+                                        $('#allocation_p').val("0");
+                                        $('#allocation_t').val("0");
+                                        $('#confirmation_a').val("0");
+                                        $('#confirmation_p').val("0");
+                                        $('#confirmation_t').val("0");
+                                        $('#no_of_monthly_installments').val("0");
+                                        $('#single_monthly_installments_percentage').val("0");
+                                        $('#Single_Monthly_Installment').val("0");
+                                        $('#total_monthly_installments_amount').val("0");
+                                        $('#no_of_half_yearly_installments').val("0");
+                                        $('#single_half_yearly_installments_percentage').val("0");
+                                        $('#Single_Half_Yearly_Installment').val("0");
+                                        $('#total_half_yearly_installments_amount').val("0");
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#extra_charge_percentage').val("0");
+                                        $('#Extra_Charge').val("0");
+                                        $('#Discount_percentage').val("0");
+                                        $('#Discount').val("0");
+                                        $('#total_net').val(0);
+                                        $('#total_downpayment ').val(0);
+
+                                        $('#Adjustment_Amount').val("0");
+                                        total_extra_charge = 0;
+                                        total_discount_amount = 0;
+                                    }</script>
+
+
+
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="Extra_Charge" class="form-control" placeholder="Extra Charges" onkeyup="extracharges_amount()" style="color:red" name="Extra_Charge" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="extra_charge_percentage" class="form-control" placeholder="Extra Charges" onkeyup="extracharges_percentage()" name="extra_charge_percentage" />
+                                </div>
+                                <style>
+                                    input[type=number]::-webkit-inner-spin-button,
+                                    input[type=number]::-webkit-outer-spin-button {
+                                        -webkit-appearance: none;
+                                        -moz-appearance: none;
+                                        margin: 0;
+                                    }
+                                </style>
+                                <script>
+                                    var total_extra_charge = 0;
+                                    var total_discount_amount = 0;
+                                    var total_amount = 0;
+                                    function extracharges_percentage() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var percentage = $('#extra_charge_percentage').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+                                        var remaining = parseFloat(amount) + parseFloat(total);
+                                        $('#Extra_Charge').val(total);
+                                        total_extra_charge = total;
+                                        $('#Net_Price_Plot').val(remaining - total_discount_amount);
+                                        $('#remaining_amount').val(remaining - total_discount_amount);
+                                        $('#Down_payment_percentage').val("");
+                                        $('#Down_Payment').val("");
+
+                                        $('#no_of_monthly_installments').val("");
+                                        $('#single_monthly_installments_percentage').val("");
+                                        $('#Single_Monthly_Installment').val("");
+                                        $('#total_monthly_installments_amount').val("");
+                                        $('#no_of_half_yearly_installments').val("");
+                                        $('#single_half_yearly_installments_percentage').val("");
+                                        $('#Single_Half_Yearly_Installment').val("");
+                                        $('#total_half_yearly_installments_amount').val("");
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("");
+
+                                    }
+                                    function extracharges_amount() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var extra_amount = $('#Extra_Charge').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+
+                                        var remaining = parseFloat(amount) + parseFloat(extra_amount);
+                                        $('#extra_charge_percentage').val(total.toFixed(4));
+
+                                        $('#Net_Price_Plot').val(remaining - total_discount_amount);
+                                        $('#remaining_amount').val(remaining - total_discount_amount);
+                                        total_extra_charge = extra_amount;
+                                        $('#Down_payment_percentage').val("");
+                                        $('#Down_Payment').val("");
+
+                                        $('#no_of_monthly_installments').val("");
+                                        $('#single_monthly_installments_percentage').val("");
+                                        $('#Single_Monthly_Installment').val("");
+                                        $('#total_monthly_installments_amount').val("");
+                                        $('#no_of_half_yearly_installments').val("");
+                                        $('#single_half_yearly_installments_percentage').val("");
+                                        $('#Single_Half_Yearly_Installment').val("");
+                                        $('#total_half_yearly_installments_amount').val("");
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("");
+
+                                    }
+                                </script>
+
+
+
+
+
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="Discount" class="form-control" placeholder="Discount" name="Discount" onkeyup="discount_amount()" style="color:black" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="Discount_percentage" class="form-control" placeholder="Discount" onkeyup="discount_percentage()" />
+                                </div>
+
+                                <script>
+
+                                    function discount_percentage() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var percentage = $('#Discount_percentage').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+                                        $('#Discount').val(total);
+                                        total_discount_amount = total;
+                                        total_amount = parseFloat(amount) + parseFloat(total_extra_charge) - parseFloat(total_discount_amount);
+
+                                        $('#Net_Price_Plot').val(total_amount);
+                                        $('#remaining_amount').val(total_amount);
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Down_Payment').val("0");
+
+                                        $('#no_of_monthly_installments').val("0");
+                                        $('#single_monthly_installments_percentage').val("0");
+                                        $('#Single_Monthly_Installment').val("0");
+                                        $('#total_monthly_installments_amount').val("0");
+                                        $('#no_of_half_yearly_installments').val("0");
+                                        $('#single_half_yearly_installments_percentage').val("0");
+                                        $('#Single_Half_Yearly_Installment').val("0");
+                                        $('#total_half_yearly_installments_amount').val("0");
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("0");
+                                    }
+                                    function discount_amount() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var extra_amount = $('#Discount').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+                                        total_discount_amount = extra_amount;
+                                        $('#Discount_percentage').val(total.toFixed(4));
+                                        total_amount = parseFloat(amount) + parseFloat(total_extra_charge) - parseFloat(total_discount_amount);
+
+                                        $('#Net_Price_Plot').val(total_amount);
+                                        $('#remaining_amount').val(total_amount);
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Down_Payment').val("0");
+
+                                        $('#no_of_monthly_installments').val("0");
+                                        $('#single_monthly_installments_percentage').val("0");
+                                        $('#Single_Monthly_Installment').val("0");
+                                        $('#total_monthly_installments_amount').val("0");
+                                        $('#no_of_half_yearly_installments').val("0");
+                                        $('#single_half_yearly_installments_percentage').val("0");
+                                        $('#Single_Half_Yearly_Installment').val("0");
+                                        $('#total_half_yearly_installments_amount').val("0");
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("0");
+
+                                    }
+                                </script>
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="Net_Price_Plot" name="Net_Price_Plot" class="form-control" placeholder="net" readonly style="color:green;font:200" required />
+                                </div>
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="remaining_amount" class="form-control" placeholder="Remaining" style="color:black" required />
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Installments Details</h3>
+                            </div>
+                            <div class="card-body">
+
+
+
+
+
+                                <script>
+
+                                    function down_payment_percentage() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var total_monthly = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly == "") { total_monthly = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var percentage = $('#Down_payment_percentage').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Down_Payment').val(total);
+                                        total_discount_amount = total;
+                                        $('#total_downpayment').val(total);
+                                        $('#total_net').val(total + parseFloat(total_half_yearly) + parseFloat(total_monthly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        if (percentage == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+                                    }
+                                    function down_Payment() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var total_monthly = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly == "") { total_monthly = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var extra_amount = $('#Down_Payment').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+
+                                        $('#Down_payment_percentage').val(total.toFixed(4));
+                                        $('#total_downpayment').val(extra_amount);
+                                        $('#total_net').val(parseFloat(extra_amount) + parseFloat(total_half_yearly) + parseFloat(total_monthly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        if (extra_amount == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+                                    }
+                                </script>
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Booking</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="" value="1" class="form-control" placeholder="no" name="" required readonly />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Down_Payment" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="down_Payment()" name="Booking" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="Down_payment_percentage" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="down_payment_percentage()" name="Down_payment_percentage" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_downpayment" class="form-control" value="0" placeholder="Total Monthly Installments" readonly name="total_downpayment" />
+                                </div>
+
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Confirmation</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="" value="1" class="form-control" placeholder="no" name="" required readonly />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="allocation_a" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="allocationamount()" name="Allocation" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="allocation_p" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="allocationpercentage()" name="allocation_p" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="allocation_t" class="form-control" value="0" placeholder="Total Monthly Installments" readonly name="allocation_t" />
+                                </div>
+                                <script>
+                                    function allocationamount() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var total_monthly = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly == "") { total_monthly = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var downpayment_amount = $('#total_downpayment').val();
+                                        if (downpayment_amount == "") { downpayment_amount = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var extra_amount = $('#allocation_a').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+
+                                        $('#allocation_p').val(total.toFixed(4));
+                                        $('#allocation_t').val(extra_amount);
+                                        $('#total_net').val(parseFloat(extra_amount) + parseFloat(total_half_yearly) + parseFloat(total_monthly) + parseFloat(total_pocession) + parseFloat(downpayment_amount) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        if (extra_amount == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+                                    }
+                                    function allocationpercentage() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var total_monthly = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly == "") { total_monthly = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var downpayment_amount = $('#total_downpayment').val();
+                                        if (downpayment_amount == "") { downpayment_amount = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var percentage = $('#allocation_p').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#allocation_a').val(total);
+                                        total_discount_amount = total;
+                                        $('#allocation_t').val(total);
+                                        $('#total_net').val(total + parseFloat(total_half_yearly) + parseFloat(total_monthly) + parseFloat(total_pocession) + parseFloat(downpayment_amount) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        if (percentage == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+                                    }
+                                </script>
+                                <div class="form-group col-3 float-left d-none" style="margin-top:30px">
+                                    <label for="inputName">Confirmation</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left d-none">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="" value="1" class="form-control" placeholder="no" name="" required readonly />
+                                </div>
+                                <div class="form-group col-3 float-left d-none">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="confirmation_a" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="confirmationamount()" name="Confirmation" required  />
+                                </div>
+                                <div class="form-group col-2 float-left d-none">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="confirmation_p" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="confirmationpercentage()" name="confirmation_p" required  />
+                                </div>
+
+                                <div class="form-group col-3 float-left d-none">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="confirmation_t" class="form-control" value="0" placeholder="Total Monthly Installments" readonly name="confirmation_t"  />
+                                </div>
+                                <script>
+                                    function confirmationamount() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var total_monthly = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly == "") { total_monthly = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var downpayment_amount = $('#total_downpayment').val();
+                                        if (downpayment_amount == "") { downpayment_amount = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var extra_amount = $('#confirmation_a').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+
+                                        $('#confirmation_p').val(total.toFixed(4));
+                                        $('#confirmation_t').val(extra_amount);
+                                        $('#total_net').val(parseFloat(extra_amount) + parseFloat(total_half_yearly) + parseFloat(total_monthly) + parseFloat(total_pocession) + parseFloat(downpayment_amount) + parseFloat(allocation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        if (extra_amount == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+
+                                    }
+                                    function confirmationpercentage() {
+
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var total_monthly = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly == "") { total_monthly = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var downpayment_amount = $('#total_downpayment').val();
+                                        if (downpayment_amount == "") { downpayment_amount = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var percentage = $('#confirmation_p').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#confirmation_a').val(total);
+                                        total_discount_amount = total;
+                                        $('#confirmation_t').val(total);
+                                        $('#total_net').val(total + parseFloat(total_half_yearly) + parseFloat(total_monthly) + parseFloat(total_pocession) + parseFloat(downpayment_amount) + parseFloat(allocation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        if (percentage == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+
+                                    }
+
+                                </script>
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Monthly Installment</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="no_of_monthly_installments" value="0" onkeyup="monthly_installemnt()" class="form-control" placeholder="no" name="No_Of_Monthly" required />
+                                </div>
+                                <script>
+                                    function monthly_installemnt() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+
+                                        var percentage = $('#single_monthly_installments_percentage').val();
+                                        var no_of_installment = $('#no_of_monthly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+                                        var Down_Payment = $('#Down_Payment').val();
+                                        if (Down_Payment == "") {
+                                            Down_Payment = 0;
+                                        }
+                                        $('#Single_Monthly_Installment').val(total);
+                                        var total_monthly_installment = total * no_of_installment;
+                                        $('#total_monthly_installments_amount').val(total_monthly_installment);
+
+                                        $('#total_net').val(total_monthly_installment + parseFloat(total_downpayment) + parseFloat(total_half_yearly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+
+                                    }
+                                </script>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Single_Monthly_Installment" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="single_monthly_installment_amount()" name="Monthly" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="single_monthly_installments_percentage" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="single_monthly_installment_per()" name="Application_Date" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_monthly_installments_amount" class="form-control" value="0" placeholder="Total Monthly Installments"  name="Application_Date" required />
+                                </div>
+
+                                <script>
+                                    function single_monthly_installment_per() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+
+                                        var percentage = $('#single_monthly_installments_percentage').val();
+                                        var no_of_installment = $('#no_of_monthly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+                                        var Down_Payment = $('#Down_Payment').val();
+                                        if (Down_Payment == "") {
+                                            Down_Payment = 0;
+                                        }
+                                        $('#Single_Monthly_Installment').val(total);
+                                        var total_monthly_installment = total * no_of_installment;
+                                        $('#total_monthly_installments_amount').val(total_monthly_installment);
+
+                                        $('#total_net').val(total_monthly_installment + parseFloat(total_downpayment) + parseFloat(total_half_yearly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+
+                                    }
+                                    function single_monthly_installment_amount() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var no_of_installment = $('#no_of_monthly_installments').val();
+                                        var amount = $('#remaining_amount').val();
+                                        var extra_amount = $('#Single_Monthly_Installment').val();
+                                        var Down_Payment = $('#Down_Payment').val();
+                                        if (Down_Payment == "") {
+                                            Down_Payment = 0;
+                                        }
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+                                        var total_monthly_installment = extra_amount * no_of_installment;
+                                        $('#single_monthly_installments_percentage').val(total.toFixed(4));
+                                        $('#total_net').val(total_monthly_installment + parseFloat(total_downpayment) + parseFloat(total_half_yearly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+                                        $('#total_monthly_installments_amount').val(total_monthly_installment);
+                                    }
+
+                                </script>
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+
+                                    <label class="_33fw587 NveTX4Z ">Quarterly installment</label>
+                                </div>
+                                <script>
+                                    function quaterly1() {
+                                        if (document.getElementById('quaterly').checked == true) {
+
+                                            document.getElementById('no_of_quaterly_installments'). = false;
+                                            document.getElementById('Single_quaterly_Installment'). = false;
+                                            document.getElementById('single_quaterly_percentage'). = false;
+
+                                        } else if (document.getElementById('quaterly').checked == false) {
+                                            document.getElementById('no_of_quaterly_installments'). = true;
+                                            $('#no_of_quaterly_installments').val(0);
+                                            document.getElementById('Single_quaterly_Installment'). = true;
+                                            $('#Single_quaterly_Installment').val(0);
+                                            document.getElementById('single_quaterly_percentage'). = true;
+                                            $('#single_quaterly_percentage').val(0);
+                                            $('#total_quaterly_installments_amount').val(0);
+
+                                            var confirmation_t = $('#confirmation_t').val();
+                                            if (confirmation_t == "") { confirmation_t = 0; }
+                                            var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                            if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                            var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                            if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                            var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                            if (total_half_yearly == "") { total_half_yearly = 0; }
+                                            var total_monthly = $('#total_monthly_installments_amount').val();
+                                            if (total_monthly == "") { total_monthly = 0; }
+                                            var total_pocession = $('#total_pocession').val();
+                                            if (total_pocession == "") { total_pocession = 0; }
+                                            var downpayment_amount = $('#total_downpayment').val();
+                                            if (downpayment_amount == "") { downpayment_amount = 0; }
+                                            var allocation_t = $('#allocation_t').val();
+                                            if (allocation_t == "") { allocation_t = 0; }
+                                            $('#total_net').val(parseFloat(total_monthly) + parseFloat(downpayment_amount) + parseFloat(total_half_yearly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+                                        }
+
+                                    }
+                                </script>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="no_of_quaterly_installments" value="0" onkeyup="no_of_quaterly()" class="form-control" placeholder="no" name="NoOfQuaterly"  required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Single_quaterly_Installment" class="form-control" onkeyup="quaterly_amount()" value="0" placeholder="Single_quaterly_Installment"  name="Quatlerly_installment" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="single_quaterly_percentage" class="form-control" value="0" onkeyup="quaterly_per()" placeholder="single_quaterly_percentage"  name="single_quaterly_percentage" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_quaterly_installments_amount" class="form-control" value="0" onkeyup="quaterly_total()" placeholder="total_quaterly_installments_amount"  name="total_quaterly_installments_amount" required />
+                                </div>
+                                <script>
+                                    function no_of_quaterly() {
+
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly_installments_amount = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly_installments_amount == "") { total_half_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_quaterly_percentage').val();
+                                        var no_of_installment = $('#no_of_quaterly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Single_quaterly_Installment').val(total);
+                                        var total_quaterly_installments_amount = total * no_of_installment;
+                                        $('#total_quaterly_installments_amount').val(total_quaterly_installments_amount);
+
+                                        $('#total_net').val(total_quaterly_installments_amount + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_half_yearly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+
+                                    }
+                                    function quaterly_amount() {
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly_installments_amount = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly_installments_amount == "") { total_half_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var no_of_installment = $('#no_of_quaterly_installments').val();
+                                        var amount = $('#remaining_amount').val();
+                                        var extra_amount = $('#Single_quaterly_Installment').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+                                        var total_quaterly_installments_amount = extra_amount * no_of_installment;
+                                        $('#single_quaterly_percentage').val(total.toFixed(4));
+                                        $('#total_net').val(total_quaterly_installments_amount + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_half_yearly_installments_amount) + parseFloat(total_yearly_installments_amount));
+                                        $('#total_quaterly_installments_amount').val(total_quaterly_installments_amount);
+                                    }
+                                    function quaterly_per() {
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_half_yearly_installments_amount = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly_installments_amount == "") { total_half_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_quaterly_percentage').val();
+                                        var no_of_installment = $('#no_of_quaterly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Single_quaterly_Installment').val(total);
+                                        var total_quaterly_installments_amount = total * no_of_installment;
+                                        $('#total_quaterly_installments_amount').val(total_quaterly_installments_amount);
+
+                                        $('#total_net').val(total_quaterly_installments_amount + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_half_yearly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                    }
+
+                                </script>
+
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+
+                                    <label class="_33fw587 NveTX4Z ">Half Yearly Installment</label>
+                                </div>
+                                <script>
+                                    function halfyearly1() {
+                                        if (document.getElementById('halfyearly').checked == true) {
+
+                                            document.getElementById('no_of_half_yearly_installments'). = false;
+                                            document.getElementById('Single_Half_Yearly_Installment'). = false;
+                                            document.getElementById('single_half_yearly_installments_percentage'). = false;
+
+                                        } else if (document.getElementById('halfyearly').checked == false) {
+                                            document.getElementById('no_of_half_yearly_installments'). = true;
+                                            $('#no_of_half_yearly_installments').val(0);
+                                            document.getElementById('Single_Half_Yearly_Installment'). = true;
+                                            $('#Single_Half_Yearly_Installment').val(0);
+                                            document.getElementById('single_half_yearly_installments_percentage'). = true;
+                                            $('#single_half_yearly_installments_percentage').val(0);
+                                            $('#total_half_yearly_installments_amount').val(0);
+
+                                            var confirmation_t = $('#confirmation_t').val();
+                                            if (confirmation_t == "") { confirmation_t = 0; }
+                                            var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                            if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                            var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                            if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                            var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                            if (total_half_yearly == "") { total_half_yearly = 0; }
+                                            var total_monthly = $('#total_monthly_installments_amount').val();
+                                            if (total_monthly == "") { total_monthly = 0; }
+                                            var total_pocession = $('#total_pocession').val();
+                                            if (total_pocession == "") { total_pocession = 0; }
+                                            var downpayment_amount = $('#total_downpayment').val();
+                                            if (downpayment_amount == "") { downpayment_amount = 0; }
+                                            var allocation_t = $('#allocation_t').val();
+                                            if (allocation_t == "") { allocation_t = 0; }
+                                            $('#total_net').val(parseFloat(total_monthly) + parseFloat(downpayment_amount) + parseFloat(total_half_yearly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+                                        }
+
+                                    }
+                                </script>
+
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#:<span style="color:red">*</span></label>
+                                    <input type="number" id="no_of_half_yearly_installments" onkeyup="half_yearly_installemnt()"  required class="form-control" value="0" placeholder="Form_No" name="No_Of_Half_Yearly" />
+                                </div>
+                                <script>
+                                    function half_yearly_installemnt() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_half_yearly_installments_percentage').val();
+                                        var no_of_installment = $('#no_of_half_yearly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Single_Half_Yearly_Installment').val(total);
+                                        var total_half_yearly_installment = total * no_of_installment;
+                                        $('#total_half_yearly_installments_amount').val(total_half_yearly_installment);
+
+                                        $('#total_net').val(total_half_yearly_installment + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+
+                                    }
+                                </script>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Single_Half_Yearly_Installment" class="form-control"  value="0" placeholder="Single Half Yearly Installments" onkeyup="single_half_yearly_installment_amount()" name="Half_Yearly" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="single_half_yearly_installments_percentage" class="form-control"  value="0" placeholder="Single Half Yearly Installments" onkeyup="single_half_yearly_installment_per()" name="Application_Date" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_half_yearly_installments_amount" value="0" class="form-control" placeholder="ATotal Half Yearly Installments"  name="Application_Date" required />
+                                </div>
+                                <script>
+                                    function single_half_yearly_installment_per() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_half_yearly_installments_percentage').val();
+                                        var no_of_installment = $('#no_of_half_yearly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Single_Half_Yearly_Installment').val(total);
+                                        var total_half_yearly_installment = total * no_of_installment;
+                                        $('#total_half_yearly_installments_amount').val(total_half_yearly_installment);
+
+                                        $('#total_net').val(total_half_yearly_installment + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                    }
+                                    function single_half_yearly_installment_amount() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var no_of_installment = $('#no_of_half_yearly_installments').val();
+                                        var amount = $('#remaining_amount').val();
+                                        var extra_amount = $('#Single_Half_Yearly_Installment').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+                                        var total_half_yearly_installment = extra_amount * no_of_installment;
+                                        $('#single_half_yearly_installments_percentage').val(total.toFixed(4));
+                                        $('#total_net').val(total_half_yearly_installment + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+                                        $('#total_half_yearly_installments_amount').val(total_half_yearly_installment);
+                                    }
+
+                                </script>
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+
+                                    <label class="_33fw587 NveTX4Z ">Yearly Installment</label>
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="no_of_yearly_installments" value="0" onkeyup="no_of_yearly()" class="form-control" placeholder="no"  name="NoOfYearly" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Single_yearly_Installment" class="form-control" onkeyup="yearly_amount()" value="0" placeholder="Single Monthly Installments"  name="yearly" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="single_yearly_installments_percentage" class="form-control" onkeyup="yearly_per()" value="0" placeholder="Single Monthly Installments"  name="Application_Date" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_yearly_installments_amount" class="form-control" onkeyup="yearly_total()" value="0" placeholder="Total Monthly Installments"  name="Application_Date" required />
+                                </div>
+                                <script>
+                                    function yearly1() {
+                                        if (document.getElementById('yearly').checked == true) {
+
+                                            document.getElementById('no_of_yearly_installments'). = false;
+                                            document.getElementById('Single_yearly_Installment'). = false;
+                                            document.getElementById('single_yearly_installments_percentage'). = false;
+
+                                        } else if (document.getElementById('yearly').checked == false) {
+                                            document.getElementById('no_of_yearly_installments'). = true;
+                                            $('#no_of_yearly_installments').val(0);
+                                            document.getElementById('Single_yearly_Installment'). = true;
+                                            $('#Single_yearly_Installment').val(0);
+                                            document.getElementById('single_yearly_installments_percentage'). = true;
+                                            $('#single_yearly_installments_percentage').val(0);
+                                            $('#total_yearly_installments_amount').val(0);
+                                            var confirmation_t = $('#confirmation_t').val();
+                                            if (confirmation_t == "") { confirmation_t = 0; }
+                                            var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                            if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                            var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                            if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                            var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                            if (total_half_yearly == "") { total_half_yearly = 0; }
+                                            var total_monthly = $('#total_monthly_installments_amount').val();
+                                            if (total_monthly == "") { total_monthly = 0; }
+                                            var total_pocession = $('#total_pocession').val();
+                                            if (total_pocession == "") { total_pocession = 0; }
+                                            var downpayment_amount = $('#total_downpayment').val();
+                                            if (downpayment_amount == "") { downpayment_amount = 0; }
+                                            var allocation_t = $('#allocation_t').val();
+                                            if (allocation_t == "") { allocation_t = 0; }
+                                            $('#total_net').val(parseFloat(total_monthly) + parseFloat(downpayment_amount) + parseFloat(total_half_yearly) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+
+                                        }
+
+                                    }
+                                </script>
+                                <script>
+                                    function no_of_yearly() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_half_yearly_installments_amount = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly_installments_amount == "") { total_half_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_yearly_installments_percentage').val();
+                                        var no_of_installment = $('#no_of_yearly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Single_yearly_Installment').val(total);
+                                        var total_yearly_installments_amount = total * no_of_installment;
+                                        $('#total_yearly_installments_amount').val(total_yearly_installments_amount);
+
+                                        $('#total_net').val(total_yearly_installments_amount + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_half_yearly_installments_amount) + parseFloat(total_quaterly_installments_amount));
+
+
+
+                                    }
+                                    function yearly_amount() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_half_yearly_installments_amount = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly_installments_amount == "") { total_half_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var no_of_installment = $('#no_of_yearly_installments').val();
+                                        var amount = $('#remaining_amount').val();
+                                        var extra_amount = $('#Single_yearly_Installment').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+                                        var total_yearly_installments_amount = extra_amount * no_of_installment;
+                                        $('#single_yearly_installments_percentage').val(total.toFixed(4));
+                                        $('#total_net').val(total_yearly_installments_amount + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_half_yearly_installments_amount) + parseFloat(total_quaterly_installments_amount));
+                                        $('#total_yearly_installments_amount').val(total_yearly_installments_amount);
+                                    }
+                                    function yearly_per() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_half_yearly_installments_amount = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly_installments_amount == "") { total_half_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var total_pocession = $('#total_pocession').val();
+                                        if (total_pocession == "") { total_pocession = 0; }
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_yearly_installments_percentage').val();
+                                        var no_of_installment = $('#no_of_yearly_installments').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Single_yearly_Installment').val(total);
+                                        var total_yearly_installments_amount = total * no_of_installment;
+                                        $('#total_yearly_installments_amount').val(total_yearly_installments_amount);
+
+                                        $('#total_net').val(total_yearly_installments_amount + parseFloat(total_monthly_installment) + parseFloat(total_downpayment) + parseFloat(total_pocession) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_half_yearly_installments_amount) + parseFloat(total_quaterly_installments_amount));
+
+                                    }
+                                </script>
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Possession Installment</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="" value="1" readonly class="form-control" placeholder="no" name="" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Pocession_Payment" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="amount()" name="Pocession" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="Pocession_payment_percentage" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="percentage()" name="Pocession_payment_percentage" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_pocession" class="form-control" value="0" placeholder="Total Monthly Installments"  name="total_pocession" required />
+                                </div>
+                                <script>
+
+                                    function percentage() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+
+
+                                        var percentage = $('#Pocession_payment_percentage').val();
+
+
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+                                        $('#Pocession_Payment').val(total);
+                                        $('#total_pocession').val(total);
+                                        if (percentage == "") { $('#total_net').val(parseFloat(total_half_yearly) + parseFloat(total_monthly)); } else {
+                                            $('#total_net').val(parseFloat(total_half_yearly) + parseFloat(total_monthly_installment) + parseFloat(total) + parseFloat(total_downpayment) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount));
+                                        }
+
+
+                                    }
+                                    function amount() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var total_yearly_installments_amount = $('#total_yearly_installments_amount').val();
+                                        if (total_yearly_installments_amount == "") { total_yearly_installments_amount = 0; }
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+                                        var total_monthly_installment = $('#total_monthly_installments_amount').val();
+                                        if (total_monthly_installment == "") { total_monthly_installment = 0; }
+                                        var total_half_yearly = $('#total_half_yearly_installments_amount').val();
+                                        if (total_half_yearly == "") { total_half_yearly = 0; }
+                                        var allocation_t = $('#allocation_t').val();
+                                        if (allocation_t == "") { allocation_t = 0; }
+                                        var confirmation_t = $('#confirmation_t').val();
+                                        if (confirmation_t == "") { confirmation_t = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+
+
+
+                                        var extra_amount = $('#Pocession_Payment').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+                                        if (extra_amount == "") { $('#total_net').val(parseFloat(total_half_yearly) + parseFloat(total_monthly)); }
+                                        else { $('#total_net').val(parseFloat(total_half_yearly) + parseFloat(total_monthly_installment) + parseFloat(extra_amount) + parseFloat(total_downpayment) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount) + parseFloat(total_yearly_installments_amount)); }
+                                        $('#total_pocession').val(extra_amount);
+                                        $('#Pocession_payment_percentage').val(total.toFixed(4));
+                                    }
+                                </script>
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Total Amount Payable:</label>
+
+
+
+
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">&nbsp;</label>
+                                    <input type="text" id="total_net" class="form-control" value="0" placeholder="Total" name="net_total" readonly required>
+
+
+
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" id="type" onclick="sub()" class="btn btn-success float-right">Book new Registration</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script>
+
+        function sub() {
+            document.getElementById('type').setAttribute('type', 'button');
+            var first = parseFloat($('#total_net').val());
+            var second = parseFloat($('#remaining_amount').val());
+
+            if (first == second) {
+
+                document.getElementById('type').setAttribute('type', 'submit');
+
+            } else {
+                alert("Amount Is different");
+            }
+
+        }
+    </script>
+}

@@ -1,0 +1,317 @@
+﻿@model dynamic
+@using Society.Data;
+@{
+    ViewBag.Title = "Setting";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>ACCOUNT SETTING</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Setting</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Setting</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group col-3 float-left" id="checkno" style="margin-top:30px">
+                                <label for="inputName">Member Ledger Account:</label>
+
+                            </div>
+
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">ELEMENT ACCOUNT:</label>
+                                <select type="text" name="member_element" id="member_element" class="form-control" required
+                                        placeholder="Payment Mode" onchange="member_element()">
+                                    <option value="@Model.registration_setting.Element_ID" data-settingname="@Model.registration_setting.Setting_Name" selected>@Model.registration_setting.Element_Account.Account_Title</option>
+                                    @foreach (Element_Account l in Model.element)
+                                    {
+
+                                        <option value="@l.ID" data-settingname="@Model.registration_setting.Setting_Name">@l.Account_Title</option>
+                                    }
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">CONTROL ACCOUNT:</label>
+                                <select type="text" name="member_control" id="member_control" class="form-control"
+                                        placeholder="Payment Mode" required onchange="member_control()">
+                                    <option value="@Model.registration_setting.Control_ID" data-settingname="@Model.registration_setting.Setting_Name" selected>@Model.registration_setting.Control_Account.Control_Account_Title</option>
+                                    @foreach (Control_Account l in Model.control)
+                                    {
+
+                                        <option value="@l.ID" data-settingname="@Model.registration_setting.Setting_Name">@l.Control_Account_Title</option>
+                                    }
+                                </select>
+                            </div>
+                            <script>
+
+                                function member_element() {
+                                    var x1 = $('#member_element option:selected');
+                                    var settingname = x1.data('settingname');
+
+
+                                    var elementid = $('#member_element option:selected').val();
+
+                                    $.ajax({
+                                        url: '/Account_Setting/Element',
+                                        type: 'POST',
+                                        data: {
+                                            elementid: elementid,
+                                            settingname: settingname
+                                        },
+                                        success: function (data) {
+
+
+
+                                        }
+                                    });
+                                    //alert(x);
+                                }
+                                function cash_element() {
+                                    var x1 = $('#cash_element option:selected');
+                                    var settingname = x1.data('settingname');
+
+
+                                    var elementid = $('#cash_element option:selected').val();
+
+                                    $.ajax({
+                                        url: '/Account_Setting/Element',
+                                        type: 'POST',
+                                        data: {
+                                            elementid: elementid,
+                                            settingname: settingname
+                                        },
+                                        success: function (data) {
+
+
+
+                                        }
+                                    });
+                                    //alert(x);
+                                }
+                                function bank_element() {
+                                    var x1 = $('#bank_element option:selected');
+                                    var settingname = x1.data('settingname');
+
+
+                                    var elementid = $('#bank_element option:selected').val();
+
+                                    $.ajax({
+                                        url: '/Account_Setting/Element',
+                                        type: 'POST',
+                                        data: {
+                                            elementid: elementid,
+                                            settingname: settingname
+                                        },
+                                        success: function (data) {
+
+
+
+                                        }
+                                    });
+                                    //alert(x);
+                                }
+                                function bank_control() {
+
+                                    var x1 = $('#bank_control option:selected');
+                                    var settingname = x1.data('settingname');
+
+
+                                    var controlid = $('#bank_control option:selected').val();
+
+                                    $.ajax({
+                                        url: '/Account_Setting/Control',
+                                        type: 'POST',
+                                        data: {
+                                            controlid: controlid,
+                                            settingname: settingname
+                                        },
+                                        success: function (data) {
+
+
+                                        }
+                                    });
+                                }
+                                function cash_control() {
+
+                                    var x1 = $('#cash_control option:selected');
+                                    var settingname = x1.data('settingname');
+
+
+                                    var controlid = $('#cash_control option:selected').val();
+
+                                    $.ajax({
+                                        url: '/Account_Setting/Control',
+                                        type: 'POST',
+                                        data: {
+                                            controlid: controlid,
+                                            settingname: settingname
+                                        },
+                                        success: function (data) {
+
+
+                                        }
+                                    });
+                                }
+                                function member_control() {
+
+                                    var x1 = $('#member_control option:selected');
+                                    var settingname = x1.data('settingname');
+
+
+                                    var controlid = $('#member_control option:selected').val();
+
+                                    $.ajax({
+                                        url: '/Account_Setting/Control',
+                                        type: 'POST',
+                                        data: {
+                                            controlid: controlid,
+                                            settingname: settingname
+                                        },
+                                        success: function (data) {
+
+
+                                        }
+                                    });
+                                }
+                            </script>
+                            <div class="form-group col-3 float-left" id="checkno" style="margin-top:30px">
+                                <label for="inputName">Bank Ledger Account:</label>
+
+                            </div>
+
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">ELEMENT ACCOUNT:</label>
+                                <select type="text" name="bank_element" class="form-control" required
+                                        placeholder="Payment Mode" id="bank_element" onchange="bank_element()">
+                                    <option value="@Model.bank_setting.Element_ID" data-settingname="@Model.bank_setting.Setting_Name" selected>@Model.bank_setting.Element_Account.Account_Title</option>
+                                    @foreach (Element_Account l in Model.element)
+                                    {
+
+                                        <option value="@l.ID" data-settingname="@Model.bank_setting.Setting_Name">@l.Account_Title</option>
+                                    }
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">CONTROL ACCOUNT:</label>
+                                <select type="text" name="bank_control" id="bank_control" class="form-control"
+                                        placeholder="Payment Mode" required onchange="bank_control()">
+                                    <option value="@Model.bank_setting.Control_ID" data-settingname="@Model.bank_setting.Setting_Name" selected>@Model.bank_setting.Control_Account.Control_Account_Title</option>
+                                    @foreach (Control_Account l in Model.control)
+                                    {
+
+                                        <option value="@l.ID" data-settingname="@Model.bank_setting.Setting_Name">@l.Control_Account_Title</option>
+                                    }
+
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group col-3 float-left" id="checkno" style="margin-top:30px">
+                                <label for="inputName">Cash Ledger Account:</label>
+
+                            </div>
+
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">ELEMENT ACCOUNT:</label>
+                                <select type="text" name="cash_element" id="cash_element" class="form-control" required
+                                        placeholder="Payment Mode" onchange="cash_element()">
+                                    <option value="@Model.cash_setting.Element_ID" data-settingname="@Model.cash_setting.Setting_Name" selected>@Model.cash_setting.Element_Account.Account_Title</option>
+                                    @foreach (Element_Account l in Model.element)
+                                    {
+
+                                        <option value="@l.ID" data-settingname="@Model.cash_setting.Setting_Name">@l.Account_Title</option>
+                                    }
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">CONTROL ACCOUNT:</label>
+                                <select type="text" name="cash_control" id="cash_control" class="form-control"
+                                        placeholder="Payment Mode" required onchange="cash_control()">
+                                    <option value="@Model.cash_setting.Control_ID" selected>@Model.cash_setting.Control_Account.Control_Account_Title</option>
+                                    @foreach (Control_Account l in Model.control)
+                                    {
+
+                                        <option value="@l.ID" data-settingname="@Model.cash_setting.Setting_Name">@l.Control_Account_Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            @*//Chnage by Amjad*@
+
+                            <div class="form-group col-3 float-left" id="checkno" style="margin-top:30px">
+                                <label for="inputName">Surcharge (Fine) :</label>
+
+                            </div>
+                            <div class="form-group col-4 float-left">
+                                
+                                    <label for="inputName"></label>
+                                    <input type="number" name="SurchargePercentage" id="SurchargePercentage" class="form-control" onkeyup="debounceUpdateDatabase()" />
+                           
+                            </div>
+
+                            <script>
+                                let debounceTimeout;
+
+                                function debounceUpdateDatabase() {
+                                    clearTimeout(debounceTimeout);
+                                    debounceTimeout = setTimeout(updateDatabase, 3000); // Adjust the delay as needed (500ms in this case)
+                                }
+
+                                function updateDatabase() {
+                                    var selectedValue = $('#SurchargePercentage').val();
+                                    // Send selectedValue to the server using AJAX
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Member/SurchargerPercent",
+                                        data: { selectedValue: selectedValue },
+                                        success: function (response) {
+                                            // Handle response from the server if needed
+                                            console.log(response);
+                                        }
+                                    });
+                                }
+                            </script>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>}

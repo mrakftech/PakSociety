@@ -1,0 +1,763 @@
+﻿@model Society.Data.Member
+    @using Society.Data
+@{
+    ViewBag.Title = "Update_Member";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+
+
+<div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Update Member</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Member</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form method="POST" id="form" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Registration Details</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Reference No: <span style="color:red">*</span></label>
+
+                                    <input type="text" id="Reg_No" class="form-control" placeholder="Reference No" name="Reg_No" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Reg_No" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Application No: <span style="color:red">*</span></label>
+
+                                    <input type="text" id="Qm_No" class="form-control" placeholder="Application_No" name="Qm_No" value="@Model.Plots.FirstOrDefault().Qm_No" />
+                                </div>
+                                <input type="hidden" name="Plot_ID" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Plot_ID" />
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Reg Dated:<span style="color:red">*</span></label>
+
+                                    <input type="date" id="Date" class="form-control" placeholder="Date" name="Date" required value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Date.ToString("yyyy-MM-dd")" />
+                                </div>                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Unit No: <span style="color:red">*</span></label>
+
+                                    <select onchange="select_plot()" id="Plot_No" class="form-control" placeholder="Plot_No" name="Plot_No">
+                                        @if (Model.Plots.FirstOrDefault().newPlot != null)
+                                        {
+
+                                            <option selected data-Street="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Street" data-Block="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Block" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).newPlot.Id">@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).newPlot.PlotNo</option>
+                                        }
+                                        else if (Model.Plots.FirstOrDefault().Plot_No == null)
+                                        {
+                                            <option value="0" selected disabled>Select Unit</option>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                        @foreach (newPlot newPlot in ViewBag.plotList)
+                                        {
+                                            <option value="@newPlot.Id" data-Street="@newPlot.Street" data-Block="@newPlot.Block">@newPlot.PlotNo</option>
+                                        }
+                                    </select>
+                                </div>
+
+
+
+
+
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Floor:</label>
+                                    <input type="text" id="Street" class="form-control" placeholder="Street" name="Street" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Street" />
+                                </div>
+
+
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputClientCompany">Type:</label>
+                                    <input type="text" class="form-control" placeholder="Block" name="Block" id="Block" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Block" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Unit Type:</label>
+                                    <input type="text" id="Plot_Type" class="form-control" readonly placeholder="Plot_Type" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Plot_Type" name="Plot_Type" />
+
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">MemberShip No:</label>
+                                    <input type="text" id="MemberShipNumber" class="form-control" placeholder="MemberShipNumber" name="MemberShipNumber" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Member.MemberShipNumber" />
+
+
+                                </div>
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Unit No:</label>
+                                    <select type="text" id="Size" class="form-control" placeholder="e.g. 50x70" name="Size" onchange="size_change()">
+                                        <option value="-1" selected>--Select--</option>
+                                        @foreach (Installment_Plan i in ViewBag.plan)
+                                        {
+                                            if (i.ID == Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Installment_Plan.ID)
+                                            {
+
+                                                <option selected value="@i.ID" data-Booking="@i.Booking" data-Allocation="@i.Allocation" data-Confirmation="@i.Confirmation" data-plot_type="@i.Plot_Type" data-Monthly="@i.Monthly" data-Half_Yearly="@i.Half_Yearly" data-No_Of_Monthly="@i.No_Of_Monthly" data-No_Of_Half_Yearly="@i.No_Of_Half_Yearly" data-Pocession="@i.Pocession" data-Plan_Name="@i.Plan_Name" data-total_price="@i.Total_Price" data-Scheme="@i.Scheme">@i.Plan_Name (@i.Plot_Type) </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@i.ID" data-Booking="@i.Booking" data-Allocation="@i.Allocation" data-Confirmation="@i.Confirmation" data-Monthly="@i.Monthly" data-plot_type="@i.Plot_Type" data-Half_Yearly="@i.Half_Yearly" data-No_Of_Monthly="@i.No_Of_Monthly" data-No_Of_Half_Yearly="@i.No_Of_Half_Yearly" data-Pocession="@i.Pocession" data-Plan_Name="@i.Plan_Name" data-total_price="@i.Total_Price" data-Scheme="@i.Scheme">@i.Plan_Name (@i.Plot_Type) </option>
+                                            }
+
+
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Plot Price:</label>@{ double aa = 0; double posession = 0;
+                                        if (Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Installments.FirstOrDefault(o => o.Comment.Contains("Po")) != null)
+                                        {
+                                            posession = (double)Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Installments.FirstOrDefault(o => o.Comment.Contains("Po")).Amount_Paid;
+
+                                            aa = ViewBag.priceWithoutPocession + posession;
+                                        }
+                                    }
+                                    <input type="text" id="price_of_plot" class="form-control" readonly placeholder="Plot_Type" value="@aa" name="" />
+
+
+
+
+                                </div>
+                                <script>
+                                    function size_change() {
+                                        var size = $('#Size option:selected');
+                                        $('#price_of_plot').val(size.data('total_price'));
+                                        $('#Plot_Type').val(size.data('plot_type'));
+                                    }
+                                    function date_change() {
+
+                                        if (document.getElementById('quaterly1').checked == true) {
+
+                                            document.getElementById('new_date').disabled = false;
+
+
+                                        } else if (document.getElementById('quaterly1').checked == false) {
+                                            document.getElementById('new_date').disabled = true;
+                                        }
+                                    }
+                                </script>
+                                @*<div class="form-group float-left col-3">
+                                    <label for="inputName">Re-Sehdule Date</label>
+                                    <input type="date" id="new_date" disabled name="new_date" class="form-control" />
+                                </div>*@
+
+                                @*<div class=" col-1 float-left"> <label class="_33fw587 NveTX4Z " style="margin-top:35px"><input type="checkbox" id="quaterly1" onclick="date_change()"><span class="J8BZ6cq" style="margin-left:10px;margin-top:3px"></span></label></div>*@
+
+                                <div class="form-group col-4 float-left" style="margin-top:20px">
+                                    <label for="inputName"> Discount</label>
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Discount Amount:</label>
+                                    <input type="number" class="form-control" onkeyup="discount_amount()" placeholder="Discount" value="@Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Discount" name="Discount" id="Discount" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Discount Percentage:</label>
+                                    @{var a = Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Discount / Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Net_Price_Plot;
+                                        a = a * 100;
+                                        var b = Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Extra_Charge / Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Net_Price_Plot;
+                                        b = b * 100; }
+
+                                    <script>
+
+                                        function discount_amount() {
+                                            var oldPocession = $('#oldPocession').val();
+
+                                            var Pocession_payment_percentage = $('#Pocession_payment_percentage').val();
+                                            var Pocession_Payment = $('#Pocession_Payment').val();
+                                            var price_total = $('#price_of_plot').val();
+                                            var Discount_per = $('#Discount_per').val();
+                                            var Discount = $('#Discount').val();
+                                            var Extra_Charge_per = $('#Extra_Charge_per').val();
+                                            var Extra_Charge = $('#Extra_Charge').val();
+                                            if (Extra_Charge == "") { Extra_Charge = 0; }
+                                            var cal = Discount / price_total * 100;
+                                            $('#Discount_per').val(cal);
+                                            var remaining = parseFloat(price_total) - parseFloat(Discount) + parseFloat(Extra_Charge) + parseFloat(Pocession_Payment) - parseFloat(oldPocession);
+                                            $('#total').val(remaining);
+                                        }
+                                        function discount_per() {
+                                            var oldPocession = $('#oldPocession').val();
+
+                                            var Pocession_payment_percentage = $('#Pocession_payment_percentage').val();
+                                            var Pocession_Payment = $('#Pocession_Payment').val();
+
+                                            var price_total = $('#price_of_plot').val();
+                                            var Discount_per = $('#Discount_per').val();
+                                            var Discount = $('#Discount').val();
+                                            var Extra_Charge_per = $('#Extra_Charge_per').val();
+                                            var Extra_Charge = $('#Extra_Charge').val();
+                                            if (Extra_Charge == "") { Extra_Charge = 0; }
+                                            var cal = Discount_per * price_total / 100;
+                                            $('#Discount').val(cal);
+                                            var remaining = parseFloat(price_total) - parseFloat(cal) + parseFloat(Extra_Charge) + parseFloat(Pocession_Payment) - parseFloat(oldPocession);
+                                            $('#total').val(remaining);
+                                        }
+
+                                        function extra_charge_Amount() {
+                                            var oldPocession = $('#oldPocession').val();
+
+                                            var Pocession_payment_percentage = $('#Pocession_payment_percentage').val();
+                                            var Pocession_Payment = $('#Pocession_Payment').val();
+                                            var price_total = $('#price_of_plot').val();
+                                            var Discount_per = $('#Discount_per').val();
+                                            var Discount = $('#Discount').val();
+                                            var Extra_Charge_per = $('#Extra_Charge_per').val();
+                                            var Extra_Charge = $('#Extra_Charge').val();
+                                            if (Extra_Charge == "") { Extra_Charge = 0; }
+                                            var cal = Extra_Charge / price_total * 100;
+                                            $('#Extra_Charge_per').val(cal);
+                                            var remaining = parseFloat(price_total) - parseFloat(Discount) + parseFloat(Extra_Charge) + parseFloat(Pocession_Payment) - parseFloat(oldPocession);
+                                            $('#total').val(remaining);
+
+                                        }
+                                        function extra_charge_per() {
+                                            var oldPocession = $('#oldPocession').val();
+
+                                            var Pocession_payment_percentage = $('#Pocession_payment_percentage').val();
+                                            var Pocession_Payment = $('#Pocession_Payment').val();
+                                            var price_total = $('#price_of_plot').val();
+                                            var Discount_per = $('#Discount_per').val();
+                                            var Discount = $('#Discount').val();
+                                            var Extra_Charge_per = $('#Extra_Charge_per').val();
+                                            var Extra_Charge = $('#Extra_Charge').val();
+                                            if (Extra_Charge == "") { Extra_Charge = 0; }
+                                            var cal = Extra_Charge_per * price_total / 100;
+                                            $('#Extra_Charge').val(cal);
+                                            var remaining = parseFloat(price_total) + parseFloat(cal) - parseFloat(Discount) + parseFloat(Pocession_Payment) - parseFloat(oldPocession);
+                                            $('#total').val(remaining);
+
+                                        }
+
+                                        function amount() {
+                                            var oldPocession = $('#oldPocession').val();
+
+                                            var price_total = $('#price_of_plot').val();
+                                            var Discount_per = $('#Discount_per').val();
+                                            var Discount = $('#Discount').val();
+                                            var Pocession_payment_percentage = $('#Pocession_payment_percentage').val();
+                                            var Pocession_Payment = $('#Pocession_Payment').val();
+                                            var Extra_Charge_per = $('#Extra_Charge_per').val();
+                                            var Extra_Charge = $('#Extra_Charge').val();
+                                            if (Extra_Charge == "") { Extra_Charge = 0; }
+                                            var cal = Pocession_Payment / price_total * 100;
+                                            $('#Pocession_payment_percentage').val(cal);
+                                            var remaining = parseFloat(price_total) - parseFloat(Discount) + parseFloat(Extra_Charge) + parseFloat(Pocession_Payment) - parseFloat(oldPocession);
+                                            $('#total').val(remaining);
+
+                                        }
+                                        function percentage() {
+                                            var oldPocession = $('#oldPocession').val();
+
+                                            var Pocession_payment_percentage = $('#Pocession_payment_percentage').val();
+                                            var Pocession_Payment = $('#Pocession_Payment').val();
+                                            var price_total = $('#price_of_plot').val();
+                                            var Discount_per = $('#Discount_per').val();
+                                            var Discount = $('#Discount').val();
+                                            var Extra_Charge_per = $('#Extra_Charge_per').val();
+                                            var Extra_Charge = $('#Extra_Charge').val();
+                                            if (Extra_Charge == "") { Extra_Charge = 0; }
+                                            var cal = Pocession_payment_percentage * price_total / 100;
+                                            $('#Pocession_Payment').val(cal);
+                                            var remaining = parseFloat(price_total) + parseFloat(cal) - parseFloat(Discount) + parseFloat(Extra_Charge) - parseFloat(oldPocession);
+                                            $('#total').val(remaining);
+
+                                        }
+                                    </script>
+                                    <input type="number" class="form-control" step="any" placeholder="Discount" value="@a" onkeyup="discount_per()" name="Discount_per" id="Discount_per" />
+                                </div>
+                                <div class="form-group col-4 float-left" style="margin-top:20px">
+                                    <label for="inputName"> Extra_Charge</label>
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">(Amount)</label>
+                                    <input type="number" class="form-control" placeholder="Extra Charge" onkeyup="extra_charge_Amount()" id="Extra_Charge" name="Extra_Charge" value="@Model.Plots.FirstOrDefault(o=>o.Member_ID==Model.Member_ID).Payment_Plan.FirstOrDefault(o=>o.Plot_ID==Model.Plots.FirstOrDefault(y=>y.Member_ID==Model.Member_ID).Plot_ID).Extra_Charge" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">(%)</label>
+                                    <input type="number" class="form-control" step="any" placeholder="Extra Charge" id="Extra_Charge_per" onkeyup="extra_charge_per()" name="Extra_Charge_per" value="@b" />
+                                </div>
+                                <div class="form-group col-4 float-left" style="margin-top:20px">
+                                    <label for="inputName">Price Adjustment</label>
+
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">(Amount):</label><input type="hidden" id="oldPocession" value="@posession" />
+
+
+                                    <input type="number" id="Pocession_Payment" class="form-control" value="@posession" placeholder="Single Monthly Installments" onkeyup="amount()" name="Pocession_Payment" required />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">(%):</label>@{ var data = posession / Model.Plots.FirstOrDefault().Payment_Plan.FirstOrDefault().Net_Price_Plot * 100;}
+                                    <input type="text" id="Pocession_payment_percentage" class="form-control" value="@data" placeholder="Single Monthly Installments" onkeyup="percentage()" name="Pocession_payment_percentage" required />
+                                </div>
+
+
+                                <div class="form-group col-4 float-left" style="margin-top:20px">
+                                    <label for="inputName"> Net Amount</label>
+                                </div>
+                                <div class="form-group col-8 float-left">
+                                    <label for="inputName">Total:</label>
+                                    <input type="number" class="form-control" placeholder="Total" id="total" value="@Model.Plots.FirstOrDefault(o => o.Member_ID == Model.Member_ID).Payment_Plan.FirstOrDefault(o => o.Plot_ID == Model.Plots.FirstOrDefault(y => y.Member_ID == Model.Member_ID).Plot_ID).Net_Price_Plot" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Member Details</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">Applicant_Name<span style="color:red">*</span></label>
+                                    <select type="text" id="Applicant_Start_Text" class="form-control" placeholder="Genger" name="Applicant_Start_Text" required>
+                                        @if (Model.Applicant_Start_Text == "Mr.")
+                                        {
+
+
+                                            <option selected>Mr.</option>
+                                            <option>Mrs.</option>
+                                            <option>Miss</option>
+                                        }
+                                        else if (Model.Applicant_Start_Text == "Mrs.")
+                                        {
+                                            <option>Miss</option>
+                                            <option>Mr.</option>
+                                            <option selected>Mrs.</option>
+                                        }
+                                        else
+                                        {
+                                            <option selected>Miss</option>
+                                            <option>Mr.</option>
+                                            <option>Mrs.</option>
+                                        }
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-5 float-left" style="margin-top:8px">
+                                    <label for="inputName"></label>
+                                    <input type="text" id="Applicant_Name" class="form-control" placeholder="Applicant_Name" name="Applicant_Name" value="@Model.Applicant_Name" required />
+                                </div>
+
+
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">Father_Husband_Name<span style="color:red">*</span></label>
+                                    <select type="text" id="Father_Husband_Start_Text" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Start_Text" required>
+                                        @if (Model.Father_Husband_Start_Text == "S/0")
+                                        {
+
+
+                                            <option selected>S/O</option>
+                                            <option>D/O</option>
+                                            <option>W/O</option>
+                                        }
+                                        else if (Model.Father_Husband_Start_Text == "W/O")
+                                        {
+                                            <option>S/O</option>
+                                            <option>D/O</option>
+                                            <option selected>W/O</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option>S/O</option>
+                                            <option>W/O</option>
+                                            <option selected>D/O</option>
+                                        }
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-5 float-left" style="margin-top:8px">
+                                    <label for="inputName"></label>
+                                    <input type="text" id="Father_Husband_Name" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Name" value="@Model.Father_Husband_Name" required />
+                                </div>
+
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">CNIC #</label>
+                                    <input type="text" id="CNIC" class="form-control" placeholder="CNIC" name="CNIC" value="@Model.CNIC" />
+                                </div>
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputClientCompany">Occupation</label>
+                                    <input type="text" class="form-control" placeholder="Occupation" name="Occupation" id="Occupation" value="@Model.Occupation" />
+                                </div>
+
+
+
+
+
+
+
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Present_Postel_Address</label>
+                                    <textarea type="email" class="form-control" placeholder="Present_Postel_Address" name="Present_Postel_Address" id="Present_Postel_Address">@Model.Present_Postel_Address</textarea>
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Permenent_Postel_Address</label>
+                                    <textarea type="email" class="form-control" placeholder="Permenent_Postel_Address" name="Permenent_Postel_Address" id="Permenent_Postel_Address">@Model.Permenent_Postel_Address</textarea>
+                                </div>
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Phone Office</label>
+                                    <input type="number" class="form-control" placeholder="Office_No" value="@Model.Office_No" name="Office_No" id="Office_No" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Cell_No</label>
+                                    <input type="number" class="form-control" placeholder="Cell_No" name="Cell_No" value="@Model.Cell_No" id="Cell_No" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Email</label>
+                                    <input type="Email" class="form-control" placeholder="Email" name="Email" id="Email" value="@Model.Email" />
+                                </div>
+
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Country</label>
+                                    <input type="text" class="form-control" placeholder="Country" name="Country" id="Country" value="@Model.Country" />
+                                </div>
+
+
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Nominee_Name</label>
+                                    <input type="text" class="form-control" placeholder="Nominee_Name" name="Nominee_Name" id="Nominee_Name" value="@Model.Nominee_Name" />
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">Nominee_Father_Husband_Name<span style="color:red">*</span></label>
+                                    <select type="text" id="NomineeFatherStartText" class="form-control" placeholder="Father_Husband_Name" name="NomineeFatherStartText" required>
+                                        @if (Model.NomineeFatherStartText == "S/0")
+                                        {
+
+
+                                            <option selected>S/O</option>
+                                            <option>D/O</option>
+                                            <option>W/O</option>
+                                        }
+                                        else if (Model.NomineeFatherStartText == "W/O")
+                                        {
+                                            <option>S/O</option>
+                                            <option>D/O</option>
+                                            <option selected>W/O</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option>S/O</option>
+                                            <option>W/O</option>
+                                            <option selected>D/O</option>
+                                        }
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-5  float-left">
+                                    <label for="inputProjectLeader">&nbsp;</label>
+                                    <input type="text" class="form-control" placeholder="Nominee_Father" name="NomineeFather" id="NomineeFather" value="@Model.NomineeFather" />
+                                </div>
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Nominee_CNIC</label>
+                                    <input type="text" class="form-control" placeholder="Nominee_CNIC" name="Nominee_CNIC" id="Nominee_CNIC" value="@Model.Nominee_CNIC" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Notes</label>
+                                    <textarea type="text" class="form-control" placeholder="Notes" name="notes" id="notes">@Model.notes</textarea>
+                                </div>
+
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Nominee_Phone_No</label>
+                                    <input type="number" class="form-control" placeholder="Nominee_Phone_No" name="Nominee_Phone_No" id="Nominee_Phone_No" value="@Model.Nominee_Phone_No" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Nominee_Address</label>
+                                    <textarea type="email" class="form-control" placeholder="Nominee_Address" name="Nominee_Address" vocab="@Model.Nominee_Address" id="Nominee_Address"></textarea>
+                                </div>
+                                <input type="hidden" value="@Model.Member_ID" name="Member_ID1" />
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Reg Date</label>
+                                    <input type="date" id="Application_Date" class="form-control" placeholder="Application_Date" name="Application_Date" value="@Model.Application_Date.ToString("yyyy-MM-dd")" required />
+                                </div>
+
+
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Relation</label>
+                                    <input type="text" class="form-control" placeholder="Relation" name="Relation" id="Relation" value="@Model.Relation" />
+                                </div>
+                                <div class="col-6 float-left">
+                                    <video hidden height="350" width="320" id="video"></video>
+                                    @if (Model.Profile_Img != null)
+                                    {
+
+                                        <img height="250" width="320" id="imagePreview" style="float:left" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Profile_Img))" />
+                                    }
+                                    else
+                                    {
+                                        <img height="250" width="320" id="imagePreview" style="float:left" />
+
+                                    }
+                                    <div class="file-input col-12 float-left mt-3 ">
+
+                                        <button type="button" class="file-button" id="startButton">Start Camera</button>
+                                        <button type="button" class="file-button" id="captureButton">Capture Image</button>
+
+                                        <input type="file" id="file" accept="image/*" onchange="handleFileSelect(event)">
+                                        <label for="file" class="file-button">Select Image</label>
+                                        @if (Model.Profile_Img != null)
+                                        {
+
+                                            <input type="hidden" name="Profile_Image" id="Data" value="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Profile_Img))" />
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" name="Profile_Image" id="Data" />
+
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="col-6 float-left">
+                                    <video hidden height="350" width="320" id="Thumbvideo"></video>
+                                    <img height="250" width="320" id="thumbPreview" style="float:left">
+                                    <div class="col-12 float-left mt-3 ">
+
+                                        <a href="myapp://" class="btn btn-info" id="scanButton">Start Finger Print Device</a>
+                                        <button type="button" class="btn btn-info" hidden id="startButton">Start Device</button>
+                                        <input type="hidden" name="thumb_Image" id="thumbImage" />
+
+                                    </div>
+                                </div>
+                                <script>
+                                    function handleFileSelect(event) {
+                                        var file = event.target.files[0];
+                                        var reader = new FileReader();
+
+                                        reader.onload = function () {
+                                            var dataInput = document.getElementById('Data');
+                                            var preview = document.getElementById('imagePreview');
+                                            preview.src = reader.result;
+                                            dataInput.value = reader.result;
+                                        };
+
+                                        reader.readAsDataURL(file);
+                                    }
+                                </script>
+                                <style>
+                                    .file-input {
+                                        position: relative;
+                                        display: inline-block;
+                                    }
+
+                                        .file-input input[type="file"] {
+                                            position: absolute;
+                                            left: -9999px;
+                                        }
+
+                                    .file-button {
+                                        display: inline-block;
+                                        padding: 5px 5px;
+                                        background-color: #007bff;
+                                        color: #fff;
+                                        border: none;
+                                        border-radius: 4px;
+                                        cursor: pointer;
+                                    }
+
+                                        .file-button:hover {
+                                            background-color: #0056b3;
+                                        }
+
+                                    /* CSS styles for the image */
+                                    img {
+                                        display: block; /* make the image a block element */
+                                        margin: auto; /* center the image horizontally */
+                                        /* set the width of the image to 50% of its container */
+                                        border: 2px solid black; /* add a border around the image */
+                                        box-shadow: 2px 2px 5px grey; /* add a box shadow effect to the image */
+                                    }
+                                </style>
+
+                                <script>
+                                    var scanButton = document.getElementById('scanButton');
+
+                                    var ThumbPreview = document.getElementById('thumbPreview');
+                                    var thumbImage = document.getElementById('thumbImage');
+                                    scanButton.addEventListener('click', function () {
+                                        $.ajax({
+                                            url: '/Member/ScanThumb',
+                                            type: 'GET',
+                                            success: function (result) {
+                                                thumbPreview.src = result;
+                                                thumbImage.value = result;
+                                            }
+                                        });
+
+                                    });
+
+                                </script>
+
+                                <script>
+                                    var captureButton = document.getElementById('captureButton');
+                                    var startButton = document.getElementById('startButton');
+                                    var video = document.getElementById('video');
+                                    var imagePreview = document.getElementById('imagePreview');
+
+
+                                    startButton.addEventListener('click', function () {
+                                        // Request access to the camera
+                                        var video = document.getElementById('video');
+                                        video.hidden = false;
+                                        imagePreview.hidden = true;
+                                        var canvas = document.getElementById('canvas');
+                                        navigator.mediaDevices.getUserMedia({ video: true })
+                                            .then(function (stream) {
+                                                video.srcObject = stream;
+                                                video.play();
+                                            });
+
+                                        // Save image data to hidden field
+                                        var context = canvas.getContext('2d');
+                                        video.addEventListener('canplay', function () {
+                                            canvas.width = video.videoWidth;
+                                            canvas.height = video.videoHeight;
+                                            setInterval(function () {
+                                                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                                                //  imagePreview.src = canvas.toDataURL('image/jpeg');
+                                            }, 1000 / 30);
+                                        });
+                                    });
+                                    function captureImage() {
+                                        var dataInput = document.getElementById('Data');
+                                        video.hidden = true;
+                                        imagePreview.hidden = false;
+                                        var canvas = document.createElement('canvas');
+                                        canvas.width = video.videoWidth;
+                                        canvas.height = video.videoHeight;
+                                        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                                        var imageData = canvas.toDataURL('image/png');
+                                        console.log(imageData);
+                                        imagePreview.src = imageData;
+                                        dataInput.value = imageData;
+                                    } captureButton.addEventListener('click', function () {
+                                        captureImage();
+                                    });
+                                    // Capture image from web cam
+
+                                </script>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Dealer Detail</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-8 float-left">
+                                    <label for="inputName">Dealer Name:<span style="color:red"></span></label>
+                                    <input type="text" id="dealer_name" name="Company_Name" class="form-control" value="@ViewBag.Company_Name" placeholder="Dealer Name" />
+                                </div>
+
+                                <input type="hidden" value="@ViewBag.dealerid" name="Dealer_ID" id="dealer_id" />
+
+
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Percentage:</label>
+                                    <input type="number" id="Percentage" value="@ViewBag.percentage" class="form-control" placeholder="Percentage" name="Percentage" />
+                                </div>
+
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+                <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+
+                        $("#dealer_name").autocomplete({
+
+                            source: function (request, response) {
+                                $.ajax({
+                                    url: "/Member/Index1",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: { Prefix: request.term },
+                                    success: function (data) {
+                                        response($.map(data, function (item) {
+
+
+                                            return { label: item.Company_Name, data: item, Company_Name: item.Company_Name, Dealer_ID: item.Dealer_ID, Percentage: item.Percentage };
+
+                                        }));
+                                    }
+                                });
+
+                            },
+
+                            select: function (event, ui) {
+                                $('#dealer_id').val(ui.item.Dealer_ID);
+                                $('#dealer_name').val(ui.item.Company_Name);
+                                $('#Percentage').val(ui.item.Percentage);
+
+
+                            }
+                        });
+
+                    });
+                </script>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" id="type" onclick="sub()" class="btn btn-success float-right">Update Member</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+  
+}
+

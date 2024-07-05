@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Society.Data.Member>
+@{
+    ViewBag.Title = "Select_Employee";
+}
+
+<div style="margin: 8px 8px">
+    <div class="content-wrapper" style="background-color:white">
+        <form runat="server">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Member List</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Member List</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Main content -->
+           
+            <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">DataTable with default features</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">Employee ID</th>
+                                <th style="width: 15%">Employee Name</th>
+                                <th style="width: 15%">Designation</th>
+                                <th style="width: 15%">Phone Number</th>
+                                <th style="width: 15%">Joining_Date</th>
+                                
+                                <th style="width: 20%">Address</th>
+                                <th>action</th>
+                            </tr>
+                        </thead>
+
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.Member__ID</td>
+                                <td>@x.Applicant_Name</td>
+                                <td>@x.Application_Date.ToString("dd-MM-yyyy")</td>
+                                <td>@x.CNIC</td>
+                                <td>@x.Cell_No</td>
+
+
+                                <td>@x.Permenent_Postel_Address</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm m-1" href="/Booking/Application_Form?ID=@x.Member__ID"><i class="fas fa-pencil-alt"></i></a>
+                                   
+                                </td>
+
+
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

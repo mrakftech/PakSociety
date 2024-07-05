@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Society.Data.Loan>
+@{
+    ViewBag.Title = "Manage_Loan";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form runat="server">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Loan List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Loan List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+                            <div class="col-md-10 offset-md-11">
+
+
+
+
+
+
+
+                                <div class="card-tools">
+                                    <a href="/Loan/AddNew_Loan" class="btn btn-primary"> Add New</a>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">#</th>
+                                    <th style="width: 15%">Employee Name</th>
+                                    <th style="width: 15%">Loan Amount</th>
+                                    <th>Single Installment</th>
+                                    <th style="width: 15%">Total Installment</th>
+                                    <th style="width: 15%">Paid Installment</th>
+                                    <th>remaining Installment</th>
+
+                                    <th style="width: 10%">Action</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;
+                            }
+                            @foreach (var x in Model)
+                            {
+
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@x.Employee.F_Name @x.Employee.L_Name </td>
+                                    <td>@x.Loan_Amount</td>
+                                    <td>@x.Single_Installment_Amount</td>
+                                    <td>@x.No_Of_Installments</td>
+
+                                    <td>
+                                        @{ float count1 = (float)x.Loan_Installments.Where(o => o.Loan_ID == x.Loan_ID && o.IsPaid == "Paid"
+                               ).ToList().Count();}
+                                        @{ double total = Convert.ToDouble(Math.Round(((count1 / (float)x.No_Of_Installments) * 100), 2));}
+
+                                        <span class="text-dark">@total %</span><br />
+                                        <div class="progress" title="@total % Complete.">
+                                            <div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="@total" aria-valuemin="0" aria-valuemax="100" style="width:@total%">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @x.Loan_Installments.Where(o => o.Loan_ID == x.Loan_ID && o.IsPaid == "Not Paid"
+                                                                                ).ToList().Count()
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm m-1" href="/Loan/View?ID=@x.Loan_ID"><i class="fas fa-folder"></i></a>
+                                        <a href="/Loan/Delete?id=@x.Loan_ID" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+                                    </td>
+
+
+                                </tr>
+                                                count = count + 1;
+                                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>}
+

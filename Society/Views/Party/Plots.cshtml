@@ -1,0 +1,301 @@
+﻿@model IEnumerable<Society.Data.newPlot>
+@{
+    ViewBag.Title = "Party_Detail";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+
+                    <div class="col-sm-6">
+                        <h1>Manage Units</h1>
+                        <h4>( Plots / Homes / Apartments / Offices / Shops )</h4>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Units</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">ENTER UNIT DETAILS IN FORM ::</h3>
+            </div>
+
+            <form method="POST">
+                <div class="card-body">
+
+                    <div class="col-md-3 float-left">
+                        <label>Unit Type:</label>
+                        <select placeholder="Type" name="plotType" id="Plot_Type" class="form-control" style="width: 288px;" required onchange="select_type()">
+                            <option>Select Unit Type</option>
+                            <option value="Plot">Plot</option>
+                            <option value="House">House</option>
+                            <option value="Appartment">Appartment</option>
+                            <option value="Office">Office</option>
+                            <option value="Shop">Shop</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Unit No :</label>
+                        <input name="PlotNo" id="PlotNo" class="form-control" placeholder="Unit No" required />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Society / Plaza Name :</label>
+                        <input type="text" placeholder="Society Name" name="societyname" id="societyname" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Sector :</label>
+                        <input type="text" placeholder="Sector in case Plot/Home" name="sector" id="sector" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Block :</label>
+                        <input type="text" placeholder="Block in case Plot/Home" name="Block" id="Block" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Street / Floor :</label>
+                        <input name="Street" id="Street" class="form-control" placeholder="Street or Floor" required />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Special Note :</label>
+                        <input type="text" placeholder="Special Note" name="SpecialType" id="SpecialType" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Length (ft) :</label>
+                        <input type="text" placeholder="Length" name="length" id="length" class="form-control" oninput="calculateArea()" />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Width (ft) :</label>
+                        <input type="text" placeholder="Width" name="width" id="width" class="form-control" oninput="calculateArea()" />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Unit Size (Sqr Feet) :</label>
+                        <input type="text" placeholder="Unit Size" name="wide" id="wide" class="form-control" readonly />
+                    </div>
+
+                    <div>
+                        <button class="col-md-2 btn btn-primary" style="margin-top:30px" type="submit">
+                            Add Now
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+
+        <section class="content">
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">Unit No</th>
+                                <th style="width: 20%">Unit Type</th>
+                                <th style="width: 15%">Block</th>
+                                <th style="width: 20%">Unit Size</th>
+                                <th style="width: 20%">Sp.Note</th>
+                                <th style="width: 20%">Status</th>
+                                <th style="width: 25%">Action</th>
+                            </tr>
+                        </thead>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.PlotNo </td>
+                                <td>@x.plotType</td>
+                                <td>@x.Block </td>
+                                <td>@x.wide </td>
+                                <td>@x.specialType </td>
+                                @if (x.isAssigned == true)
+                                {
+                                    <td><span class="badge badge-success">Assigned</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge badge-warning">Not Assigned</span></td>
+                                }
+                            <td style="padding:0px;">
+                                <a href="#" class="edit-plot" data-toggle="modal" data-target="#editModal" data-id="@x.Id" data-plotno="@x.PlotNo" data-block="@x.Block" data-street="@x.Street" data-isassigned="@x.isAssigned" data-plottype="@x.plotType" data-specialtype="@x.specialType" data-wide="@x.wide" data-regno="@x.reg_no"><i class="fas fa-pencil-alt"></i></a>
+                                <a href="#" class="delete-plot" data-id="@x.Id"><i class="fas fa-trash"></i></a>
+                                <a href="#" class="view-plot" data-id="@x.Id" data-plotno="@x.PlotNo" data-block="@x.Block" data-street="@x.Street" data-isassigned="@x.isAssigned" data-plottype="@x.plotType" data-specialtype="@x.specialType" data-wide="@x.wide"><i class="fas fa-eye"></i></a>
+                            </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!-- View Modal -->
+        <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewModalLabel">View Plot</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong style="color:red">Unit No:</strong> <span id="viewPlotNo"></span></p>
+                        <p><strong style="color:red">Block:</strong> <span id="viewBlock"></span></p>
+                        <p><strong style="color:red">Street:</strong> <span id="viewStreet"></span></p>
+                        <p><strong style="color:red">Unit Type:</strong> <span id="viewPlotType"></span></p>
+                        <p><strong style="color:red">Special Type:</strong> <span id="viewSpecialType"></span></p>
+                        <p><strong style="color:red">Area/sqr feet:</strong> <span id="viewWide"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Plot</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editPlotForm">
+                            <input type="hidden" id="editPlotID" name="Id" />
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="editPlotNo">Unit No</label>
+                                    <input type="text" class="form-control" id="editPlotNo" name="PlotNo" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="editBlock">Block</label>
+                                    <input type="text" class="form-control" id="editBlock" name="Block" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="editStreet">Street</label>
+                                    <input type="text" class="form-control" id="editStreet" name="Street" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Unit Type:</label>
+                                    <select placeholder="Type" name="plotType" id="Plot_Type" class="form-control" required onchange="select_type()">
+                                        <option>Select Unit Type</option>
+                                        <option value="Plot">Plot</option>
+                                        <option value="House">House</option>
+                                        <option value="Appartment">Appartment</option>
+                                        <option value="Office">Office</option>
+                                        <option value="Shop">Shop</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="editSpecialType">Special Type</label>
+                                    <input type="text" class="form-control" id="editSpecialType" name="specialType" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="editWide">Area/sqr feet</label>
+                                    <input type="text" class="form-control" id="editWide" name="wide" />
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="savePlotChanges">Save changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script>
+       $(document).ready(function () {
+    $('.edit-plot').on('click', function () {
+        var plotData = $(this).data();
+        $('#editPlotID').val(plotData.id);
+        $('#editPlotNo').val(plotData.plotno);
+        $('#editBlock').val(plotData.block);
+        $('#editStreet').val(plotData.street);
+        $('#editIsAssigned').prop('checked', plotData.isassigned);
+        $('#editPlotType').val(plotData.plottype);
+        $('#editSpecialType').val(plotData.specialtype);
+        $('#editWide').val(plotData.wide);
+        $('#editRegNo').val(plotData.regno);
+    });
+
+    $('.view-plot').on('click', function () {
+        var plotData = $(this).data();
+        $('#viewPlotNo').text(plotData.plotno);
+        $('#viewBlock').text(plotData.block);
+        $('#viewStreet').text(plotData.street);
+        $('#viewPlotType').text(plotData.plottype);
+        $('#viewSpecialType').text(plotData.specialtype);
+        $('#viewWide').text(plotData.wide);
+        $('#viewModal').modal('show');
+    });
+
+    function calculateArea() {
+        var length = document.getElementById("length").value;
+        var width = document.getElementById("width").value;
+        var area = length * width;
+        document.getElementById("wide").value = area;
+    }
+
+    $('#savePlotChanges').on('click', function () {
+        var formData = $('#editPlotForm').serialize();
+        $.ajax({
+            url: '@Url.Action("UpdatePlot", "Party")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                // Handle success
+                location.reload();
+            },
+            error: function (error) {
+                // Handle error
+                alert('Error updating plot');
+            }
+        });
+    });
+
+    $('.delete-plot').on('click', function () {
+        var plotID = $(this).data('id');
+        if (confirm('Are you sure you want to delete this plot?')) {
+            $.ajax({
+                url: '@Url.Action("DeletePlot", "Party")',
+                type: 'POST',
+                data: { id: plotID },
+                success: function (result) {
+                    // Handle success
+                    location.reload();
+                },
+                error: function (error) {
+                    // Handle error
+                    alert('Error deleting plot');
+                }
+            });
+        }
+    });
+});
+        </script>
+
+
+    </div>
+
+}

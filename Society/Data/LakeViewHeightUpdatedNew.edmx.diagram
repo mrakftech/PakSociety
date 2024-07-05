@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4481ac57072d4e8395c90e201c928a8f" Name="Diagram1">
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Account_Setting" Width="1.5" PointX="10.5" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Advance" Width="1.5" PointX="5.25" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Attendence" Width="1.5" PointX="5.25" PointY="22.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Control_Account" Width="1.5" PointX="8.25" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Dealer" Width="1.5" PointX="8.25" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Dealer_Commision" Width="1.5" PointX="10.5" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Dealer_Commision_Detail" Width="1.5" PointX="12.75" PointY="33" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.dealer_data" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Development_Charges" Width="1.5" PointX="12" PointY="45.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Dummy" Width="1.5" PointX="12.75" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Element_Account" Width="1.5" PointX="6" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Employee" Width="1.5" PointX="3" PointY="31.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.File_Transfer" Width="1.5" PointX="7.5" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Final_" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Installment_Plan" Width="1.5" PointX="5.25" PointY="50.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Installment" Width="1.5" PointX="12" PointY="48.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Ledger_Account" Width="1.5" PointX="10.5" PointY="27" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Loan" Width="1.5" PointX="5.25" PointY="26.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Loan_Installments" Width="1.5" PointX="7.5" PointY="26.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Member" Width="1.5" PointX="5.25" PointY="30.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.memberImage" Width="1.5" PointX="7.5" PointY="43.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.MemberShipFee" Width="1.5" PointX="10.5" PointY="37" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.C_Members_Record__" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.C_Members_Record__A" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.newPlot" Width="1.5" PointX="5.25" PointY="55.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.old_member_record_2" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.old_member_record_3" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.old_voucher_2" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.old_member_record" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.old_voucher" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.OpenFile" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Oversea" Width="1.5" PointX="8.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.OverTime" Width="1.5" PointX="5.25" PointY="39.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Party" Width="1.5" PointX="7.5" PointY="49.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Party_Detail" Width="1.5" PointX="9.75" PointY="40.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.payment_DAta" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Payment_Plan" Width="1.5" PointX="9.75" PointY="49.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Payment_Transfer" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.paymentVoucher" Width="1.5" PointX="12" PointY="54.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.PayRole" Width="1.5" PointX="5.25" PointY="43" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Plot" Width="1.5" PointX="7.5" PointY="38.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Plot_History" Width="1.5" PointX="9.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.reciept_voucher_payment" Width="1.5" PointX="12.75" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.reciept_vouchers" Width="1.5" PointX="10.5" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Refund" Width="1.5" PointX="10.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Role_Permission" Width="1.5" PointX="3" PointY="50" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.role" Width="1.5" PointX="0.75" PointY="34.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Salary_With_Allowences" Width="1.5" PointX="5.25" PointY="46.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Sheet1_" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Shift" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.Sub_Installment" Width="1.5" PointX="14.25" PointY="50.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.SurchargePercentage" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.ThumbScan" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="lakeViewNewDbModel.update_record" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Account_Setting_Control_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Account_Setting_Element_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Advance_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Attendence_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Control_Account_Element_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Ledger_Account_Control_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Dealer_Commision_Dealer" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Dealer_Dealer" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Ledger_Account_Dealer" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Dealer_Commision_Detail_Dealer_Commision" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Dealer_Commision_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Development_Charges_Payment_Plan" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Dummy_reciept_vouchers" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Ledger_Account_Element_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Employee_roles" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Loan_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Member_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_OverTime_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Party_Detail_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_PayRole_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Salary_With_Allowences_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_File_Transfer_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Plot_Installment_Plan" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Installments_Payment_Plan" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Sub_Installment_Installments" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Ledger_Account_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_reciept_voucher_payment_Ledger_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Loan_Installments_Loan" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK__MemberShi__membe__31B762FC" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_memberImage_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Party_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Plot_Member" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK__MemberShi__Payme__32AB8735" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Plot_newPlot" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Party_Detail_Party" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Payment_Plan_Plot" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_paymentVoucher_Payment_Plan" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Plot_History_Plot" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_reciept_voucher_payment_reciept_vouchers" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_reciept_vouchers_reciept_vouchers" ManuallyRouted="false" />
+        <AssociationConnector Association="lakeViewNewDbModel.FK_Role_Permission_roles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

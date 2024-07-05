@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Society.Data.paymentVoucher>
+@{
+    ViewBag.Title = "Manage_Shifts";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form runat="server">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Payment Receipts</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Payment Receipts</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+                            <div class="col-md-10 offset-md-11">
+
+
+
+
+
+
+
+                                <div class="card-tools">
+                                    <a href="/Party/AddReceipt?id=@ViewBag.id" class="btn btn-primary"> Add New</a>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 20%">Date</th>
+                                    <th style="width: 20%">Amount</th>
+                                    <th style="width: 30%">Action</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@x.Payment_Plan.Plot.Reg_No</td>
+                                    <td>@x.date.ToString("dd/MM/yyyy")</td>
+                                    <td>@x.amount</td>
+                                    <td>
+                                        <a class="btn btn-info btn-sm m-1" href="/Party/printReceipt?id=@x.Id"><i class="fas fa-pencil-alt"></i></a>
+                                    </td>
+
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}

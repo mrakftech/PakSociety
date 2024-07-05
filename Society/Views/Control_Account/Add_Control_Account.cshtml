@@ -1,0 +1,164 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "Add_Control_Account";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Control Account</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Accounts</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Add New Control Account </h3>
+                </div>
+                <form method="POST" action="" id="formAccControl">
+                    <div class="card-body">
+                        <div class="col-md-3 float-left">
+                            <label>Element Account:</label>
+                            <select name="txtAccountCode" id="txtAccountCode" class="form-control"
+                                    onchange="onChangeElementAccount()">
+                                <option value="-1">Select</option>
+                                @foreach (Element_Account x in Model.Element_List)
+                                {
+                                    <option value='@x.Element_Account_Code' data-title="@x.Account_Title" data-id="@x.ID">@x.Account_Title</option>
+                                }
+
+
+
+
+
+                            </select>
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label>Control Account Code:</label>
+                            <input type="number" placeholder="Control Account Code" name="txtAccountConCode"
+                                   id="txtAccountConCode" class="form-control" readonly />
+                            <input type="hidden" name="txtAccountConCodeHidd" id="txtAccountConCodeHidd" value="" />
+                            <input type="hidden" name="elementaccounttitle" id="elementaccounttitle" />
+                            <input type="hidden" name="elementid" id="elementid" />
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label>Control Account Title:</label>
+                            <input type="text" placeholder="Control Account Title" name="txtAccountConTitle"
+                                   id="txtAccountConTitle" class="form-control" />
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label> &nbsp;</label>
+                            <input class="float-right m-3 btn btn-primary" value="Add New" type="submit" />
+
+
+                        </div>
+
+                        <script>
+                            function onChangeElementAccount() {
+                                var x1 = $('#txtAccountCode option:selected');
+                                var x = $('#txtAccountCode option:selected').val();
+                                var title = x1.data('title');
+                                var id = x1.data('id');
+                                
+                                $('#elementaccounttitle').val(title);
+                                $.ajax({
+                                    url: '/Control_Account/Add_Control_Account_Json',
+                                    type: 'post',
+                                    data: {
+                                        EleAcc: x,
+                                    },
+                                    success: function (data) {
+                                        $('#elementid').val(id);
+                                        
+                                        $('#txtAccountConCodeHidd').val(data + 1);
+                                        $('#txtAccountConCode').val(x + "." + (data + 1));
+                                    }
+                                });
+                            }
+
+
+                        </script>
+
+
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Control Account</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">#</th>
+                                <th style="width: 30%">Control Account Code</th>
+                                <th style="width: 30%">Control Account Title</th>
+                                <th style="width: 30%">Element Account Title</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Control_Account x in Model.Control_List)
+                            {
+                            <tr>
+                                <td>@x.ID</td>
+                                <td>@x.Control_Complete_Code</td>
+                                <td>@x.Control_Account_Title</td>
+                                <td>@x.Element_Account_Title</td>
+                                <td> <a href="javascript:addNewRole('@x.Control_Account_Title','@x.ID')" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        function addNewRole(val, id) {
+            var role = prompt("Enter New Account Title", val);
+            var id = id;
+            role = $.trim(role);
+            if (role == "") {
+                alert("Enter valid Account title.");
+            } else {
+                $.ajax({
+                    url: "/Control_Account/Update_Control_Account",
+                    type: "POST",
+                    data: {
+                        title: role,
+                        id: id
+                    },
+                    cache: false,
+                    success: function (data) {
+
+                        if (data == true) {
+                            alert('title Updated Successfully.');
+                            window.location.href = "/Control_Account/Add_Control_Account";
+                        } else { $.alert('Something went wrong.'); }
+                    }
+                });
+            }
+        }
+    </script>
+}

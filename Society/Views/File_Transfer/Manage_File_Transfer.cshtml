@@ -1,0 +1,161 @@
+﻿
+@model dynamic
+@using Society.Data
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">File Transfer</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">File Transfer</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+
+                        <div class="col-lg-3 form-group offset-lg-4 offset-md-0 col-sm-12 col-md-6 offset-sm-0"> <input type="search" id="srch" class="form-control has-Search" onkeyup="cc()" placeholder="Search By EB #" /></div>
+
+
+
+                    </div>
+
+                </section>
+                <script>
+                    function cc() {
+
+                            var v = $('#srch').val();
+
+                            $.ajax({
+                                url: '/File_Transfer/filter',
+                                type: 'POST',
+                                data: {
+                                    search1: v
+
+                                },
+                                success: function (data) {
+
+                                    if (data == "[]") {
+
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+                                        table.draw();
+                                    } else {
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+
+
+                                        var obj = JSON.parse(data);
+                                        var tr;
+
+                                        //Append each row to html table
+                                        for (var i = 0; i < obj.length; i++) {
+                                            tr = $('<tr/>');
+                                            tr.append("<td>" + obj[i].Reg_No + "</td>");
+                                            tr.append("<td>" + obj[i].Applicant_Name + "</td>");
+
+
+
+                                            var today = new Date(obj[i].Date);
+                                            var dd = today.getDate();
+
+                                            var mm = today.getMonth() + 1;
+                                            var yyyy = today.getFullYear();
+                                            if (dd < 10) {
+                                                dd = '0' + dd;
+                                            }
+
+                                            if (mm < 10) {
+                                                mm = '0' + mm;
+                                            }
+                                            today = yyyy + '-' + mm + '-' + dd;
+
+                                            tr.append("<td>" + today + "</td>");
+                                            tr.append("<td>" + obj[i].CNIC + "</td>");
+                                            tr.append("<td>" + obj[i].Permenent_Postel_Address + "</td>");
+
+
+                                            tr.append("<td>" + `<a title="Transfer" class="btn btn-info btn-sm m-1" href="/File_Transfer/File_Transfer?ID=`+obj[i].Payment_ID+`"><i class="fas fa-file-alt"></i></a>` + "</td>");
+                                            table.row.add(tr);
+
+                                            table.draw();
+
+
+                                        }
+                                    }
+
+                                }
+                            });
+
+
+                    }
+                </script>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th>Ref#</th>
+                                    <th>Member Name</th>
+                                    <th>Reg Date</th>
+                                    <th>CNIC</th>
+
+                                    <th>Address</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (Payment_Plan x in Model.a)
+                            {
+                                <tr>
+                                    <td>@x.Plot.Reg_No</td>
+                                    <td>@x.Plot.Member.Applicant_Name</td>
+                                    <td>@x.Plot.Member.Application_Date.ToString("dd-MM-yyyy")</td>
+                                    <td>@x.Plot.Member.CNIC</td>
+
+
+
+
+                                    <td>@x.Plot.Member.Permenent_Postel_Address</td>
+
+
+                                    <td>
+                                        <a title="Transfer" class="btn btn-info btn-sm m-1" href="/File_Transfer/File_Transfer?ID=@x.Payment_ID"><i class="fas fa-file-alt"></i></a>
+                                    </td>
+
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+
+
+

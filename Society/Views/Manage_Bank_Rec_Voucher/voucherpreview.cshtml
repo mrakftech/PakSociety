@@ -1,0 +1,199 @@
+﻿@model dynamic
+    @using Society.Data
+@{
+    ViewBag.Title = "voucherpreview";
+}
+
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+    <div class="content-wrapper">
+        <div id="divToPrint"
+             style="width:80%;margin: 0px auto;padding: 10px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <h1 style="width: 100%;text-align: center; border-bottom: 3px solid black;padding-bottom: 10px;">
+               Lake View Heights
+            </h1>
+
+            <h3 style="text-align: center;text-decoration: underline">@Model.heading</h3>
+
+
+            <table style="margin: 20px;width: 100%;">
+                <tr>
+                    @if (Model.reciept_Vouchers_details.Manual_Voucher_No != null)
+                    {
+                        <td><b>Voucher No:</b>@Model.reciept_Vouchers_details.Manual_Voucher_No</td>
+                    }
+                    else
+                    {
+                        <td><b>Voucher No:</b>@Model.reciept_Vouchers_details.VoucherNum</td>
+                    }
+
+                    <td><b>Voucher Date :</b>@Model.reciept_Vouchers_details.VoucherDate</td>
+                </tr>
+                @if (Model.reciept_Vouchers_details.Type == "BRV" || Model.reciept_Vouchers_details.Type == "BPV")
+                {
+                    <tr><td><b>Cheque Number :</b>@Model.reciept_Vouchers_details.ChequeNumber</td><td><b>Cheque Date :</b> @Model.reciept_Vouchers_details.ChequeDate</td></tr>
+
+                    <tr><td><b> Drown bank:</b>@Model.reciept_Vouchers_details.Drown_bank</td></tr>
+                }
+            </table>
+
+
+
+            <table style="width: 100%;" border="1">
+                <thead style="padding:10px;background-color: darkgrey;">
+                    <tr>
+                        <th>Account Code</th>
+                        <th>Account Discription</th>
+                        <th>Particulars</th>
+                        <th>Total</th>
+
+                        <th>Credit</th>
+                        <th>Debit</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @{ double credit = 0;
+                        double debit = 0;
+                        bool flag = true;}
+                    @foreach (reciept_voucher_payment c in Model.reciept_voucher_payment_details)
+                    {
+                        <tr>
+                            <td>@c.Element_Account_Code.@c.Control_Account_Code.@c.Ledger_Account_Code</td>
+                            
+                            <td>@c.Ledger_Account.Element_Account_Title/@c.Ledger_Account.Control_Account_Title/@c.Ledger_Account.Ledger_Account_Title</td>
+                          
+                            <td>@c.Comments</td>
+
+                            @if (flag == true)
+                            {
+                                <td rowspan=@Model.count></td>
+                                flag = false;
+                            }
+
+                            @if (c.TransType == "C")
+                            {
+                                <td style='text-align:right;'>@c.Amount</td>
+                                <td></td>
+                                credit += c.Amount;
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td style='text-align:right;'>@c.Amount</td>
+
+                                debit += c.Amount;
+                            }
+
+
+
+
+
+
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot style="padding:10px;background-color: darkgrey;">
+                    <tr>
+                        <th style="text-align: left;" colspan="3" id="words">
+                            PKR:
+                        </th>
+                        <th style="text-align: right;" id="number"><b>Total:</b></th>
+                        <th style="text-align: right;"><b>@credit</b></th>
+                        <th style="text-align: right;"><b>@debit</b></th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <table style="width: 100%;margin-top: 100px;">
+                <tr>
+                    <td style="width: 20%; border-bottom: 1px solid black;text-align: center;">
+                    </td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 20%; border-bottom: 1px solid black;text-align: center;">
+                    </td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 20%; border-bottom: 1px solid black;text-align: center;">
+                    </td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 20%; border-bottom: 1px solid black;text-align: center;"></td>
+                </tr>
+                <tr>
+                    <td style="width: 20%; text-align: center;">Prepared By</td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 20%; text-align: center;">Checked By</td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 20%; text-align: center;">Approved By</td>
+                    <td style="width: 5%;"></td>
+                    <td style="width: 20%; text-align: center;">Recieved By</td>
+                </tr>
+            </table>
+
+
+        </div>
+        <div style="width: 100%;text-align: center;">
+            <button onclick="PrintElem('divToPrint')"
+                    style="padding:10px;background-color: olivedrab;outline: none; border: none; border-radius: 5px; margin-top: 15px; color:white;cursor: pointer;">
+                Print
+                The Voucher
+            </button>
+            <a href="/Dashboard/Dashboard" target="_blank"
+               style="text-decoration: none;padding:10px;background-color: olivedrab;outline: none; border: none; border-radius: 5px; margin-top: 15px; color:white;cursor: pointer;">
+                Go
+                To Home
+            </a>
+
+            <script>
+                function PrintElem(elem) {
+                    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+                    mywindow.document.write('<html><head>');
+                    mywindow.document.write('</head><body >');
+                  
+                    mywindow.document.write(document.getElementById(elem).innerHTML);
+                    mywindow.document.write('</body></html>');
+
+                    mywindow.document.close(); // necessary for IE >= 10
+                    mywindow.focus(); // necessary for IE >= 10*/
+
+                    mywindow.print();
+                    //mywindow.close();
+
+                    return true;
+                }
+            </script>
+            <script>
+                var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+                var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+                function inWords(num) {
+                    if ((num = num.toString()).length > 9) return 'overflow';
+                    n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+                    if (!n) return; var str = '';
+                    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+                    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+                    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+                    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+                    str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
+                    return str;
+                }
+
+                document.getElementById('number').onkeyup = function () {
+                    document.getElementById('words').innerHTML = inWords(document.getElementById('number').value);
+                };
+            </script>
+        </div>
+    </div>
+
+</body>
+
+</html>
+

@@ -1,0 +1,781 @@
+﻿@model Society.Data.Payment_Plan
+@using Society.Data;
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee") { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">File Transfer(EB @Model.Plot.Reg_No)</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">File Transfer</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div> <form method="POST" id="form" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Plot Information</h3>
+                </div> <div class="card-body">
+                    <div class="form-group col-3 float-left" style="margin-top:8px">
+                        <label for="inputName">Plot Size</label>
+                        <select type="text" id="Plot_Size" name="Plot_Size" class="form-control" placeholder="Applicant_Name" onchange="amountadd()" required>
+
+                            @foreach (Installment_Plan i in ViewBag.plotsize)
+                            {
+                                if (Model.Plot.Size == i.ID)
+                                {
+
+                                    <option selected data-amount="@i.Total_Price" value="@i.ID">@i.Plan_Name @if (i.Scheme == true) { Write("NEW"); } else { Write("OLD"); } (@i.Plot_Type)</option>
+                                }
+                                else
+                                {
+                                    <option data-amount="@i.Total_Price" value="@i.ID">@i.Plan_Name @if (i.Scheme == true) { Write("NEW"); } else { Write("OLD"); } (@i.Plot_Type)</option>
+                                }
+
+                            }
+
+                        </select>
+                        <script>
+                            function amountadd() {
+
+                                var size = $('#Plot_Size option:selected');
+                                $('#amount').val(size.data('amount'));
+
+                            }
+                        </script>
+                    </div>
+                    <div class="form-group float-left col-3" style="margin-top:8px">
+                        <label for="inputName">Amount</label>
+                        <input type="number" id="amount" name="amount" value="@ViewBag.amount" class="form-control" />
+                    </div>
+                    <div class="form-group float-left col-3" style="margin-top:8px">
+                        <label for="inputName">Transfer Date</label>
+                        <input type="date" id="transfer_date" name="transfer_date" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+                    </div>
+                    <div class="form-group float-left col-2" style="margin-top:8px">
+                        <label for="inputName">Re-Sehdule Date</label>
+                        <input type="date" id="new_date" disabled name="new_date" class="form-control" />
+                    </div>
+
+                    <div class=" col-1 float-left"> <label class="_33fw587 NveTX4Z " style="margin-top:45px"><input type="checkbox" id="quaterly1" onclick="date_change()"><span class="J8BZ6cq" style="margin-left:10px;margin-top:3px"></span></label></div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            function scheme_change() {
+
+                if (document.getElementById('quaterly').checked == true) {
+
+                    document.getElementById('Plot_Size').disabled = false;
+
+
+                } else if (document.getElementById('quaterly').checked == false) {
+                    document.getElementById('Plot_Size').disabled = true;
+                }
+            }
+            function date_change() {
+
+                if (document.getElementById('quaterly1').checked == true) {
+
+                    document.getElementById('new_date').disabled = false;
+
+
+                } else if (document.getElementById('quaterly1').checked == false) {
+                    document.getElementById('new_date').disabled = true;
+                }
+            }
+        </script>
+        <div class="col-md-6">
+
+            <div class="card card-danger">
+                <div class="card-header">
+                    <h3 class="card-title">SELLER</h3>
+                </div>
+                <input type="hidden" name="Payment_ID" value="@Model.Payment_ID" />
+                <input type="hidden" name="Member_ID" value="@Model.Plot.Member.Member_ID" />
+                <div class="card-body">
+                    <div class="form-group col-2 float-left">
+                        <label for="inputName">Applicant_Name<span style="color:red">*</span></label>
+                        <select type="text" id="Applicant_Start_Text" class="form-control" placeholder="Genger" required>
+                            @if (Model.Plot.Member.Applicant_Start_Text == "Mr.")
+                            {
+
+
+                                <option selected>Mr.</option>
+                                <option>Mrs.</option>
+                            }
+                            else
+                            {
+                                <option>Mr.</option>
+                                <option selected>Mrs.</option>
+                            }
+
+                        </select>
+                    </div>
+                    <div class="form-group col-10 float-left" style="margin-top:8px">
+                        <label for="inputName"></label>
+                        <input type="text" id="Applicant_Name" name="oldname" class="form-control" placeholder="Applicant_Name" value="@Model.Plot.Member.Applicant_Name" required />
+                    </div>
+
+
+                    <div class="form-group col-2 float-left">
+                        <label for="inputName">Father_Husband_Name<span style="color:red">*</span></label>
+                        <select type="text" id="Father_Husband_Start_Text" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Start_Text" required>
+                            @if (Model.Plot.Member.Father_Husband_Start_Text == "Mr.")
+                            {
+
+
+                                <option selected>Mr.</option>
+                                <option>Mrs.</option>
+                            }
+                            else
+                            {
+                                <option>Mr.</option>
+                                <option selected>Mrs.</option>
+                            }
+
+                        </select>
+                    </div>
+                    <div class="form-group col-10 float-left" style="margin-top:8px">
+                        <label for="inputName"></label>
+                        <input type="text" id="Father_Husband_Name" class="form-control" placeholder="Father_Husband_Name" value="@Model.Plot.Member.Father_Husband_Name" required />
+                    </div>
+
+
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputName">CNIC #</label>
+                        <input type="text" id="CNIC" class="form-control" name="oldcnic" placeholder="CNIC" value="@Model.Plot.Member.CNIC" />
+                    </div>
+
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputClientCompany">Occupation</label>
+                        <input type="text" class="form-control" placeholder="Occupation" id="Occupation" value="@Model.Plot.Member.Occupation" />
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Present_Postel_Address</label>
+                        <textarea type="email" class="form-control" placeholder="Present_Postel_Address" value="@Model.Plot.Member.Present_Postel_Address" id="Present_Postel_Address">@Model.Plot.Member.Present_Postel_Address</textarea>
+                    </div>
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Permenent_Postel_Address</label>
+                        <textarea type="email" class="form-control" placeholder="Permenent_Postel_Address" value="@Model.Plot.Member.Permenent_Postel_Address" id="Permenent_Postel_Address">@Model.Plot.Member.Permenent_Postel_Address</textarea>
+                    </div>
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Phone Office</label>
+                        <input type="number" class="form-control" placeholder="Office_No" value="@Model.Plot.Member.Office_No" id="Office_No" />
+                    </div>
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Cell_No</label>
+                        <input type="number" class="form-control" placeholder="Cell_No" value="@Model.Plot.Member.Cell_No" id="Cell_No" />
+                    </div>
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Email</label>
+                        <input type="Email" class="form-control" placeholder="Email" value="@Model.Plot.Member.Email" id="Email" />
+                    </div>
+
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Country</label>
+                        <input type="text" class="form-control" placeholder="Country" id="Country" value="@Model.Plot.Member.Country" />
+                    </div>
+
+
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Nominee_Name</label>
+                        <input type="text" class="form-control" placeholder="Nominee_Name" value="@Model.Plot.Member.Nominee_Name" id="Nominee_Name" />
+                    </div>
+
+                    <div class="form-group col-2 float-left">
+                        <label for="inputName">Nominee_Father_Husband_Name<span style="color:red">*</span></label>
+                        <select type="text" id="NomineeFatherStartText" class="form-control" placeholder="Father_Husband_Name" required>
+                            @if (Model.Plot.Member.NomineeFatherStartText == "S/0")
+                            {
+
+
+                                <option selected>S/O</option>
+                                <option>D/O</option>
+                                <option>W/O</option>
+                            }
+                            else if (Model.Plot.Member.NomineeFatherStartText == "W/O")
+                            {
+                                <option>S/O</option>
+                                <option>D/O</option>
+                                <option selected>W/O</option>
+
+                            }
+                            else
+                            {
+                                <option>S/O</option>
+                                <option>W/O</option>
+                                <option selected>D/O</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-10  float-left">
+                        <label for="inputProjectLeader">&nbsp;</label>
+                        <input type="text" class="form-control" placeholder="Nominee_Father" id="NomineeFather" value="@Model.Plot.Member.NomineeFather" />
+                    </div>
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Nominee_CNIC</label>
+                        <input type="text" class="form-control" placeholder="Nominee_CNIC" value="@Model.Plot.Member.Nominee_CNIC" id="Nominee_CNIC" />
+                    </div>
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Relation</label>
+                        <input type="text" class="form-control" placeholder="Relation" value="@Model.Plot.Member.Relation" id="Relation" />
+                    </div>
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Nominee_Phone_No</label>
+                        <input type="number" class="form-control" placeholder="Nominee_Phone_No" value="@Model.Plot.Member.Nominee_Phone_No" id="Nominee_Phone_No" />
+                    </div>
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Nominee_Address</label>
+                        <textarea type="email" class="form-control" placeholder="Nominee_Address" value="@Model.Plot.Member.Nominee_Address" id="Nominee_Address">@Model.Plot.Member.Nominee_Address</textarea>
+                    </div>
+
+                    <div class="file-input col-6 float-left">
+                        <video hidden height="125" width="160" id="video"></video>
+                        <img height="125" width="160" id="imagePreview" style="float:left">
+                        <div class="col-12 float-left mt-3 ">
+
+                            <button type="button" class="btn btn-info " id="startButton">Start</button>
+                            <button type="button" class="btn btn-info" id="captureButton">Capture</button>
+                            <input type="hidden" name="fromImage" id="Data" />
+                            <input type="file" id="file" accept="image/*" onchange="handleFileSelect(event)">
+                            <label for="file" style="width:142px;margin-top:5px;text-align:center" class="file-button">Select Image</label>
+
+                        </div>
+                    </div>
+                    <div class="file-input col-6 float-left">
+
+                        <img height="125" width="160" id="fromThumbPreview" style="float:left">
+                        <div class="col-12 float-left mt-3 ">
+
+                            <a href="myapp://" class="btn btn-info" id="fromThumbButton">Start Thumb</a>
+                            <input type="hidden" name="fromThumbData" id="fromThumb" />
+                        </div>
+                    </div>
+                    <style>
+                        .file-input {
+                            position: relative;
+                            display: inline-block;
+                        }
+
+                            .file-input input[type="file"] {
+                                position: absolute;
+                                left: -9999px;
+                            }
+
+                        .file-button {
+                            display: inline-block;
+                            padding: 5px 5px;
+                            background-color: #007bff;
+                            color: #fff;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                        }
+
+                            .file-button:hover {
+                                background-color: #0056b3;
+                            }
+                    </style>
+
+                    <script>
+                        function handleFileSelect(event) {
+                            var file = event.target.files[0];
+                            var reader = new FileReader();
+
+                            reader.onload = function () {
+                                var dataInput = document.getElementById('Data');
+                                var preview = document.getElementById('imagePreview');
+                                preview.src = reader.result;
+                                dataInput.value = reader.result;
+                            };
+
+                            reader.readAsDataURL(file);
+                        }
+                    </script>
+                    <script>
+                        var fromThumbButton = document.getElementById('fromThumbButton');
+
+                        var fromThumbPreview = document.getElementById('fromThumbPreview');
+                        var fromThumb = document.getElementById('fromThumb');
+                        fromThumbButton.addEventListener('click', function () {
+                            $.ajax({
+                                url: '/File_Transfer/fromScanThumb',
+                                type: 'GET',
+                                success: function (result) {
+                                    fromThumbPreview.src = result;
+                                    fromThumb.value = result;
+                                }
+                            });
+
+                        });
+
+                    </script>
+
+
+                    <script>
+                        var captureButton = document.getElementById('captureButton');
+                        var startButton = document.getElementById('startButton');
+                        var video = document.getElementById('video');
+                        var imagePreview = document.getElementById('imagePreview');
+
+
+                        startButton.addEventListener('click', function () {
+                            // Request access to the camera
+                            var video = document.getElementById('video');
+                            video.hidden = false;
+                            imagePreview.hidden = true;
+                            var canvas = document.getElementById('canvas');
+                            navigator.mediaDevices.getUserMedia({ video: true })
+                                .then(function (stream) {
+                                    video.srcObject = stream;
+                                    video.play();
+                                });
+                        });
+                        function captureImage() {
+                            var dataInput = document.getElementById('Data');
+                            video.hidden = true;
+                            imagePreview.hidden = false;
+                            var canvas = document.createElement('canvas');
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                            var imageData = canvas.toDataURL('image/png');
+                            imagePreview.src = imageData;
+                            dataInput.value = imageData;
+                        } captureButton.addEventListener('click', function () {
+                            captureImage();
+                        });
+                        // Capture image from web cam
+
+                    </script>
+
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <!-- /.card -->
+
+        </div>
+        <!-- /.col (left) -->
+        <div class="col-md-6">
+
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">BUYER</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group col-2 float-left">
+                        <label for="inputName">Applicant_Name<span style="color:red">*</span></label>
+                        <select type="text" id="Applicant_Start_Text1" class="form-control" placeholder="Genger" name="Applicant_Start_Text" required>
+                            <option>Mr.</option>
+                            <option>Mrs.</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-10 float-left" style="margin-top:8px">
+                        <label for="inputName"></label>
+                        <input type="text" id="Applicant_Name1" class="form-control" placeholder="Applicant_Name" name="Applicant_Name" required />
+                    </div>
+
+
+                    <div class="form-group col-2 float-left">
+                        <label for="inputName">Father_Husband_Name<span style="color:red">*</span></label>
+                        <select type="text" id="Father_Husband_Start_Text1" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Start_Text" required>
+                            <option>Mr.</option>
+                            <option>Mrs.</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-10 float-left" style="margin-top:8px">
+                        <label for="inputName"></label>
+                        <input type="text" id="Father_Husband_Name1" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Name" required />
+                    </div>
+
+
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputName">CNIC #</label>
+                        <input type="text" id="CNIC1" class="form-control" placeholder="CNIC" name="CNIC" />
+                    </div>
+
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputClientCompany">Occupation</label>
+                        <input type="text" class="form-control" placeholder="Occupation" name="Occupation" id="Occupation1" />
+                    </div>
+
+
+
+
+
+
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Country</label>
+                        <input type="text" class="form-control" placeholder="Country" name="Country" id="Country1" />
+                    </div>
+
+
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Present_Postel_Address</label>
+                        <textarea type="email" class="form-control" placeholder="Present_Postel_Address" name="Present_Postel_Address" id="Present_Postel_Address1"></textarea>
+                    </div>
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Permenent_Postel_Address</label>
+                        <textarea type="email" class="form-control" placeholder="Permenent_Postel_Address" name="Permenent_Postel_Address" id="Permenent_Postel_Address1"></textarea>
+                    </div>
+
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Phone Office</label>
+                        <input type="number" class="form-control" placeholder="Office_No" name="Office_No" id="Office_No1" />
+                    </div>
+
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Cell_No</label>
+                        <input type="number" class="form-control" placeholder="Cell_No" name="Cell_No" id="Cell_No1" />
+                    </div>
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Email</label>
+                        <input type="Email" class="form-control" placeholder="Email" name="Email" id="Email1" />
+                    </div>
+
+
+
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Nominee_Name</label>
+                        <input type="text" class="form-control" placeholder="Nominee_Name" name="Nominee_Name" id="Nominee_Name1" />
+                    </div>
+
+                    <div class="form-group col-2 float-left">
+                        <label for="inputName">Nominee_Father_Husband_Name<span style="color:red">*</span></label>
+                        <select type="text" id="NomineeFatherStartText" class="form-control" placeholder="NomineeFatherStartText" name="NomineeFatherStartText" required>
+                            <option>W/O</option>
+                            <option>S/O</option>
+                            <option>D/O</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-10  float-left">
+                        <label for="inputProjectLeader">&nbsp;</label>
+                        <input type="text" class="form-control" placeholder="Nominee_Father" name="NomineeFather" id="NomineeFather1" />
+                    </div>
+
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Nominee_CNIC</label>
+                        <input type="text" class="form-control" placeholder="Nominee_CNIC" name="Nominee_CNIC" id="Nominee_CNIC1" />
+                    </div>
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Relation</label>
+                        <input type="text" class="form-control" placeholder="Relation" name="Relation" id="Relation1" />
+                    </div>
+                    <div class="form-group col-12  float-left">
+                        <label for="inputProjectLeader">Nominee_Phone_No</label>
+                        <input type="number" class="form-control" placeholder="Nominee_Phone_No" name="Nominee_Phone_No" id="Nominee_Phone_No1" />
+                    </div>
+                    <div class="form-group col-12 float-left">
+                        <label for="inputProjectLeader">Nominee_Address</label>
+                        <textarea type="email" class="form-control" placeholder="Nominee_Address" name="Nominee_Address" id="Nominee_Address1"></textarea>
+                    </div>
+
+                    <div class="file-input col-6 float-left">
+                        <video hidden height="125" width="160" id="video1"></video>
+                        <img height="125" width="160" id="imagePreview1" style="float:left">
+                        <div class="col-12 float-left mt-3 ">
+
+                            <button type="button" class="btn btn-info" id="startButton1">Start</button>
+                            <button type="button" class="btn btn-info" id="captureButton1">Capture</button>
+                            <input type="hidden" name="toImage" id="Data1" />
+                            <input type="file" id="file1" accept="image/*" onchange="handleFileSelect1(event)">
+                            <label for="file1" style="width:142px;margin-top:5px;text-align:center" class="file-button">Select Image</label>
+
+                        </div>
+                    </div>
+
+                    <script>
+                        function handleFileSelect1(event) {
+                            console.log("hit");
+                            var file = event.target.files[0];
+                            var reader = new FileReader();
+
+                            reader.onload = function () {
+                                var dataInput = document.getElementById('Data1');
+                                var preview = document.getElementById('imagePreview1');
+                                preview.src = reader.result;
+                                dataInput.value = reader.result;
+                            };
+
+                            reader.readAsDataURL(file);
+                        }
+                    </script>
+                    <style>
+                        .file-input {
+                            position: relative;
+                            display: inline-block;
+                        }
+
+                            .file-input input[type="file"] {
+                                position: absolute;
+                                left: -9999px;
+                            }
+
+                        .file-button {
+                            display: inline-block;
+                            padding: 5px 5px;
+                            background-color: #007bff;
+                            color: #fff;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                        }
+
+                            .file-button:hover {
+                                background-color: #0056b3;
+                            }
+                    </style>
+                    <div class="col-6 float-left">
+
+                        <img height="125" width="160" id="toThumbPreview" style="float:left">
+                        <div class="col-12 float-left mt-3 ">
+
+                            <a href="myapp://" class="btn btn-info" id="toThumbButton">Start Thumb</a>
+                            <input type="hidden" name="toThumbData" id="toThumb" />
+
+                        </div>
+                    </div>
+                    <script>
+                        var toThumbButton = document.getElementById('toThumbButton');
+
+                        var toThumbPreview = document.getElementById('toThumbPreview');
+                        var toThumb = document.getElementById('toThumb');
+                        toThumbButton.addEventListener('click', function () {
+                            $.ajax({
+                                url: '/File_Transfer/toScanThumb',
+                                type: 'GET',
+                                success: function (result) {
+                                    toThumbPreview.src = result;
+                                    toThumb.value = result;
+                                }
+                            });
+
+                        });
+
+                    </script>
+
+                    <script>
+                        var captureButton1 = document.getElementById('captureButton1');
+                        var startButton1 = document.getElementById('startButton1');
+                        var video1 = document.getElementById('video1');
+                        var imagePreview1 = document.getElementById('imagePreview1');
+
+
+                        startButton1.addEventListener('click', function () {
+                            // Request access to the camera
+                            var video1 = document.getElementById('video1');
+                            video1.hidden = false;
+                            imagePreview1.hidden = true;
+                            var canvas1 = document.getElementById('canvas');
+                            navigator.mediaDevices.getUserMedia({ video: true })
+                                .then(function (stream) {
+                                    video1.srcObject = stream;
+                                    video1.play();
+                                });
+
+                        });
+                        function captureImage1() {
+                            var dataInput1 = document.getElementById('Data1');
+                            video1.hidden = true;
+                            imagePreview1.hidden = false;
+                            var canvas1 = document.createElement('canvas');
+                            canvas1.width = video1.videoWidth;
+                            canvas1.height = video1.videoHeight;
+                            canvas1.getContext('2d').drawImage(video1, 0, 0, canvas1.width, canvas1.height);
+                            var imageData1 = canvas1.toDataURL('image/png');
+                            imagePreview1.src = imageData1;
+                            dataInput1.value = imageData1;
+                        } captureButton1.addEventListener('click', function () {
+                            captureImage1();
+                        });
+                        // Capture image from web cam
+
+                    </script>
+
+                    <style>
+                        /* CSS styles for the image */
+                        img {
+                            display: block; /* make the image a block element */
+                            margin: auto; /* center the image horizontally */
+                            /* set the width of the image to 50% of its container */
+                            border: 2px solid black; /* add a border around the image */
+                            box-shadow: 2px 2px 5px grey; /* add a box shadow effect to the image */
+                        }
+                    </style>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <!-- /.card -->
+
+        </div>
+        <!-- /.col (right) -->
+    </div>
+
+
+
+    <div class="row">
+        <div class="file-input col-6 offset-5 float-left">
+            <video hidden height="125" width="160" id="video2"></video>
+            <img height="125" width="160" id="imagePreview2" style="float:left">
+            <div class="col-12 float-left mt-3 ">
+
+                <button type="button" class="btn btn-info" id="startButton2">Start</button>
+                <button type="button" class="btn btn-info" id="captureButton2">Capture</button>
+                <input type="hidden" name="groupPhoto" id="Data2" />
+                <input type="file" id="file2" accept="image/*" onchange="handleFileSelect2(event)"><br />
+                <label for="file2" style="width:142px;margin-top:5px;text-align:center" class="file-button">Select Image</label>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function handleFileSelect2(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var dataInput = document.getElementById('Data2');
+                var preview = document.getElementById('imagePreview2');
+                preview.src = reader.result;
+                dataInput.value = reader.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    </script>
+    <script>
+        var captureButton2 = document.getElementById('captureButton2');
+        var startButton2 = document.getElementById('startButton2');
+        var video2 = document.getElementById('video2');
+        var imagePreview2 = document.getElementById('imagePreview2');
+
+
+        startButton2.addEventListener('click', function () {
+            // Request access to the camera
+            var video2 = document.getElementById('video2');
+            video2.hidden = false;
+            imagePreview2.hidden = true;
+            var canvas1 = document.getElementById('canvas');
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    video2.srcObject = stream;
+                    video2.play();
+                });
+
+        });
+        function captureImage2() {
+            var dataInput1 = document.getElementById('Data2');
+            video2.hidden = true;
+            imagePreview2.hidden = false;
+            var canvas1 = document.createElement('canvas');
+            canvas1.width = video2.videoWidth;
+            canvas1.height = video2.videoHeight;
+            canvas1.getContext('2d').drawImage(video2, 0, 0, canvas1.width, canvas1.height);
+            var imageData2 = canvas1.toDataURL('image/png');
+            imagePreview2.src = imageData2;
+            dataInput1.value = imageData2;
+        } captureButton2.addEventListener('click', function () {
+            captureImage2();
+        });
+        // Capture image from web cam
+
+    </script>
+
+    <div class="row">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success float-right" onclick="return confirm('Are you sure U Want to Transfer?')">Transfer</button>
+        </div>
+    </div>
+</form>
+        </section>
+    </div>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#CNIC1").autocomplete({
+                
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Member/Index",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+
+
+                                return { label: item.CNIC, data: item, Applicant_Name: item.Applicant_Name, Father_Husband_Name: item.Father_Husband_Name, Occupation: item.Occupation, Present_Postel_Address: item.Present_Postel_Address, Permenent_Postel_Address: item.Permenent_Postel_Address, Office_No: item.Office_No, Cell_No: item.Cell_No, Email: item.Email, Nominee_Name: item.Nominee_Name, Nominee_CNIC: item.Nominee_CNIC, Relation: item.Relation, Nominee_Phone_No: item.Nominee_Phone_No, Nominee_Address: item.Nominee_Address };
+
+                            }));
+                        }
+                    });
+
+                },
+
+                select: function (event, ui) {
+                    $('#Applicant_Name1').val(ui.item.Applicant_Name);
+                    $('#Father_Husband_Name1').val(ui.item.Father_Husband_Name);
+                    $('#Occupation1').val(ui.item.Occupation);
+                    $('#Present_Postel_Address1').val(ui.item.Present_Postel_Address);
+                    $('#Permenent_Postel_Address1').val(ui.item.Permenent_Postel_Address);
+                    $('#Office_No1').val(ui.item.Office_No);
+                    $('#Cell_No1').val(ui.item.Cell_No);
+                    $('#Email1').val(ui.item.Email);
+                    $('#Nominee_Name1').val(ui.item.Nominee_Name);
+                    $('#Nominee_CNIC1').val(ui.item.Nominee_CNIC);
+                    $('#Relation1').val(ui.item.Relation);
+                    $('#Nominee_Phone_No1').val(ui.item.Nominee_Phone_No);
+                    $('#Nominee_Address1').val(ui.item.Nominee_Address);
+                }
+            });
+
+        });
+    </script>
+}

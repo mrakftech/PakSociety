@@ -1,0 +1,185 @@
+﻿@model IEnumerable<Society.Data.Payment_Plan>
+@{
+    ViewBag.Title = "Defaulter_Report";
+}
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+         
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Defaulter List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Defaulter List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>  
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+              
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <script>
+                        function cc() {
+
+                            var v = $('#srch').val();
+
+                            $.ajax({
+                                url: '/Report/defaulter_find',
+                                type: 'POST',
+                                data: {
+                                    search1: v
+
+                                },
+                                success: function (data) {
+
+                                    if (data == "[]") {
+
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+                                        table.draw();
+                                    } else {
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+
+
+                                        var obj = JSON.parse(data);
+                                        var tr;
+
+                                        //Append each row to html table
+                                        for (var i = 0; i < obj.length; i++) {
+                                            tr = $('<tr/>');
+                                            tr.append("<td>" + obj[i].Reg_No + "</td>");
+                                            tr.append("<td>" + obj[i].Applicant_Name + "</td>");
+                                            tr.append("<td>" + obj[i].Cell_No + "</td>");
+
+
+
+
+
+
+                                            tr.append("<td>" + obj[i].Net.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                            tr.append("<td>" + obj[i].Paid_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                            tr.append("<td>" + obj[i].due.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+                                            tr.append("<td>" + obj[i].defaulter.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + "</td>");
+
+                                            table.row.add(tr);
+
+                                            table.draw();
+
+
+                                        }
+                                    }
+
+                                }
+                            });
+
+
+                        }
+                    </script>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">Ref#</th>
+                                    <th style="width: 5%">Size</th>
+                                    <th style="width: 5%">Unit Type</th>
+                                    <th style="width: 10%">Member Name</th>
+
+                                    <th style="width: 10%">Phone No</th>
+
+                                    <th style="width: 10%">Net Price</th>
+                                    <th style="width: 10%">Paid Amount</th>
+                                    <th style="width: 10%">Paid Installments(#)</th>
+                                    <th style="width: 10%">Balance Amount</th>
+                                    <th style="width: 10%">OverDue Amount</th>
+                                    <th style="width: 10%">Pending Installments(#)</th>
+                                    <th style="width: 10%">Last Paid Amount</th>
+                                    <th style="width: 10%">Last Paid Date</th>
+                                    <th style="width: 10%">Possession</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+
+
+                            @foreach (var x in Model)
+
+                            {
+                                var find_last_amount1 = x.Installments.Where(o => o.Monthly_Paid > 0).ToList();
+                                if (find_last_amount1.Count > 0)
+                                {
+
+
+                                    var find_last_amount = x.Installments.Where(o => o.Monthly_Paid > 0).Last();
+                                    if (find_last_amount != null && find_last_amount.Payment_Plan.Plot.Member.Parties.FirstOrDefault().Party_Detail.OrderBy(o => o.ID).LastOrDefault() != null)
+                                    {
+                                        var mem_ID = find_last_amount.Payment_Plan.Plot.Member.Member_ID;
+                                        var party_ID = find_last_amount.Payment_Plan.Plot.Member.Parties.First(o => o.Member_ID == mem_ID).ID;
+                                        var a = find_last_amount.Payment_Plan.Plot.Member.Parties.FirstOrDefault(o => o.Member_ID == mem_ID).Party_Detail.Where(o => o.Party_ID == party_ID).OrderBy(o=>o.ID).LastOrDefault();
+                                        double amount = (double)a.Current_Amount - (double)a.Previous_Amount ;
+
+                                        var first = x.Installments.Where(o => o.Payment_Month <= DateTime.Today).Sum(i => i.Amount_Paid);
+                                        var No_of_Unpaid = x.Installments.Where(o => o.Payment_Month <= DateTime.Today && o.IsPaid ==false).Count();
+                                        var first1 = x.Installments.Sum(i => i.Amount_Paid);
+                                        double second = (double)x.Installments.Where(o => o.Payment_Month <= DateTime.Today).Sum(i => i.Monthly_Paid);
+                                        double paid_amount = (double)x.Installments.Sum(i => i.Monthly_Paid);
+                                        double No_paid_amount = (double)x.Installments.Where(o =>o.IsPaid ==true).Count();
+                                        double third = (double)first - second;
+
+                                        double remaining = (double)first1 - paid_amount;
+                                        double net = (double)x.Net_Price_Plot;
+                                        if (third <= 0) { }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>@x.Plot.Reg_No</td>
+                                                <td>@x.Plot.Installment_Plan.Plan_Name</td>
+                                                <td>@x.Plot.Plot_Type</td>
+                                                <td>@x.Plot.Member.Applicant_Name</td>
+                                                <td>@x.Plot.Member.Cell_No</td>
+                                                <td>@net.ToString("n0")</td>
+                                                <td>@paid_amount.ToString("n0")</td>
+                                                <td>@No_paid_amount</td>
+                                                <td>@remaining.ToString("n0")</td>
+                                                <td>@third.ToString("n0")</td>
+                                                <td>@No_of_Unpaid</td>
+
+                                                <td>@amount.ToString("n0")</td>
+                                                <td>@a.Pay_Date.ToString("dd-MM-yyyy")</td>
+                                                @{double xx =(double) x.Pocession_Payment; }
+                                                <td>@xx.ToString("n0")</td>
+                                            </tr>
+                                            count = count + 1;
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+                        </table>
+                    </div>
+                </div>
+        
+        </div>
+    </div>
+
+}
+

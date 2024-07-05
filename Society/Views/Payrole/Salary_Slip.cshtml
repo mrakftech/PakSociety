@@ -1,0 +1,205 @@
+﻿@model dynamic
+@using Society.Data;
+@{
+    ViewBag.Title = "Salary_Slip";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee") { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px" id="divToPrint">
+        <div class="content-wrapper" style="background-color:white">
+            <div class="container " style="margin-left:200px">
+                <div class="row print-container" style="width:700px;background-color:lavender">
+                    <div class="text-center bg-gray text-black" style="width:699px">
+                        <h2><b>Payslip</b></h2>
+                    </div>
+                    <div class="col-md-12">
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row" style="margin-top:20px">
+                                    <div class="col-md-3">
+                                        <div> <span class="fw-bolder">EMPLOYEE NAME:-</span> </div>
+                                    </div>
+                                    <div class="col-md-3"><b>@Model.Salary_With_Allowences.Employee.F_Name @Model.Salary_With_Allowences.Employee.L_Name</b></div>
+                                    <div class="col-md-3">
+                                        <div> <span class="fw-bolder">JOINING DATE:-</span>  </div>
+                                    </div>
+                                    <div class="col-md-3"><b>@Model.Salary_With_Allowences.Employee.Joining_Date.ToString("dd-MM-yyyy")</b></div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-3">
+                                        <div> <span class="fw-bolder">EMPLOYEE CNIC:-</span> </div>
+                                    </div>
+                                    <div class="col-md-3"><b>@Model.Salary_With_Allowences.Employee.CNIC</b></div>
+                                    <div class="col-md-3">
+                                        <div> <span class="fw-bolder">DESIGNATION:-</span>  </div>
+                                    </div>
+                                    <div class="col-md-3"><b>@Model.Salary_With_Allowences.Employee.Designation</b></div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-3">
+                                        <div> <span class="fw-bolder">PHONE NUMBER:-</span> </div>
+                                    </div>
+                                    <div class="col-md-3"><b>@Model.Salary_With_Allowences.Employee.Phone_Number</b></div>
+                                    <div class="col-md-3">
+                                        <div> <span class="fw-bolder">SHIFT:-</span>  </div>
+                                    </div>
+                                    <div class="col-md-3"><b>@Model.Salary_With_Allowences.Employee.Shift</b></div>
+                                </div>
+
+                            </div>
+                            <table class="mt-4 table table-bordered">
+                                <thead class="text-center" style="background-color:gray">
+                                    <tr>
+                                        <th scope="col">ALLOWENCES</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">DEDUCTIONS</th>
+                                        <th scope="col">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">BASIC PAY</th>
+                                        <td>@Model.Salary_With_Allowences.Basic_Salary</td>
+                                        <td>LOAN INSTALLMENT</td>
+
+
+
+                                        @if (Model.Loans == 0)
+                                        {
+
+
+                                            <td>0</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@Model.Loans</td>
+                                        }
+
+
+
+
+
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">CONVENCE ALLOWENCE</th>
+                                        <td>@Model.Salary_With_Allowences.Convance_Allownce</td>
+                                        <td>ADVANCE</td>
+                                        @{
+
+                                            if (Model.Advances == 0)
+                                            {
+                                                <td>0</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>@Model.Advances</td>
+                                            }
+                                        }
+
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">HOUSE RENT ALLOWENCE</th>
+                                        <td>@Model.Salary_With_Allowences.House_Rent_Allowence</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">MEDICAL ALLOWENCE</th>
+                                        <td>@Model.Salary_With_Allowences.Medical_Allowence</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">OVERTIME</th>
+
+                                        @if (Model.OverTimes == 0)
+                                        {
+                                            <td>0</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>@Model.OverTimes</td>
+
+                                        }
+
+
+
+
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">GROSS SALARY</th>
+                                        <td style="background-color:forestgreen">@Model.Payroles.Gross_Salary</td>
+                                        <td>NET SALARY</td>
+                                        <td style="background-color:forestgreen">@Model.Payroles.Net_Salary</td>
+                                    </tr>
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"> <b> <span>NET PAY: @Model.Payroles.Net_Salary</span></b> </div>
+                            <div class="border col-md-8">
+                                <div class="d-flex flex-column" id="AmountInWords"> </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:50px">
+                            <div class="col-md-2"> <b> <span>Accountant Signature:-</span></b> </div>------------------------ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="col-md-2"> <b> <span>Employee Signature:-</span></b> </div>------------------------
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    @@media print {
+                        body * {
+                            visibility: hidden;
+                        }
+
+                        .print-container, .print-container * {
+                            visibility: visible;
+                        }
+                    }
+                </style>
+
+            </div>
+            <div style="margin-left:500px">
+                <button onclick="window.print();"
+                        style="padding:10px;background-color: olivedrab;outline: none; border: none; border-radius: 5px; margin-top: 15px; color:white;cursor: pointer;">
+                    Print
+                    Slip
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+
+    var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+    var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        function inWords(num) {
+
+        if ((num = num.toString()).length > 9) return 'overflow';
+        n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+        if (!n) return; var str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
+            return str;
+        }
+
+       document.getElementById('AmountInWords').innerHTML = (" "+inWords(@Model.Payroles.Net_Salary)+"only");
+    </script>}
+

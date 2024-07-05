@@ -1,0 +1,691 @@
+﻿@using Society.Data;
+
+@model dynamic
+@{
+    ViewBag.Title = "Mark_Attendence";
+}
+@if (Session["CNIC"] == null ) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Attendence</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Attendence</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="modal" tabindex="-1" role="dialog" id="modelNewPlot">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form action="" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Update Attendence</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="hidden_emp_id" name="hidden_emp_id" />
+                            <div class="col-md-3 float-left">
+                                <label>Shift:</label>
+
+                                <select name="update_Shift" id="update_Shift" class="form-control"
+                                        required>
+                                    <option value="" selected disabled>Select</option>
+                                    @foreach (Shift a in Model.shift)
+                                    {
+                                        <option value="@a.Shift_Name">@a.Shift_Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                            <div class="form-group col-3 float-left">
+                                <label for="inputName">Employee Name:</label>
+                                <input type="text" id="Employee_Name" class="form-control" name="txtSalerName">
+                                <!-- <input type="hidden" name="hiddenBookingID" id="hiddenBookingID" value="" /> -->
+                            </div>
+                            <div class="form-group col-3 float-left">
+                                <label for="inputName">InTime:</label>
+                                <input type="time" id="update_in_time" class="form-control" name="update_in_time">
+                                <!-- <input type="hidden" name="hiddenBookingID" id="hiddenBookingID" value="" /> -->
+                            </div>
+                            <div class="form-group col-3 float-left">
+                                <label for="inputName">OutTime:</label>
+                                <input type="time" id="update_out_time" class="form-control" name="update_out_time">
+                                <!-- <input type="hidden" name="hiddenBookingID" id="hiddenBookingID" value="" /> -->
+                            </div>
+
+                            <div class="form-group col-2 float-left">
+                                <input type="button" class="btn btn-primary form-control" onclick="update_attendence_to_DB()"
+                                       value="Add Now">
+
+                            </div> <div class="form-group col-3 float-left">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Add New Attendence </h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-3 float-left">
+                        <label>Shift:</label>
+
+                        <select name="Shift" id="Shift" class="form-control"
+                                required>
+                            <option value="" selected disabled>Select</option>
+                            @foreach (Shift a in Model.shift)
+                            {
+                                <option value="@a.Shift_Name">@a.Shift_Name</option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>Employee Name:</label>
+
+                        <select name="employe_id" id="employe_id" class="form-control"
+                                required>
+                            <option value="" selected disabled>Select</option>
+                            @foreach (Employee e in Model.emp_List)
+                            {
+                                <option value="@e.Employee_ID">@e.F_Name @e.L_Name</option>
+                            }
+
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>In Time:</label>
+
+                        <input type="time" placeholder="Control Account Code" name="intime"
+                               id="intime" class="form-control" required />
+                    </div>
+
+
+
+                    <div class="col-md-2 float-left">
+                        <label> &nbsp;</label>
+                        <button class="btn btn-primary form-control" onclick="mark_attendence()">
+                            Mark attendence
+                        </button>
+                    </div>
+                    <div class="col-md-2 float-left">
+                        <label> &nbsp;</label>
+                        <button class="btn btn-danger form-control" onclick="mark_absent()">
+                            Mark Absent
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Attendence</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">ID</th>
+                                <th style="width: 16%">Employee Name</th>
+                                <th style="width: 9%">In Time</th>
+                                <th style="width: 9%">Out Time</th>
+                                <th style="width: 15%">Attendence Date</th>
+                                <th style="width: 11%">Over Time</th>
+                                <th style="width: 12%">Shift</th>
+                                <th style="width: 12%">Status</th>
+                                <th style="width: 25%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Attendence x in Model.today_atndc)
+                            {
+                                <tr>
+                                    <td>@x.Employee_ID </td>
+                                    <td>@x.Employee_Name</td>
+                                    @if (x.IN_Time == null)
+                                    {
+
+                                        <td>-</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@x.IN_Time</td>
+                                    }
+                                    @if (x.OUT_Time == null)
+                                    {
+
+                                        <td>-</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@x.OUT_Time</td>
+                                    }
+
+                                    <td>@x.Attendence_date.ToString("dd-MM-yyyy")</td>
+                                    @if (x.Over_Time == null)
+                                    {
+
+                                        <td>0</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@x.Over_Time (HOURS)</td>
+                                    }
+                                    @if (x.Shift == null)
+                                    {
+
+                                        <td>-</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@x.Shift</td>
+                                    }
+                                    @if (x.Attendence_Status == true)
+                                    {
+
+                                        <td><span class="badge badge-success">Present</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="badge badge-danger">Absent</span></td>
+                                    }
+                                    @if (x.Attendence_Status == true)
+                                    {
+                                        <td>
+                                            <button class='btn btn-info btn-sm m-1' onclick="Model('@x.ID', '@x.Employee_Name', '@x.IN_Time', '@x.OUT_Time', '@x.Over_Time', '@x.Shift')"><i class='fas fa-pencil-alt'></i></button>
+                                            <button class='btn btn-danger btn-sm m-1' onclick="delete_Attendence('@x.ID')"><i class='fas fa-trash'></i></button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+
+                                            <button class='btn btn-danger btn-sm m-1' onclick="delete_Attendence('@x.ID')"><i class='fas fa-trash'></i></button>
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                    <script>
+
+                        function update_attendence_to_DB() {
+                            var id = $('#hidden_emp_id').val();
+                            var in_time = $('#update_in_time').val();
+                            var out_time = $('#update_out_time').val();
+                            var over_time = $('#update_over_time').val();
+                            var shift = $('#update_Shift').val();
+                            if (in_time == "") {
+                                alert("select in_time first");
+                                $('#update_in_time').focus();
+                            } else if (out_time == "") {
+                                alert("select out_time first");
+                                $('#update_out_time').focus();
+                            } else {
+
+                                $.ajax({
+                                    url: '/Attendence/Update_attendence_json',
+                                    type: 'POST',
+                                    data: {
+                                        id: id,
+                                        in_time: in_time,
+                                        out_time: out_time,
+                                        over_time: over_time,
+                                        shift: shift
+
+
+
+                                    },
+                                    cache: false,
+                                    success: function (data) {
+
+
+
+                                        var table = $('#example1').DataTable();
+                                        table.clear();
+
+
+                                        var obj = JSON.parse(data);
+                                        var tr;
+
+                                        //Append each row to html table
+                                        for (var i = 0; i < obj.length; i++) {
+                                            tr = $('<tr/>');
+                                            tr.append("<td>" + obj[i].Employee_ID + "</td>");
+                                            tr.append("<td>" + obj[i].Employee_Name + "</td>");
+                                            var in_time = obj[i].IN_Time;
+                                            if (in_time == null) {
+                                                tr.append("<td>" + "-" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + obj[i].IN_Time + "</td>");
+                                            }
+                                            var out = obj[i].OUT_Time;
+                                            if (out == null) {
+                                                tr.append("<td>" + "-" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + obj[i].OUT_Time + "</td>");
+                                            }
+
+
+                                            var today = new Date(obj[i].Attendence_date);
+                                            var dd = today.getDate();
+
+                                            var mm = today.getMonth() + 1;
+                                            var yyyy = today.getFullYear();
+                                            if (dd < 10) {
+                                                dd = '0' + dd;
+                                            }
+
+                                            if (mm < 10) {
+                                                mm = '0' + mm;
+                                            }
+                                            today = yyyy + '-' + mm + '-' + dd;
+
+                                            tr.append("<td>" + today + "</td>");
+                                            var over_time = obj[i].Over_Time;
+                                            if (over_time == null) {
+                                                tr.append("<td>" + "-" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + obj[i].Over_Time + "(HOURS)</td>");
+                                            }
+                                            var shift = obj[i].Shift;
+                                            if (shift == null) {
+                                                tr.append("<td>" + "-" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + obj[i].Shift + "</td>");
+                                            }
+                                            var Attendence_Status = obj[i].Attendence_Status;
+                                            if (Attendence_Status == true) {
+                                                tr.append("<td>" + "<span class='badge badge-success'>Present</span>" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + "<span class='badge badge-danger'>Absent</span>" + "</td>");
+                                            }
+                                            if (Attendence_Status == true) {
+                                                tr.append("<td>" + "<button class='btn btn-info btn-sm m-1'  onclick=Model('" + obj[i].ID + "','" + obj[i].Employee_Name + "','" + obj[i].IN_Time + "','" + obj[i].OUT_Time + "','" + obj[i].Over_Time + "','" + obj[i].Shift + "')><i class='fas fa-pencil-alt'></i></button>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                            } else {
+                                                tr.append("<td>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                            }
+
+
+                                            table.row.add(tr);
+
+                                            table.draw();
+
+
+
+
+                                        } $('#modelNewPlot').modal('hide');
+                                    }
+
+
+
+                                });
+
+
+
+                            }
+                        }
+                        function mark_attendence() {
+                            var employe_id = $('#employe_id').val();
+                            var intime = $('#intime').val();
+                            var overtime = $('#overtime').val();
+                            var shift = $('#Shift').val();
+                            if (employe_id == null) {
+                                alert("select employee first");
+                                $('#txtAccountCode').focus();
+                            } else if (intime == "") {
+                                alert("select indate first");
+                                $('#indate').focus();
+                            } else if (shift == null) {
+                                alert("select shift first");
+                                $('#Shift').focus();
+                            } else {
+                                $.ajax({
+                                    url: '/Attendence/Mark_attendence_json',
+                                    type: 'POST',
+                                    data: {
+                                        employe_id: employe_id,
+                                        intime: intime,
+                                        overtime: overtime,
+                                        shift: shift
+                                    },
+                                    cache: false,
+                                    success: function (data) {
+                                        if (data == "exist") {
+                                            alert("attendence Already marked");
+                                        } else {
+
+                                            var table = $('#example1').DataTable();
+                                            table.clear();
+
+
+                                            var obj = JSON.parse(data);
+                                            var tr;
+                                            
+                                            //Append each row to html table
+                                            for (var i = 0; i < obj.length; i++) {
+                                                tr = $('<tr/>');
+                                                tr.append("<td>" + obj[i].Employee_ID + "</td>");
+                                                tr.append("<td>" + obj[i].Employee_Name + "</td>");
+                                                var in_time = obj[i].IN_Time;
+                                                if (in_time == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].IN_Time + "</td>");
+                                                }
+                                                var out = obj[i].OUT_Time;
+                                                if (out == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].OUT_Time + "</td>");
+                                                }
+
+
+                                                var today = new Date(obj[i].Attendence_date);
+                                                var dd = today.getDate();
+
+                                                var mm = today.getMonth() + 1;
+                                                var yyyy = today.getFullYear();
+                                                if (dd < 10) {
+                                                    dd = '0' + dd;
+                                                }
+
+                                                if (mm < 10) {
+                                                    mm = '0' + mm;
+                                                }
+                                                today = yyyy + '-' + mm + '-' + dd;
+
+                                                tr.append("<td>" + today + "</td>");
+                                                var over_time = obj[i].Over_Time;
+                                                if (over_time == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].Over_Time + "(HOURS)</td>");
+                                                }
+                                                var shift = obj[i].Shift;
+                                                if (shift == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].Shift + "</td>");
+                                                }
+                                                var Attendence_Status = obj[i].Attendence_Status;
+                                                if (Attendence_Status == true) {
+                                                    tr.append("<td>" + "<span class='badge badge-success'>Present</span>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<span class='badge badge-danger'>Absent</span>" + "</td>");
+                                                }
+
+                                                if (Attendence_Status == true) {
+                                                    tr.append("<td>" + "<button class='btn btn-info btn-sm m-1'  onclick=Model('" + obj[i].ID + "','" + obj[i].Employee_Name + "','" + obj[i].IN_Time + "','" + obj[i].OUT_Time + "','" + obj[i].Over_Time + "','" + obj[i].Shift + "')><i class='fas fa-pencil-alt'></i></button>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                                }
+                                                
+                                                table.row.add(tr);
+
+                                                table.draw();
+                                            }
+
+
+
+                                        }
+                                    }
+
+
+                                });
+
+                            }
+
+                        }
+                        function Model(emp_id, emp_name, in_time, out_time, overtime, shift) {
+                            $('#Employee_Name').val(emp_name);
+                            $('#update_in_time').val(in_time);
+                            $('#update_out_time').val(out_time);
+                            $('#hidden_emp_id').val(emp_id);
+                            $('#update_over_time').val(overtime);
+
+                            $('#update_Shift').val(shift);
+                            $('#modelNewPlot').modal({
+                                show: true,
+                                backdrop: false,
+
+                            })
+                        }
+                        function delete_Attendence(id) {
+                            var ID = id;
+                            var result = confirm("Want to delete?");
+                            if (result) {
+                                $.ajax({
+                                    url: '/Attendence/delete',
+                                    type: 'POST',
+                                    data: {
+                                        id: ID
+
+                                    },
+                                    cache: false,
+                                    success: function (data) {
+                                        if (data == false) {
+
+                                            var table = $('#example1').DataTable();
+                                            table.clear();
+                                            table.draw();
+                                        } else {
+                                            var table = $('#example1').DataTable();
+                                            table.clear();
+
+
+                                            var obj = JSON.parse(data);
+                                            var tr;
+
+                                            //Append each row to html table
+                                            for (var i = 0; i < obj.length; i++) {
+                                                tr = $('<tr/>');
+                                                tr.append("<td>" + obj[i].Employee_ID + "</td>");
+                                                tr.append("<td>" + obj[i].Employee_Name + "</td>");
+                                                var in_time = obj[i].IN_Time;
+                                                if (in_time == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].IN_Time + "</td>");
+                                                }
+                                                var out = obj[i].OUT_Time;
+                                                if (out == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].OUT_Time + "</td>");
+                                                }
+
+
+                                                var today = new Date(obj[i].Attendence_date);
+                                                var dd = today.getDate();
+
+                                                var mm = today.getMonth() + 1;
+                                                var yyyy = today.getFullYear();
+                                                if (dd < 10) {
+                                                    dd = '0' + dd;
+                                                }
+
+                                                if (mm < 10) {
+                                                    mm = '0' + mm;
+                                                }
+                                                today = yyyy + '-' + mm + '-' + dd;
+
+                                                tr.append("<td>" + today + "</td>");
+                                                var over_time = obj[i].Over_Time;
+                                                if (over_time == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].Over_Time + "(HOURS)</td>");
+                                                }
+                                                var shift = obj[i].Shift;
+                                                if (shift == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].Shift + "</td>");
+                                                }
+                                                var Attendence_Status = obj[i].Attendence_Status;
+                                                if (Attendence_Status == true) {
+                                                    tr.append("<td>" + "<span class='badge badge-success'>Present</span>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<span class='badge badge-danger'>Absent</span>" + "</td>");
+                                                }
+
+                                                if (Attendence_Status == true) {
+                                                    tr.append("<td>" + "<button class='btn btn-info btn-sm m-1'  onclick=Model('" + obj[i].ID + "','" + obj[i].Employee_Name + "','" + obj[i].IN_Time + "','" + obj[i].OUT_Time + "','" + obj[i].Over_Time + "','" + obj[i].Shift + "')><i class='fas fa-pencil-alt'></i></button>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                                }
+
+                                                table.row.add(tr);
+
+                                                table.draw();
+                                            }
+                                        }
+
+
+
+
+                                    }
+
+
+                                });
+
+                            }
+                        }
+                        function mark_absent() {
+                            var employe_id = $('#employe_id').val();
+
+                            if (employe_id == null) {
+                                alert("select employee first");
+                                $('#txtAccountCode').focus();
+                            } else {
+                                $.ajax({
+                                    url: '/Attendence/Mark_absent_json',
+                                    type: 'POST',
+                                    data: {
+                                        employe_id: employe_id
+
+                                    },
+                                    cache: false,
+                                    success: function (data) {
+                                        if (data == "exist") {
+                                            alert("attendence Already marked");
+                                        } else {
+
+                                            var table = $('#example1').DataTable();
+                                            table.clear();
+
+
+                                            var obj = JSON.parse(data);
+                                            var tr;
+
+                                            //Append each row to html table
+                                            for (var i = 0; i < obj.length; i++) {
+                                                tr = $('<tr/>');
+                                                tr.append("<td>" + obj[i].Employee_ID + "</td>");
+                                                tr.append("<td>" + obj[i].Employee_Name + "</td>");
+                                                var in_time = obj[i].IN_Time;
+                                                if (in_time == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].IN_Time + "</td>");
+                                                }
+                                                var out = obj[i].OUT_Time;
+                                                if (out == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].OUT_Time + "</td>");
+                                                }
+
+
+                                                var today = new Date(obj[i].Attendence_date);
+                                                var dd = today.getDate();
+
+                                                var mm = today.getMonth() + 1;
+                                                var yyyy = today.getFullYear();
+                                                if (dd < 10) {
+                                                    dd = '0' + dd;
+                                                }
+
+                                                if (mm < 10) {
+                                                    mm = '0' + mm;
+                                                }
+                                                today = yyyy + '-' + mm + '-' + dd;
+
+                                                tr.append("<td>" + today + "</td>");
+                                                var over_time = obj[i].Over_Time;
+                                                if (over_time == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].Over_Time + "(HOURS)</td>");
+                                                }
+                                                var shift = obj[i].Shift;
+                                                if (shift == null) {
+                                                    tr.append("<td>" + "-" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + obj[i].Shift + "</td>");
+                                                }
+                                                var Attendence_Status = obj[i].Attendence_Status;
+                                                if (Attendence_Status == true) {
+                                                    tr.append("<td>" + "<span class='badge badge-success'>Present</span>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<span class='badge badge-danger'>Absent</span>" + "</td>");
+                                                }
+
+                                                if (Attendence_Status == true) {
+                                                    tr.append("<td>" + "<button class='btn btn-info btn-sm m-1'  onclick=Model('" + obj[i].ID + "','" + obj[i].Employee_Name + "','" + obj[i].IN_Time + "','" + obj[i].OUT_Time + "','" + obj[i].Over_Time + "','" + obj[i].Shift + "')><i class='fas fa-pencil-alt'></i></button>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                                } else {
+                                                    tr.append("<td>" + "<button class='btn btn-danger btn-sm m-1' onclick=delete_Attendence('" + obj[i].ID + "')><i class='fas fa-trash'></i></button>" + "</td>");
+                                                }
+
+                                                table.row.add(tr);
+
+                                                table.draw();
+                                            }
+
+
+
+                                        }
+                                    }
+
+
+                                });
+
+                            }
+
+                        }
+                    </script>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+}

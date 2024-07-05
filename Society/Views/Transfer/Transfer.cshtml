@@ -1,0 +1,326 @@
+﻿@model IEnumerable<Society.Data.Payment_Plan>
+@{
+    ViewBag.Title = "Transfer";
+}
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>TRANSFER SETTING</h1>
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a hreferences="#">Home</a></li>
+                        <li class="breadcrumb-item active">Setting</li>
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+    </section> <div class="row col-12">
+        @if (!string.IsNullOrWhiteSpace(ViewBag.Error))
+        {
+
+            <h4 style="text-align: center; font-weight: 300" class="title-error">@ViewBag.Error</h4>
+        }
+    </div>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Transfer</h3>
+
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="form-group col-2 float-left" id="checkno" style="margin-top:30px">
+                                <label for="inputName">Transfer Details:</label>
+
+                            </div>
+
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">FROM: (reference)</label>
+                                <input type="text" name="first" id="first" class="form-control" required
+                                       placeholder="references" onkeyup="transfer()" />
+
+
+
+                            </div>
+
+                            <script>
+                                var globel = 0;
+                                function transfer() {
+
+
+                                    var reg_no = $('#first').val();
+                                    $.ajax({
+                                        url: '/Transfer/sending',
+                                        type: 'POST',
+                                        data: {
+                                            reg_no: reg_no,
+                                        },
+                                        success: function (data) {
+
+                                            if (data == "false") {
+                                                $('#sending').empty();
+                                                $('#sending').html('');
+                                                $('#rec').empty();
+                                                $('#rec').html('');
+                                            } else {
+                                                var obj1 = JSON.parse(data);
+                                                for (var i = 0; i < obj1.length; i++) {
+                                                    globel = obj1[i].Paid_amount;
+                                                    $('#sending').empty();
+                                                    $('#sending').html('');
+                                                    $('#rec').empty();
+                                                    $('#rec').html('');
+                                                    var op = `<b>Receiving Amount</b> <a class="float-right">${obj1[i].Paid_amount}</a>`;
+                                                    $('#rec').append(op);
+
+                                                    var options = `      <div class="card-body box-profile">
+
+
+                                                                                                                                                                <h3 class="profile-username text-center">${obj1[i].name}</h3>
+
+                                                                                                                                                                <p class="text-muted text-center">references-${reg_no}</p>
+
+                                                                                                                                                                <ul class="list-group list-group-unbordered mb-3">
+                                                                                                                                                                    <li class="list-group-item">
+                                                                                                                                                                        <b>Total Amount</b> <a class="float-right">${obj1[i].Net_Price_Plot}</a>
+                                                                                                                                                                    </li>
+                                                                                                                                                                    <li class="list-group-item">
+                                                                                                                                                                        <b>Paid Amount</b> <a class="float-right">${obj1[i].Paid_amount}</a>
+                                                                                                                                                                    </li>
+                                                                                                                                                                    <li class="list-group-item">
+                                                                                                                                                                        <b>Remaining Amount</b> <a class="float-right">${obj1[i].Remaining_amount}</a>
+                                                                                                                                                                    </li>
+                                                                                                                                                                    <li class="list-group-item">
+                                                                                                                                                                        <b>Sending Amount</b> <a class="float-right">${obj1[i].Paid_amount}</a>
+                                                                                                                                                                    </li>
+                                                                                                                                                                </ul>
+
+
+                                                                                                                                                            </div>`;
+                                                }
+
+
+                                                $('#sending').append(options);
+                                            }
+
+                                        }
+                                    });
+                                }
+                            </script>
+                            <style>
+
+                                .title-error {
+                                    width:100%;
+                                    background-color: #f2dede;
+                                    border: 1px solid transparent;
+                                    border-color: #ebccd1;
+                                    color: #a94442;
+                                    border-radius: 10px;
+                                    font-size: 24px;
+                                    font-weight: 400;
+                                    margin-bottom: 40px;
+                                }
+                            </style>
+                            <div class="card">
+
+                                <table id="dataTable" class="table">
+                                    <tr>
+                                        <th>(To) references</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" required name="references[]"
+                                                   placeholder="references" onkeyup="receiving()" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="amounts[]"
+                                                   placeholder="Amount" required />
+                                        </td>
+                                        <td>
+                                            <span class="btn btn-sm btn-success mb-1 btnToAddRow" onclick="addRow()">
+                                                <i class="fa fa-plus" title="Add New Row"></i>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <script>
+                                    function addRow() {
+                                        var table = document.getElementById("dataTable");
+                                        var newRow = table.insertRow(table.rows.length);
+
+                                        var nameCell = newRow.insertCell(0);
+                                        nameCell.innerHTML = `
+                                                                                                                                            <input type="text"  class="form-control" required name="references[]"
+                                                                                                                                                   placeholder="references" onkeyup="receiving()" />`;
+
+                                        var ageCell = newRow.insertCell(1);
+                                        ageCell.innerHTML = `
+                                                                                                                                            <input type="text"  class="form-control" name="amounts[]"
+                                                                                                                                                   placeholder="Amount" required " />`;
+
+                                        var actionCell = newRow.insertCell(2);
+                                        actionCell.innerHTML = '<span class="btn btn-sm btn-danger btnToRemoveRow" onclick="removeRow(this)"><i class="fa fa-trash" title="Delete Row"> </i></span>';
+                                    }
+
+                                    function removeRow(span) {
+                                        var row = span.parentNode.parentNode;
+                                        row.parentNode.removeChild(row);
+                                    }
+
+                                    function saveRecords() {
+                                        var table = document.getElementById("dataTable");
+                                        var rows = table.getElementsByTagName("tr");
+                                        var records = [];
+
+                                        for (var i = 1; i < rows.length; i++) {
+                                            var nameInput = rows[i].getElementsByTagName("input")[0];
+                                            var ageInput = rows[i].getElementsByTagName("input")[1];
+
+                                            var name = nameInput.value;
+                                            var age = ageInput.value;
+
+                                            records.push({ references: name, amount: age });
+                                        }
+
+                                        console.log(records); // You can use the 'records' array as needed (e.g., send it to the server).
+                                    }
+                                </script>
+                            </div>
+                            <script>
+                                function receiving() {
+
+
+                                    var reg_no1 = $('#second').val();
+
+                                    $.ajax({
+                                        url: '/Transfer/receiving1',
+                                        type: 'POST',
+                                        data: {
+                                            reg_no1: reg_no1,
+                                        },
+                                        success: function (data) {
+
+                                            var obj = JSON.parse(data);
+                                            for (var i = 0; i < obj.length; i++) {
+                                                $('#receiving').empty();
+                                                $('#receiving').html('');
+
+
+                                                var options = `      <div class="card-body box-profile">
+
+
+                                                                                                                                                                    <h3 class="profile-username text-center">${obj[i].name}</h3>
+
+                                                                                                                                                                    <p class="text-muted text-center">references-${reg_no1}</p>
+
+                                                                                                                                                                    <ul class="list-group list-group-unbordered mb-3">
+                                                                                                                                                                        <li class="list-group-item">
+                                                                                                                                                                            <b>Total Amount</b> <a class="float-right">${obj[i].Net_Price_Plot}</a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                        <li class="list-group-item">
+                                                                                                                                                                            <b>Paid Amount</b> <a class="float-right">${obj[i].Paid_amount}</a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                        <li class="list-group-item">
+                                                                                                                                                                            <b>Remaining Amount</b> <a class="float-right">${obj[i].Remaining_amount}</a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                        <li class="list-group-item" id="rec">
+                                                                                                                                                                            <b>Receiving Amount</b> <a class="float-right">${globel}</a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                    </ul>
+
+
+                                                                                                                                                                </div>`;
+                                            }
+
+
+                                            $('#receiving').append(options);
+                                        }
+                                    });
+                                }
+                            </script> <div class="form-group col-2 float-left" style="margin-top:32px"><button type="submit" onclick="saveRecords()" class="btn btn-primary">Payment Transfer</button></div>
+                        </form>
+
+
+
+
+                    </div>
+                    <section class="content">
+                        <div class="card card-primary card-outline col-5 float-right " id="receiving">
+                            <div class="card-body box-profile">
+
+
+                                <h3 class="profile-username text-center">Nina Mcintire</h3>
+
+                                <p class="text-muted text-center">Member</p>
+
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item">
+                                        <b>Total Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Paid Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Remaining Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                    <li class="list-group-item" id="rec">
+                                        <b>Receiving Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <div class="card card-primary card-outline col-5 " id="sending">
+                            <div class="card-body box-profile">
+
+
+                                <h3 class="profile-username text-center">Nina Mcintire</h3>
+
+                                <p class="text-muted text-center">Member</p>
+
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item">
+                                        <b>Total Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Paid Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Remaining Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Sending Amount</b> <a class="float-right">-</a>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div><!-- /.container-fluid -->
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>}

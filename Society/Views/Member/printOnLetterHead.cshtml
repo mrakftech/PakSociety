@@ -1,0 +1,479 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "print";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px" class="divToPrint  print-container">
+        <div class="content-wrapper" style="background-color:white">
+
+
+            @*<div style="margin-top: 20px; margin-bottom: 20px; width: 100%; display: flex; justify-content: space-between; margin-left: 20px; margin-right: 20px;">
+            <img id="firstImage" style="height: 150px; margin-right: 1px; margin-left: 80px;" src="~/images/logo/img1.png" />
+            <img id="secondImage" style="height: 150px; margin-left: 1px; margin-right: 1px;" src="~/images/logo/img2.png" />
+            <img id="thirdImage" style="height: 231px; margin-left: -51px; margin-right: 145px; margin-top:-37px;" src="~/images/logo/img3.png" />
+        </div>*@
+
+
+            
+
+            <div style="margin-top: -36px; margin-bottom: -10px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                <img id="firstImage" style="height: 150px; margin-right: 1px;" src="~/images/logo/img1.png" />
+                <img id="thirdImage" style="height: 231px; margin-left: 1px; margin-top: 0px;" src="~/images/logo/img3.png" />
+            </div>
+
+
+
+
+            @*<div style="width: 100%; text-align: center;">
+            <img  src="~/images/logo/line.png" />
+        </div>*@
+
+            <div style="text-align: center;">
+                <h3>ACCOUNT STATEMENT</h3>
+            </div>
+
+
+
+
+            @*<div style="height:150px"></div>*@
+            <div class="row d-flex justify-content-center">
+                <h2 style="font-weight:600;font-size:x-large"></h2>
+
+            </div>
+            <div class="row d-flex justify-content-center">
+                <h2 style="font-weight: 400; font-size: x-large"></h2>
+            </div>
+            <div>
+                <h2><u>Personal Information:</u></h2>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    @*<div> <span class="fw-bolder" style="font-weight:bold">REGISTRATION NO:</span> </div>*@
+                    <div> <span class="fw-bolder" style="font-weight:bold">E-REF NO:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Reg_No</b></div>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">REGISTRATION NO:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Member.MemberShipNumber</b></div>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">APPLICATION NO:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Qm_No</b></div>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">CNIC No:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Member.CNIC</b></div>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Name:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Member.Applicant_Name.ToUpper()</b></div>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    @*<div> <span class="fw-bolder" style="font-weight:bold">S/O:</span> </div>*@
+                    <div> <span class="fw-bolder" style="font-weight:bold">@Model.data.Plot.Member.Father_Husband_Start_Text :</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Member.Father_Husband_Name.ToUpper()</b></div>
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Address:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Member.Permenent_Postel_Address</b></div>
+            </div>
+
+            <div class="row" style="">
+                <div class="col-1">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Contact 1:</span> </div>
+                </div>
+                <div class="col-2"><b>@Model.data.Plot.Member.Cell_No</b></div>
+                <div class="col-1">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Contact 2:</span> </div>
+                </div>
+                <div class="col-2"><b>@Model.data.Plot.Member.Office_No</b></div>
+                <div class="col-1">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Email:</span> </div>
+                </div>
+                <div class="col-2"><b>@Model.data.Plot.Member.Email</b></div>
+            </div>
+            <div class="col-12" style="border-bottom: 3px solid #000000; text-align: center;margin-top:8px "></div>
+
+            <div>
+                <h2><u>Unit Information:</u></h2>
+            </div>
+
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Unit Type:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Block</b></div>
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Unit Size:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Installment_Plan.Size</b></div>
+            </div>
+
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Unit No:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Installment_Plan.Plan_Name / </b><b>@Model.data.Plot.newPlot.Street</b></div>
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Type:</span> </div>
+                </div>
+                <div class="col-3">
+                    <b>
+                        @if (Model.Newplotdat != null)
+                        {
+                            @Model.Newplotdat
+                        }
+                        else
+                        {
+                            <span> </span>
+                        }
+                    </b>
+                </div>
+            </div>
+
+            <div class="row" style="">
+                @*<div class="col-2">
+                <div> <span class="fw-bolder" style="font-weight:bold">Type:</span> </div>
+            </div>
+            <div class="col-3"><b>@Model.data.Plot.Installment_Plan.Plot_Type</b></div>*@
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Booking Date:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Plot.Member.Application_Date.ToString("dd/MM/yyyy")</b></div>
+            </div>
+
+            @*<div class="row" style="">
+            <div class="col-2">
+                <div> <span class="fw-bolder" style="font-weight:bold">Dimension:</span> </div>
+            </div>
+            <div class="col-3"><b></b></div>
+        </div>*@
+            <div class="col-12" style="border-bottom: 3px solid #000000; text-align: center;margin-top:8px "></div>
+
+            <div>
+                <h2><u>Payment Summary:</u></h2>
+            </div>
+
+
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Total Price:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Gross_Price_Plot.ToString("n0")</b></div>
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Extra Charge:</span> </div>
+                </div>
+                @if (Model.data.Extra_Charge != null)
+                {
+
+                    <div class="col-2"><b>@Model.data.Extra_Charge.ToString("n0")</b></div>
+                }
+                else
+                {
+                    <div class="col-2"><b>0</b></div>
+                }
+                @*<div class="col-2">
+                <div> <span class="fw-bolder" style="font-weight:bold">Membership Fee:</span> </div>
+            </div>
+            @if (Model.data.memberShipFee != null)
+            {
+
+                <div class="col-1"><b>@Model.data.memberShipFee.ToString("n0")</b></div>
+            }
+            else
+            {
+                <div class="col-1"><b>0</b></div>
+            }*@
+            </div>
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Discount:</span> </div>
+                </div>
+                @if (Model.data.Discount != null)
+                {
+
+                    <div class="col-3"><b>@Model.data.Discount.ToString("n0")</b></div>
+                }
+                else
+                {
+                    <div class="col-3"><b>0</b></div>
+                }
+
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Net Price:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.data.Net_Price_Plot.ToString("n0")</b></div>
+            </div>
+
+            <div class="row" style="">
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Paid Amount:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.paid_amount.ToString("n0")</b></div>
+                <div class="col-2">
+                    <div> <span class="fw-bolder" style="font-weight:bold">Balance Amount:</span> </div>
+                </div>
+                <div class="col-3"><b>@Model.remaining_amount.ToString("n0")</b></div>
+            </div>
+            <div class="col-12" style="border-bottom: 3px solid #000000; text-align: center;margin-top:8px "></div>
+
+            <div class="row" style="font-size:20px">
+
+
+                <div class="col-12">
+
+
+                    <div class="row">
+                        <table class=" table text-black" style="border-right-color:black;margin-top:20px;margin-left:10px;margin-right:10px">
+                            <thead class="text-center">
+                                <tr style="line-height:0.5">
+                                    <th scope="col" class="border border-dark text-black" style="border-right:0px !important;font-size:medium">Payment Types</th>
+                                    <th scope="col" class="border border-dark text-black" style=" font-size: medium ">Inst#</th>
+                                    <th scope="col" class="border border-dark text-black" style="font-size: medium ">Due Date</th>
+                                    <th scope="col" class="border border-dark text-black" style=" font-size: medium ">Due Amount</th>
+                                    <th scope="col" class="border border-dark text-black" style=" font-size: medium">Recv.Amount</th>
+                                    <th scope="col" class="border border-dark text-black" style=" font-size: medium">O.S.Amount</th>
+                                    <th scope="col" class="border border-dark text-black" style=" font-size: medium ">Paid On</th>
+                                    <th scope="col" class="border border-dark text-black" style=" font-size: medium">Receipt No</th>
+                                    <th scope="col" class="border border-dark text-black" style=" border-left: 0px !important; font-size: medium">Receipt Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (Installment i in Model.installment_detail)
+                                {
+                                    double line_height;
+                                    if (i.Sub_Installment.Count > 1) { line_height = 0.9; }
+                                    else
+                                    {
+                                        line_height = 0.4;
+                                    }
+                                    <tr style="line-height:@line_height">
+                                        <td class="border border-dark text-black" style="font-size: medium ;text-align:center">@i.Comment</td>
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">@i.Installment_No</td>
+
+
+                                        @{double amount = (double)i.Amount_Paid;
+                                            double amount1 = (double)i.Monthly_Paid;
+                                            var remainimg = amount - amount1;}
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">@i.Payment_Month.ToString("dd-MM-yyyy")</td>
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">
+                                            @amount.ToString("n0")
+
+                                        </td>
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">
+                                            @{foreach (Sub_Installment a in i.Sub_Installment.ToList())
+                                                {
+                                                    double amount2 = (double)a.Amount;
+                                                    <u>@amount2.ToString("n0")</u><br />
+
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">
+                                            @remainimg.ToString("n0")
+                                        </td>
+
+                                        @if (i.Paid_Month != null)
+                                        {
+                                            DateTime paidDate = (DateTime)i.Paid_Month;
+
+
+                                            <td class="border border-dark text-black" style="font-size: medium; text-align: center">@paidDate.ToString("dd/MM/yyyy")</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border border-dark text-black" style="font-size: medium; text-align: center"></td>
+
+                                        }
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">
+                                            @{foreach (Sub_Installment a in i.Sub_Installment.ToList())
+                                                {
+
+                                                    <u>@a.Receipt_No</u><br />
+
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="border border-dark text-black" style="font-size: medium; text-align: center">@amount.ToString("n0")</td>
+
+                                    </tr>
+
+                                }
+
+
+                                @{double first = Model.data.Net_Price_Plot;
+                                    double second = Model.paid_amount;
+                                    double third = first - second;}
+                                @{int count = 1;
+                                    double sum = 0;
+                                }
+
+
+                                @if (ViewBag.development.Count > 0)
+                                {
+                                    <tr style="line-height:0.5">
+                                        <th scope="col" class="border border-dark text-black">#.</th>
+
+                                        <th scope="col" class="border border-dark text-black">Paid Date</th>
+                                        <th scope="col" class="border border-dark text-black">Paid Amount</th>
+
+                                        <th scope="col" class="border border-dark text-black">Narration</th>
+                                        <th scope="col" class="border border-dark text-black">Receipt No</th>
+                                        <th scope="col" class="border border-dark text-black"></th>
+                                        <th scope="col" class="border border-dark text-black">Development Charges</th>
+                                    </tr>
+
+                                    foreach (Development_Charges d in ViewBag.development)
+                                    {
+
+
+                                        <tr style="background-color:gray;line-height:0.8">
+                                            <td class="border border-dark text-black">@count</td>
+
+                                            <td class="border border-dark text-black">@d.Paid_Date.ToString("dd-MM-yyyy")</td>
+
+                                            <td class="border border-dark text-black">@d.Amount.ToString("n0")</td>
+                                            <td class="border border-dark text-black">@d.Narration</td>
+                                            <td class="border border-dark text-black">@d.receipt_No</td>
+                                            <td class="border border-dark text-black">-</td>
+                                            <td class="border border-dark text-black">Development Charges</td>
+                                        </tr>
+                                        sum = sum + d.Amount;
+                                        count = count + 1;
+                                    }
+
+
+
+                                }
+                                <tr style="line-height:0.8">
+                                    <td class=""></td>
+                                    <td colspan="2" class="">Total:-</td>
+                                    <td class="text-black font-weight-bold" style="border: 3px solid !important;">@Model.data.Net_Price_Plot.ToString("n0")</td>
+
+                                    <td class=" text-black font-weight-bold " style="border: 3px solid !important;">@Model.paid_amount.ToString("n0")</td>
+                                    <td class=" text-black font-weight-bold" style="border: 3px solid !important;">@third.ToString("n0")</td>
+                                </tr>
+
+                                <tr style="line-height:0.8">
+                                    <td class=""></td>
+                                    <td colspan="2" class="">Total OverDue:-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class=" text-black font-weight-bold" style="border: 3px solid !important;">@Model.defaulterAmount.ToString("n0")</td>
+                                </tr>
+                                <!--<tr style="line-height:0.8">
+                            <td class=""></td>
+                            <td colspan="2" class="">OverDue:-</td>
+                            <td></td>
+                            <td></td>
+                            <td class=" text-black font-weight-bold" style="border: 3px solid !important;">@Model.defaulterAmount.ToString("n0")</td>
+                        </tr>-->
+                                @*amjad ali*@
+                                <!--<tr style="line-height:0.8">
+                            <td class=""></td>
+                            <td colspan="2" class="">Surcharge(@ViewBag.Surcharge) %:-</td>
+                            <td></td>
+                            <td></td>
+                            <td class=" text-black font-weight-bold" style="border: 3px solid !important;">@ViewBag.Surcharge</td>
+                        </tr>
+
+                        <tr style="line-height:0.8">
+                            <td class=""></td>
+                            <td colspan="2" class="">Total OverDue:-</td>
+                            <td></td>
+                            <td></td>
+                            <td class=" text-black font-weight-bold" style="border: 3px solid !important;">@Model.defaulterAmount.ToString("n0")</td>
+                        </tr>-->
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="row" style="height:45px;padding-top:60px">
+                    <div style="width:950px;height:9px;margin-right:50px;margin-left:60px">
+
+                        @*<div style="float:left;width:200px;border-bottom:solid 1px"
+                        ></div>*@
+
+                        <div style="float:right;width:200px;border-bottom:solid 1px">
+                        </div>
+                    </div>
+                    <div style="width: 950px; height: 40px; margin-right: 50px; margin-left: 60px">
+                        @*<div class="d-flex justify-content-center" style="float:left;width:200px;font-weight:700">Director Sales</div>*@
+                        <div class="d-flex justify-content-center" style="float: right; width: 200px; font-weight: 700">Signature & Stamp</div>
+                    </div>
+                </div>
+
+                <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin-left:190px;">
+                    <div style="margin-bottom: 10px; align-items: center; margin-top: 100px; margin-left: 90px;">
+                        <p> ACOM #26,27, Downtown, Parkview City, Islamabad</p>
+                        <hr style="border-style: solid; border-color: black;">
+                        <div style="margin-left: 35px; align-items: center; font-weight: bold;">A Project of Imtiaz Marketing (PTV) Ltd.</div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <style>
+                @@media print {
+                    body * {
+                        visibility: hidden;
+                    }
+
+                    .divToPrint, .divToPrint * {
+                        visibility: visible;
+                    }
+                }
+            </style>
+
+        </div>
+
+    </div>
+
+    <script>window.addEventListener("load", window.print());</script>
+
+    <script>
+
+
+
+        var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+        var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        function inWords(num) {
+            if ((num = num.toString()).length > 9) return 'overflow';
+            n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return; var str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
+            return str;
+        }
+        $(document).ready(function () {
+            $('#AmountInWords').html(" " + inWords() + "only"); //inWords(your amount)
+        })
+    </script>
+}
+

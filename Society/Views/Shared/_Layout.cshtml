@@ -1,0 +1,712 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pak Society</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Font Awesome Icons -->
+    <link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="https://npm-assets.fiverrcdn.com/assets/uploads/domaine-display.css" rel="stylesheet" type="text/css">
+    <link href="~/plugins/fiverr1.css" rel="stylesheet" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <link href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
+
+    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+    <!-- Theme style -->
+
+    <link href="~/dist/css/adminlte.min.css" rel="stylesheet" />
+
+
+    <link href="~/plugins/boot.min.css" rel="stylesheet" />
+
+
+
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+
+            </ul>
+
+            <!-- Right navbar links -->
+
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-green bg-black  elevation-5" style="background-color: #303030">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link" style="text-align:center">
+<style>
+    .gradient-text {
+        background: linear-gradient(to bottom, #238444, #bdd158);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: Arial, sans-serif;
+    }
+</style>
+                <img src="~/images/logo/kftech-logo.jpg" style="border-radius:10px" alt="AdminLTE Logo" class="brand-image img-fluid elevation-2">
+                <span class="brand-text font-weight-light" style="margin-right: 20px; color: #145c31"><b class="gradient-text">Pak Society</b>  </span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+
+
+                <nav class="mt-2">
+                    <div class="form-inline " style=" background: linear-gradient(to bottom, #238444, #bdd158);">
+                        <div class="input-group" data-widget="sidebar-search" style="background-color: #000000 ">
+                            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" style="background-color: #303030">
+                            <div class="input-group-append" style="background-color: #000000 ">
+                                <button class="btn btn-sidebar" style=" background: linear-gradient(to bottom, #238444, #bdd158);">
+                                    <i class="fas fa-fw fa-search"></i>
+                                </button>
+                            </div>
+                        </div><div class="sidebar-search-results"><div class="list-group"><a href="pages/UI/general.html" class="list-group-item"><div class="search-title"><strong class="text-light">Gene</strong>ral</div><div class="search-path">UI Elements</div></a><a href="pages/forms/general.html" class="list-group-item"><div class="search-title"><strong class="text-light">Gene</strong>ral Elements</div><div class="search-path">Forms</div></a></div></div>
+                    </div>
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item menu-open">
+                            <a href="/Dashboard/Dashboard"
+                               class="nav-link " style=" background: linear-gradient(to bottom, #238444, #bdd158);">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+
+                            <i></i>
+                            <p>
+                                <small>CORE SOFTWARE</small>
+                            </p>
+
+                        </li>
+                        <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+
+                        <li class="nav-item">
+                            <a href="/Member/Manage_Member" class="nav-link ">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Manage Booking
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Party/Plots" class="nav-link ">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Manage Units
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Form/ManageForm" class="nav-link ">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Manage Online Forms
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Form/Verification" class="nav-link ">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Online Verification Form
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="/Plot_History/Manage_Plot_History"
+                               class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Transfer History
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="/refund/manage_refund"
+                               class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Manage Re-Fund
+                                </p>
+                            </a>
+                        </li>
+                        @*<li class="nav-item">
+                            <a href="/Payment_Plan/Manage_Plan" class="nav-link ">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Manage Payment Plan
+                                </p>
+                            </a>
+                        </li>*@
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>
+                                    Manage Transfer
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Transfer/Transfer" class="nav-link">
+                                        <i class="fa fa-money-check-alt nav-icon"></i>
+                                        <p>Payment Transfer</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Plot_History/Manage_Plot_History"
+                                       class="nav-link">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Transfer History
+                                        </p>
+                                    </a>
+                                </li>
+
+
+
+                                <li class="nav-item">
+                                    <a href="/File_Transfer/Manage_File_Transfer" class="nav-link">
+                                        <i class="fa fa-money-bill-wave nav-icon"></i>
+                                        <p>File Transfer</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Dealer/Manage_Dealer" class="nav-link ">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Manage Dealer
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    Manage Reports
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+
+                                <li class="nav-item">
+                                    <a href="/Daily_Payments/Report" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Daily Report
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Report/Monthly_Paid" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Monthly Paid Report
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Report/Member_Report" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Member Report
+                                        </p>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a href="/Report/Member_DealerCommisionReport" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Dealer Commission Report
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Report/Installment_Report" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Installment Report
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Report/Receipt_Register" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Receipt Register Report
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Report/Defaulter_Report" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Recovery Report
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Report/single_defaulter" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Individual  Recovery Report
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+
+                            <i></i>
+                            <p>
+                                <small>ACCOUNTS</small>
+                            </p>
+
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    Manage Accounts
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Element_Account/Add_Element_Account" class="nav-link">
+                                        <i class="fa fa-euro-sign nav-icon"></i>
+                                        <p>
+                                            Element Account
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Control_Account/Add_Control_Account" class="nav-link">
+                                        <i class="far fa-copyright nav-icon"></i>
+                                        <p>
+                                            Control Account
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Ledger_Account/Add_Ledger_Account" class="nav-link">
+                                        <i class="fa fa-lira-sign nav-icon"></i>
+                                        <p>
+                                            Ledger Account
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Account_Setting/Setting" class="nav-link">
+                                        <i class="fa fa-lira-sign nav-icon"></i>
+                                        <p>
+                                            Account Setting
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Party/Party_Detail" class="nav-link">
+                                        <i class="fa fa-lira-sign nav-icon"></i>
+                                        <p>
+                                            Party Detail
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>
+                                    Manage Vouchers
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Manage_Bank_Rec_Voucher/Manage_Bank_Rec_Voucher" class="nav-link">
+                                        <i class="fa fa-money-check-alt nav-icon"></i>
+                                        <p>Bank Reciept Voucher</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Manage_Bank_Pay_Voucher/Manage_Bank_Pay_Voucher" class="nav-link">
+                                        <i class="fa fa-money-check nav-icon"></i>
+                                        <p>Bank Payment Voucher</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Manage_Cash_Rec_Voucher/Manage_Cash_Rec_Voucher" class="nav-link">
+                                        <i class="fa fa-money-bill nav-icon"></i>
+                                        <p>Cash Reciept Voucher</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Manage_Cash_Pay_Voucher/Manage_Cash_Pay_Voucher" class="nav-link">
+                                        <i class="far fa-money-bill-alt nav-icon"></i>
+                                        <p>Cash Payment Voucher</p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="/Manage_General_Voucher/Manage_General_Voucher" class="nav-link">
+                                        <i class="fa fa-money-bill-wave nav-icon"></i>
+                                        <p>General Voucher</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    Manage Reports
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+
+                                <li class="nav-item">
+                                    <a href="/Report/Trial_Balance" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Chart of Account
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Report/ledgerReport" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Ledger Report
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+
+                            <i></i>
+                            <p>
+                                <small>HR (PAYROLL)</small>
+                            </p>
+
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Employee/Manage_Employee" class="nav-link ">
+                                <i class="nav-icon fas fa-calendar-plus"></i>
+                                <p>
+                                    Manage Employee
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item has-treeview">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    Manage Attendence
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Attendence/Mark_Attendence" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Employee Attendence
+                                        </p>
+                                    </a>
+                                </li>
+
+
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item has-treeview">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    PayRoll
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Payrole/Manage_Payrole" class="nav-link">
+                                        <i class="fa fa-euro-sign nav-icon"></i>
+                                        <p>
+                                            Generate PayRole
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Advance/Manage_Advance" class="nav-link">
+                                        <i class="far fa-copyright nav-icon"></i>
+                                        <p>
+                                            Manage Advance
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Loan/Manage_Loan" class="nav-link">
+                                        <i class="fa fa-lira-sign nav-icon"></i>
+                                        <p>
+                                            Manage Loans
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Salary_With_Allowences/Manage_Salary" class="nav-link">
+                                        <i class="fa fa-lira-sign nav-icon"></i>
+                                        <p>
+                                            Manage Salary
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/OverTime/Manage_Overtime" class="nav-link">
+                                        <i class="fa fa-lira-sign nav-icon"></i>
+                                        <p>
+                                            Manage OverTime
+                                        </p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item has-treeview">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    Manage Reports
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Attendence/Monthly_Attendence_Report" class="nav-link">
+                                        <i class="nav-icon fas fa-calendar-plus"></i>
+                                        <p>
+                                            Monthly Attendence
+                                        </p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Shifts/Manage_Shifts" class="nav-link ">
+                                <i class="nav-icon fas fa-clock"></i>
+                                <p>
+                                    Manage Shifts
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+
+                            <i></i>
+                            <p>
+                                <small>Roles Setting</small>
+                            </p>
+
+                        </li>
+                        <li class="nav-item has-treeview" style="margin-bottom:5%!important">
+                            <a href="#"
+                               class="nav-link ">
+                                <i class="nav-icon fas fa-file"></i>
+                                <p>
+                                    Roles
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+
+                                <li class="nav-item">
+                                    <a href="/Roles/Manage_Roles" class="nav-link">
+                                        <i class="fa fa-euro-sign nav-icon"></i>
+                                        <p>
+                                            Manage Roles
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Roles/manage_permissions" class="nav-link">
+                                        <i class="far fa-copyright nav-icon"></i>
+                                        <p>
+                                            Manage Permissions
+                                        </p>
+                                    </a>
+                                </li>
+
+
+
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                </nav>
+
+                <!-- SidebarSearch Form -->
+                <!-- Sidebar Menu -->
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Header (Page header) -->
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <div>
+            @RenderBody()
+        </div>
+
+
+        <!-- /.content -->
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+            <div class="p-3">
+                <h5>Title</h5>
+                <p>Sidebar content</p>
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+
+
+    </div>
+
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <!-- DataTables  & Plugins -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/responsive.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+    <script src="~/plugins/datatables-buttons/buttons.bootstrap4.min.js"></script>
+    <script src="~/plugins/jszip/jszip.min.js"></script>
+    <script src="~/plugins/datatables-buttons/buttons.html5.min.js"></script>
+    <script src="~/plugins/datatables-buttons/buttons.print.min.js"></script>
+    <script src="~/plugins/datatables-buttons/buttons.colVis.min.js"></script>
+    <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script src="~/Scripts/select2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js"></script>
+    <script type="text/javascript" src="~/plugins/jquery/jspdf.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/dist/js/demo.js"></script>
+    <!-- /.content -->
+
+
+
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="~/plugins/boot.min.js"></script>
+    <script src="~/plugins/overlayScrollbars/js/OverlayScrollbars.min.js"></script>
+    <script>
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $("#example3").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('.example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+
+        });
+
+    </script>
+
+
+    <script src="~/plugins/flot/jquery.flot.js"></script>
+    <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+    <script src="~/plugins/flot/plugins/jquery.flot.resize.js"></script>
+    <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+    <script src="~/plugins/flot/plugins/jquery.flot.pie.js"></script>
+    <script src="~/plugins/chart.js/Chart.min.js"></script>
+
+</body>
+</html>
+

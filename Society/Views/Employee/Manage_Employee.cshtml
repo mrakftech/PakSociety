@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Society.Data.Employee>
+@{
+    ViewBag.Title = "Manage_Employee";
+}@if (Session["CNIC"] == null || Session["type"].ToString()=="Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form runat="server">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Employee List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Employee List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+                            <div class="col-md-10 offset-md-11">
+
+
+
+
+
+
+
+                                <div class="card-tools">
+                                    <a href="/Employee/Add_Employee" class="btn btn-primary"> Add New</a>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">Employee ID</th>
+                                    <th style="width: 15%">Employee Name</th>
+                                    <th style="width: 15%">Designation</th>
+                                    <th style="width: 15%">Phone Number</th>
+                                    <th style="width: 15%">Joining_Date</th>
+                                    <th style="width: 15%">Status</th>
+                                    <th style="width: 20%">Address</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@x.Employee_ID</td>
+                                    <td>@x.F_Name @x.L_Name</td>
+                                    <td>@x.Designation</td>
+                                    <td>@x.Phone_Number</td>
+                                    <td>@x.Joining_Date.ToString("dd-MM-yyyy")</td>
+                                    @{if (x.Status == true)
+                                        {
+                                            <td>Active</td>
+                                        }
+                                        else
+                                        {
+                                            <td>UnActive</td>
+                                        } }
+
+                                    <td>@x.Address</td>
+                                    <td>
+                                        <a class="btn btn-info btn-sm m-1" href="/Employee/Update_Employee?ID=@x.Employee_ID"><i class="fas fa-pencil-alt"></i></a>
+                                        @*@if (x.Attendences.Count > 0 || x.Advances.Count > 0 || x.Loans.Count > 0 || x.Salary_With_Allowences.Count > 0 || x.OverTimes.Count > 0)*@
+                                        @if (x.Attendences.Count > 0 || x.Advances.Count > 0 || x.Loans.Count > 0 || x.Salary_With_Allowences.Count > 0 )
+                                        { }
+                                        else
+                                        {<a href="/Employee/Delete?id=@x.Employee_ID" onclick="return confirm('Are you sure U Want to delete Record?')" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>}
+
+                                    </td>
+
+
+                                </tr>
+                                        }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+                                        }

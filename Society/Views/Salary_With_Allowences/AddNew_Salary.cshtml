@@ -1,0 +1,207 @@
+﻿@model IEnumerable<Society.Data.Employee>
+@{
+    ViewBag.Title = "AddNew_Salary";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add New Salary</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Salary Add</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Employee Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group col-6 float-left offset-3">
+                                <label for="inputName">Employee Name</label>
+
+                                <select id="Emp_ID" required class="form-control" placeholder="Customer Name"
+                                        name="Emp_ID">
+                                    <option value="-1">Select</option>
+                                    @foreach (var x in Model)
+                                    {
+                                        <option value='@x.Employee_ID'>@x.F_Name @x.L_Name (@x.CNIC)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-4 float-left">
+                                <label for="inputName">Basic Salary</label>
+                                <input type="number" id="Basic_Salary" required class="form-control" placeholder="Basic Salary"
+                                       name="Basic_Salary" min="0" onkeyup="change_basic_salary()" />
+                            </div>
+
+
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputProjectLeader">Convance Allownce</label>
+                                <input type="number" id="Convance_Allownce" required class="form-control"
+                                       placeholder="Convance Allownce" min="0" name="Convance_Allownce" onkeyup="change_convence_allowence()" />
+                            </div>
+
+                            <div class="form-group col-4 float-left">
+                                <label for="inputProjectLeader">House Rent Allowence</label>
+                                <input type="number" id="House_Rent_Allowence" required class="form-control"
+                                       placeholder="House Rent Allowence" min="0" name="House_Rent_Allowence" onkeyup="change_house_allownece()" />
+                            </div>
+                            <div class="form-group col-4 float-left">
+                                <label for="inputProjectLeader">Medical Allowence</label>
+                                <input type="number" id="Medical_Allowence" required class="form-control"
+                                       placeholder="Medical Allowence" min="0" name="Medical_Allowence" onkeyup="change_medical_allownece()" />
+                            </div>
+                            <div class="form-group col-4 float-left">
+                                <label for="inputProjectLeader">Rate Per Hour</label>
+                                <input type="number" id="Rate_Per_Hour" required class="form-control"
+                                       placeholder="Rate Per Hour" min="0" name="Rate_Per_Hour" />
+                            </div>
+                            <div class="form-group col-4 float-left">
+                                <label for="inputProjectLeader" style="color:green">Gross Salary</label>
+                                <input type="number" readonly id="Gross_Salary" required class="form-control"
+                                       placeholder="Gross Salary" name="Gross_Salary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <input value="Add New Salary" onclick="submit()" class="btn btn-success float-right" />
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <script>
+        function submit() {
+            var Basic_Salary = $('#Basic_Salary').val();
+            var Convance_Allownce = $('#Convance_Allownce').val();
+            var House_Rent_Allowence = $('#House_Rent_Allowence').val();
+            var Medical_Allowence = $('#Medical_Allowence').val();
+            var Emp_ID = $('#Emp_ID option:selected').val();
+            var Rate_Per_Hour = $('#Rate_Per_Hour').val();
+            var Gross_Salary = $('#Gross_Salary').val();
+
+
+            if (Basic_Salary == '') {
+                alert("enter basic Salary");
+                $('#Basic_Salary').focus();
+            } else if (Convance_Allownce == '') {
+                alert("enter Convance Allownce");
+                $('#Convance_Allownce').focus();
+            } else if (House_Rent_Allowence == '') {
+                alert("enter House Rent Allowence");
+                $('#House_Rent_Allowence').focus();
+            } else if (Medical_Allowence == '') {
+                alert("enter Medical Allowence");
+                $('#Medical_Allowence').focus();
+            } else if (Emp_ID == '-1') {
+                alert("select employee first");
+                $('#Emp_ID').focus();
+            } else if (Rate_Per_Hour == '') {
+                alert("select rate per hour first");
+                $('#Rate_Per_Hour').focus();
+            } else {
+                $.ajax({
+                    url: '/Salary_With_Allowences/AddNew_Salary',
+                    type: 'POST',
+                    data: {
+                        Basic_Salary: Basic_Salary,
+                        Convance_Allownce: Convance_Allownce,
+                        House_Rent_Allowence: House_Rent_Allowence,
+                        Medical_Allowence: Medical_Allowence,
+                        Emp_ID: Emp_ID,
+                        Rate_Per_Hour: Rate_Per_Hour,
+                        Gross_Salary: Gross_Salary
+
+
+                    },
+                    cache: false,
+                    success: function (data) {
+
+                        if (data == "true") {
+                            alert('Salary Added Successfully.');
+
+                            window.location.href = "/Salary_With_Allowences/Manage_Salary";
+                        } else { alert('employee already exist.'); }
+
+
+                    }
+
+
+
+                });
+
+            }
+        }
+        function change_basic_salary() {
+            var Basic_Salary = $('#Basic_Salary').val();
+            var Convance_Allownce = $('#Convance_Allownce').val();
+            var House_Rent_Allowence = $('#House_Rent_Allowence').val();
+            var Medical_Allowence = $('#Medical_Allowence').val();
+            if (Basic_Salary == '') { Basic_Salary = 0 }
+            if (Convance_Allownce == '') { Convance_Allownce = 0 }
+            if (House_Rent_Allowence == '') { House_Rent_Allowence = 0 }
+            if (Medical_Allowence == '') { Medical_Allowence = 0 }
+            var total = parseFloat(Basic_Salary) + parseFloat(Convance_Allownce) + parseFloat(House_Rent_Allowence) + parseFloat(Medical_Allowence);
+            $('#Gross_Salary').val(total);
+        }
+
+        function change_convence_allowence() {
+            var Basic_Salary = $('#Basic_Salary').val();
+            var Convance_Allownce = $('#Convance_Allownce').val();
+            var House_Rent_Allowence = $('#House_Rent_Allowence').val();
+            var Medical_Allowence = $('#Medical_Allowence').val();
+            if (Basic_Salary == '') { Basic_Salary = 0 }
+            if (Convance_Allownce == '') { Convance_Allownce = 0 }
+            if (House_Rent_Allowence == '') { House_Rent_Allowence = 0 }
+            if (Medical_Allowence == '') { Medical_Allowence = 0 }
+            var total = parseFloat(Basic_Salary) + parseFloat(Convance_Allownce) + parseFloat(House_Rent_Allowence) + parseFloat(Medical_Allowence);
+            $('#Gross_Salary').val(total);
+        }
+        function change_house_allownece() {
+            var Basic_Salary = $('#Basic_Salary').val();
+            var Convance_Allownce = $('#Convance_Allownce').val();
+            var House_Rent_Allowence = $('#House_Rent_Allowence').val();
+            var Medical_Allowence = $('#Medical_Allowence').val();
+            if (Basic_Salary == '') { Basic_Salary = 0 }
+            if (Convance_Allownce == '') { Convance_Allownce = 0 }
+            if (House_Rent_Allowence == '') { House_Rent_Allowence = 0 }
+            if (Medical_Allowence == '') { Medical_Allowence = 0 }
+            var total = parseFloat(Basic_Salary) + parseFloat(Convance_Allownce) + parseFloat(House_Rent_Allowence) + parseFloat(Medical_Allowence);
+            $('#Gross_Salary').val(total);
+        }
+        function change_medical_allownece() {
+            var Basic_Salary = $('#Basic_Salary').val();
+
+            var Convance_Allownce = $('#Convance_Allownce').val();
+            var House_Rent_Allowence = $('#House_Rent_Allowence').val();
+            var Medical_Allowence = $('#Medical_Allowence').val();
+            if (Basic_Salary == '') { Basic_Salary = 0 }
+            if (Convance_Allownce == '') { Convance_Allownce = 0 }
+            if (House_Rent_Allowence == '') { House_Rent_Allowence = 0 }
+            if (Medical_Allowence == '') { Medical_Allowence = 0 }
+            var total = parseFloat(Basic_Salary) + parseFloat(Convance_Allownce) + parseFloat(House_Rent_Allowence) + parseFloat(Medical_Allowence);
+            $('#Gross_Salary').val(total);
+        }
+
+    </script>
+}

@@ -1,0 +1,122 @@
+﻿@model dynamic
+@using Society.Data;
+@{
+    ViewBag.Title = "Manage_Advance";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{<div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Manage_Advance</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Advance</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+            <form method="post">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add New Advance</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="col-md-3 float-left">
+                            <label>Employee:</label>
+
+
+
+                            <select placeholder="Account Code" class="form-control" name="Emp_ID" id="Emp_ID">
+                                <option value="-1">--select--</option>
+                                @foreach (Employee x in Model.employee_list)
+                                {
+                                    <option value="@x.Employee_ID">@x.F_Name @x.L_Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 float-left">
+                            <label>Amount:</label>
+                            <input type="text" placeholder="Advance Amount" class="form-control" name="Advance_Amount" id="Advance_Amount"
+                                   required />
+                        </div>
+                        <div class="col-md-3 float-left" style="margin-top:27px">
+
+                            <button class="float-left m-1 btn btn-primary" id="btnSave" type="submit">Add Now</button>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Element Account</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">#</th>
+                                <th style="width: 15%">Employee Name</th>
+                                <th style="width: 15%">Advance Amount</th>
+                                <th style="width: 15%">Date</th>
+                                <th style="width: 15%">Status</th>
+
+
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        @{ int count = 1;}
+                        @foreach (Advance x in Model.advance_list)
+                        {
+
+                            <tr>
+                                <td>@count</td>
+                                <td>@x.Employee.F_Name @x.Employee.L_Name</td>
+                                <td>@x.Advance_Amount</td>
+                                <td>@x.Advance_Period.ToString("dd-MM-yyyy")</td>
+                                @if (x.Status == "Un Paid")
+                                {
+
+
+                                    <td><label class="badge badge-warning ">Un Paid</label></td>
+                                }
+                                else
+                                {
+                                    <td><label class="badge badge-success ">Paid</label></td>
+                                }
+
+                                <td>
+
+                                    <a href="/Advance/Delete?id=@x.Advance_ID" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+                                </td>
+
+
+                            </tr>
+                            count = count + 1;
+                        }
+                    </table>
+
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+   
+}
+
+

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Society.Data.Salary_With_Allowences>
+@{
+    ViewBag.Title = "AddNew_Loan";
+}
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add New Loan</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Salary Add</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Employee Details</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-6 float-left offset-3">
+                                    <label for="inputName">Employee Name</label>
+
+                                    <select id="Emp_ID" required class="form-control" placeholder="Customer Name"
+                                            name="Emp_ID" onchange="onchangeemployeeid()">
+                                        <option value="-1">Select</option>
+                                        @foreach (var x in Model)
+                                        {
+                                            <option value='@x.Emp_ID' data-gross-salary="@x.Gross_Salary">@x.Employee.F_Name @x.Employee.L_Name (@x.Employee.CNIC)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">Gross Salary</label>
+                                    <input type="number" id="Gross_Salary" required class="form-control" placeholder="Gross Salary"
+                                           name="Gross_Salary" min="0" readonly />
+                                </div>
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Loan Amount</label>
+                                    <input type="number" id="Loan_Amount" required class="form-control"
+                                           placeholder="Loan Amount" min="0" name="Loan_Amount" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">No Of Installment</label>
+                                    <input type="number" id="No_Of_Installments" required class="form-control"
+                                           placeholder="No Of Installments" min="0" onkeyup="singleinstallmentamount()" name="No_Of_Installments" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Single Installment Amount</label>
+                                    <input type="number" id="Single_Installment_Amount" required class="form-control"
+                                           placeholder="Single Installment Amount" min="0" readonly name="Single_Installment_Amount" />
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input value="Add New Loan" type="submit" class="btn btn-success float-right" />
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script>
+        function onchangeemployeeid() {
+
+            var opt = $("#Emp_ID option:selected");
+            var nam = opt.data('gross-salary');
+
+            $('#Gross_Salary').val(nam);
+        }
+        function singleinstallmentamount() {
+            var total_amount = $('#Loan_Amount').val();
+            var no_of_installment = $('#No_Of_Installments').val();
+            var single_installment_amount = Math.round(total_amount / no_of_installment, 2);
+            $('#Single_Installment_Amount').val(single_installment_amount);
+        }
+
+    </script>}

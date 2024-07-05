@@ -1,0 +1,219 @@
+﻿@model Society.Data.Employee
+    @using Society.Data
+@{
+    ViewBag.Title = "Update_Employee";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Add New Employee</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Employee Add</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <form action="Update_Employee" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Employee Details</h3>
+                            </div>
+                            <div class="card-body">
+
+
+
+
+                                <input type="hidden" name="Employee_ID" value="@Model.Employee_ID" />
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">User Name</label>
+                                    <input type="text" class="form-control" placeholder="CNIC (61101400000001)"
+                                            name="CNIC" value="@Model.CNIC" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Joining Date</label>
+                                    <input type="date" class="form-control" name="Joining_Date" value="@Model.Joining_Date.ToString("dd-MM-yyyy")" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputClientCompany">First Name</label>
+                                    <input type="text" class="form-control" placeholder="FirstName" value="@Model.F_Name" name="F_Name"
+                                           required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputClientCompany">Last Name</label>
+                                    <input type="text" class="form-control" placeholder="LastName" value="@Model.L_Name" name="L_Name"
+                                           required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Date of Birth</label>
+                                    <input type="date" class="form-control" name="DOB" value="@Model.DOB.ToString("dd-MM-yyyy")" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Email Address</label>
+                                    <input type="text" class="form-control" placeholder="Email Address" value="@Model.Email" name="Email" />
+                                </div>
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Address</label>
+                                    <input type="text" class="form-control" placeholder="Address" value="@Model.Address"
+                                           name="Address" id="Address" />
+                                </div>
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Designation</label>
+                                    <input type="text" class="form-control" placeholder="Designation" value="@Model.Designation" name="Designation" />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Phone Number</label>
+                                    <input type="text" class="form-control" placeholder="Phone Number" value="@Model.Phone_Number" name="Phone_Number" />
+                                </div>
+
+
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Gender</label>
+                                    <select type="text" class="form-control"
+                                            name="Gender">
+                                        <option disabled value="-1">...Select Item...</option>
+                                        @if (Model.Gender == "male")
+                                        {
+
+
+                                            <option value="male" selected>Male</option>
+                                            <option value="female">Female</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="female" selected>Female</option>
+                                            <option value="male">Male</option>
+                                        }
+
+
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Martial Status</label>
+                                    <select type="text" class="form-control"
+                                            name="Martial_Status">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        @if (Model.Martial_Status == "Married")
+                                        {
+
+
+                                            <option value="Married" selected>Married</option>
+                                            <option value="UnMarried">UnMarried</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Married">Married</option>
+                                            <option value="UnMarried" selected>UnMarried</option>
+                                        }
+
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Type</label>
+                                    <select type="text" class="form-control"
+                                            name="Type">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        @if (Model.Type == "Admin")
+                                        {
+
+
+                                            <option value="Admin" selected>Admin</option>
+                                            <option value="Employee">Employee</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Admin">Admin</option>
+                                            <option value="Employee" selected>Employee</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Roles</label>
+                                    <select type="text" class="form-control"
+                                            name="Role_ID">
+                                        
+
+                                        @foreach (role r in ViewBag.roles)
+                {
+                    if (r.Title==Model.role.Title) {
+                                        <option  value="@Model.Role_ID" selected>@Model.role.Title</option>
+                    }
+                    else
+                    {
+                                    <option value="@r.Roles_ID">@r.Title</option>
+                    }
+                                            
+                                        }
+
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Status</label>
+                                    <select type="text" class="form-control"
+                                            name="Status">
+                                        <option disabled value="-1" selected>...Select Item...</option>
+                                        @if (Model.Status == true)
+                                        {
+
+
+                                            <option value="True" selected>Active</option>
+                                            <option value="False">UnActive</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="True">Active</option>
+                                            <option value="False" selected>UnActive</option>
+
+                                        }
+
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Password</label>
+                                    <input type="text" class="form-control" placeholder="Password" value="@Model.Password" name="Password" />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Phone Number</label>
+                                    <input type="file" class="form-control" placeholder="Profile_Picture" name="Profile_Picturee"  value="@Model.Profile_Picture" />
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input type="submit" value="Add Employee" class="btn btn-success float-right">
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>}
+
+

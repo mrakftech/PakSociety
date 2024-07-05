@@ -1,0 +1,218 @@
+﻿
+@model dynamic
+@using Society.Data
+@{
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header" id="skip1">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Statement of Account</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Reports</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content" id="skip">
+            <div class="container-fluid">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-10 offset-md-1">
+                            <div class="row">
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Select Ledger:</label>
+                                        <select class="select2 form-control" style="width: 100%;" name="ledger">
+                                            @foreach (Ledger_Account l in ViewBag.ledgerAccount)
+                                            {
+                                                <option value="@l.ID">@l.Ledger_Account_Title</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-12 col-lg-4 form-group  float-left">
+                                    <label for="inputName">Date Range</label>
+                                    <input id="daterange" class="form-control " placeholder="Start Date" name="dateRange" required />
+                                </div>
+
+                                <script>
+                                    $('#daterange').daterangepicker({
+                                        "alwaysShowCalendars": true,
+                                        "startDate": "01/01/2024",
+                                        "endDate": "01/01/2024"
+                                    }, function (start, end, label) {
+                                        console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+                                    });
+                                </script>
+                                <div class="col-lg-2"><label for="inputName">&nbsp;</label><button type="submit" class="btn btn-primary col-12" value="Search">Search</button></div>
+                                <div class="col-lg-2"><label for="inputName">&nbsp;</label><button class="btn btn-warning col-12" value="Print" onclick="window.print();">Print <small>(Ctrl + P)</small> </button></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+        @if (ViewBag.record != null)
+        {<img src="~/images/logo/Lake View Heights Logo-01.png" alt="AdminLTE Logo" class="logo">
+
+            <div id="img"></div>
+            <div id="name"></div>
+
+            <div class="divtoPrint">
+
+                <section class="content">
+
+
+
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <table class="table table-striped projects" id="example1">
+
+
+                                <thead>
+                                    <tr>
+                                        <th>Account Title:-</th>
+                                        <th colspan="2">@ViewBag.title</th>
+                                        <th>Opening Balance:-</th>
+                                        <th colspan="2">@ViewBag.openingBalance</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Range:-</th>
+                                        <th colspan="2">@ViewBag.range</th>
+                                        <th>Closing Balance:-</th>
+                                        <th colspan="2">@ViewBag.closingBalance</th>
+                                    </tr>
+                                    <tr><td colspan="5">&nbsp;</td></tr>
+                                </thead>
+                                <thead>
+                                    <tr>
+                                        <th>Transaction Date</th>
+                                        <th>Description</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Running Balance</th>
+                                    </tr>
+                                </thead>
+                                @foreach (reciept_voucher_payment l in ViewBag.record)
+                                {
+                                    <tr>
+                                        <td>@l.reciept_vouchers.VoucherDate.ToString("yyyy-MM-dd")</td>
+                                        <td>@l.Comments</td>
+                                        @if (l.TransType == "C")
+                                        {
+                                            <td>-</td>
+                                            <td>@l.Amount.ToString("n2")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@l.Amount.ToString("n2")</td>
+                                            <td>-</td>
+                                        }
+                                        <td>@l.CurrentBalance</td>
+                                    </tr>
+                                }
+
+
+
+                            </table>
+                        </div>
+                    </div>
+
+
+                </section>
+            </div>}
+        else
+        {
+            <section class="content">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-dark">
+                            <div class="card-header">
+                                <h3 class="card-title">RECORDS</h3>
+                            </div>
+                            <div class="card-body">
+                                <div>No Record Found</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        }
+
+
+
+    </div>
+    <style>
+        @@media screen {
+            .logo {
+                display:none;
+            }
+        }
+                    @@media print {
+                        .logo {
+                            display:block;
+                            position: absolute;
+                            left: 10px;
+                            width: 100px;
+                            height: 90px;
+                        }
+                        #name:before {
+
+
+                            content: "LEDGER REPORT(@ViewBag.range)";
+
+                        }
+                        footer {
+                            visibility: hidden;
+                        }
+                        #skip, #skip1, #skip * ,#skip1 * {
+                            visibility: hidden;
+                            height: 0px;
+                        }
+
+
+                        #img:before {
+                            content:"Lake View Heights";
+
+                        }
+                        #name, #name * {
+                            height: 50px;
+                            font-size: x-large;
+                            text-align: center;
+                            font-family: 'Century Gothic';
+                            font-weight:bold;
+                        }
+                            #img, #img * {
+                                height: 50px;
+                                font-size:xx-large;
+                                text-align: center;
+                      font-family:'Century Gothic';
+                      font-weight:bolder;
+
+                            }
+                        .divToPrint, .divToPrint * {
+
+                            visibility: visible;
+                        }
+                    }
+    </style>
+
+}

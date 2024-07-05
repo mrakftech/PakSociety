@@ -1,0 +1,64 @@
+﻿
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Booking Details</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Member</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>        <section class="content">
+                              <form method="POST" id="form" enctype="multipart/form-data">
+                                  <div class="row">
+                                      <div class="col-md-12">
+                                          <div class="card card-primary">
+                                              <div class="card-header">
+                                                  <h3 class="card-title">Registration Details</h3>
+                                              </div>
+                                              <div class="card-body">
+                                                  <input type="hidden" name="PaymentId" value="@ViewBag.id" />
+                                                  <div class="form-group col-6 float-left">
+                                                      <label for="inputName">App No: </label>
+                                                      <input type="text" id="appNo" class="form-control" placeholder="appNo" name="appNo" />
+                                                  </div>
+                                                  <div class="form-group col-6 float-left">
+                                                      <label for="inputName">Voucher No: <span style="color:red">*</span></label>
+                                                      <input type="text" id="Qm_No" class="form-control" placeholder="VoucherNo" name="VoucherNo" required />
+                                                  </div>
+                                                  <div class="form-group col-6 float-left">
+                                                      <label for="inputName">Amount:<span style="color:red">*</span></label>
+                                                      <input type="number" id="amount" class="form-control" placeholder="amount" name="amount" required />
+                                                  </div>
+
+                                                  <div class="form-group col-6 float-left">
+                                                      <label for="inputName">Size:</label>
+                                                      <select type="text" required id="onAccount" class="form-control" name="onAccount">
+                                                          <option value="" disabled selected>--Select--</option>
+                                                          <option value="Booking">Booking</option>
+                                                          <option value="Confirmation">Confirmation</option>
+                                                          <option value="Installment">Installment</option>
+                                                          <option value="Possession">Possession</option>
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <button type="submit" id="type" onclick="sub()" class="btn btn-primary float-right">Add Voucher</button>
+                                      </div>
+                                  </div>
+                              </form>
+        </section>
+    </div>}

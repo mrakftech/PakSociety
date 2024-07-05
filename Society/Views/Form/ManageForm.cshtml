@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Society.Data.Oversea>
+
+
+
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <h1 class="m-0">Online Form</h1>   
+                            @if (TempData["Success"] != null)
+                            {<h4 style="text-align: center; background-color: #7ecf73a3; font-weight: 300 " class="title-success">@TempData["Success"]</h4>}
+
+                                @if (TempData["NoDataFound"] !=null)
+                                {<h4 style="text-align: center; font-weight: 300" class="title-error">@TempData["NoDataFound"]</h4>}
+
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <style>
+
+                    .title-success {
+                        border: 1px solid transparent;
+                        border-color: #2bd93f;
+                        color: #2a8134;
+                        border-radius: 10px;
+                        font-size: 24px;
+                        font-weight: 400;
+                        margin-bottom: 40px;
+                    }
+
+                    .title-error {
+                        background-color: #f2dede;
+                        border: 1px solid transparent;
+                        border-color: #ebccd1;
+                        color: #a94442;
+                        border-radius: 10px;
+                        font-size: 24px;
+                        font-weight: 400;
+                        margin-bottom: 40px;
+                    }
+                </style>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th>Ref#</th>
+                                    <th>Name</th>
+                                    <th>CNIC</th>
+                                    <th>Date</th>
+                                    <th>Contact</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@x.ReferenceNo</td>
+                                    <td>@x.Name</td>
+                                    <td>@x.CNICOrPassport</td>
+
+
+                                    <td>@x.Date.ToString("dd-MMM-yyyy")</td>
+
+
+
+
+                                    <td>@x.Contact</td>
+                                    <td>
+
+                                        <a title="Approve" href="/Form/VerificationApprove?id=@x.id" onclick="return confirm('Are you sure u want to approve?')" class="btn btn-primary btn-sm m-1"><i class="fas fa-file-alt"></i></a>
+                                        <a title="Update" href="/Form/VerificationUpdate?id=@x.id" class="btn btn-success btn-sm m-1"><i class="fas fa-user"></i></a>
+                                        <a title="delete" href="/Form/Delete?id=@x.id" onclick="return confirm('Are you sure U Want to delete Record?')" class="btn btn-danger btn-sm m-1"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+
+

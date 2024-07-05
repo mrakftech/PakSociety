@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Society.Data.PayRole>
+@{
+    ViewBag.Title = "Manage_Payrole";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee") { Response.Redirect("/Login/Login"); }
+else
+{
+
+
+
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+
+                            <h1 class="m-0">Payrole Complete List </h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Payrole List</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+       
+
+
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <!-- Content Wrapper. Contains page content -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+
+
+                    <div class="row">
+                        <div class="col-md-10 offset-md-4">
+
+
+
+
+
+                            <form method="post">
+
+                                <div class="card-tools">
+
+                                    <div class="form-group col-md-3">
+
+
+                                        <input type='month' id='month' name='month' required class='form-control float-sm-left' />
+
+                                    </div>
+                                    <div class="form-group col-md-3 float-sm-left">
+
+
+                                        <input type="submit" value="Search" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </form>
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+            <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">DataTable with default features</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body p-0">
+                    <table class="table table-striped projects" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">#</th>
+                                <th style="width: 15%">Employee Name</th>
+                                <th style="width: 15%">Gross Salary</th>
+                                <th style="width: 15%">Net Salary</th>
+                                <th style="width: 10%">Month</th>
+                                <th>Year</th>
+                                <th>Period</th>
+                                <th style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        @{ int count = 1;}
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@x.Employee.F_Name @x.Employee.L_Name</td>
+                                <td>@x.Gross_Salary</td>
+                                <td>@x.Net_Salary</td>
+                                <td>@x.Month</td>
+                                <td>@x.Year</td>
+                                <td>@x.Period.ToString("dd-MM-yyyy")</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm m-1" href="/Payrole/Salary_Slip?ID=@x.PayRole_ID&month=@x.Period"><i class="fas fa-pencil-alt"></i>Generate Slip</a>
+
+
+
+                            </tr>
+
+                            count = count + 1;
+                        }
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}

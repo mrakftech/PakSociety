@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Society.Data.Party_Detail>
+@{
+    ViewBag.Title = "Receipt_Register";
+}
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Receipt Register</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Receipt Register</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 1%">Ref#</th>
+                                    <th style="width: 15%">Client Name</th>
+                                    <th style="width: 15%">Payment Date</th>
+                                    <th style="width: 15%">Previous Balance </th>
+                                    <th style="width: 15%">Current Balance </th>
+                                    <th style="width: 15%">Paid Amount </th>
+                                    <th style="width: 20%">receipt Head</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+                            @foreach (var x in Model)
+                            {
+                        <tr>
+                            <td>@count</td>
+                            <td>@x.Party.Member.Plots.FirstOrDefault(o => o.Member_ID == x.Party.Member_ID).Reg_No </td>
+                            <td>@x.Party.Member.Applicant_Name</td>
+                            <td>@x.Pay_Date.ToString("dd-MM-yyyy")</td>
+                            <td>@x.Previous_Amount</td>
+
+                            <td>@x.Current_Amount</td>
+                            @{var res = x.Current_Amount - x.Previous_Amount;}
+                            <td>@res</td>
+                            <td>@x.Head</td>
+
+
+
+                        </tr>
+                                count = count + 1;
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+

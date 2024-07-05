@@ -1,0 +1,1400 @@
+﻿@model dynamic
+@using Society.Data;
+@{
+    ViewBag.Title = "Add_Member";
+}@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Booking Details</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Member</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#CNIC").autocomplete({
+
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Member/Index",
+                            type: "POST",
+                            dataType: "json",
+                            data: { Prefix: request.term },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+
+
+                                    return { label: item.CNIC, data: item, Applicant_Name: item.Applicant_Name, Father_Husband_Name: item.Father_Husband_Name, Occupation: item.Occupation, Present_Postel_Address: item.Present_Postel_Address, Permenent_Postel_Address: item.Permenent_Postel_Address, Office_No: item.Office_No, Cell_No: item.Cell_No, Email: item.Email, Nominee_Name: item.Nominee_Name, NomineeFather: item.NomineeFather, Country: item.Country, Nominee_CNIC: item.Nominee_CNIC, Relation: item.Relation, Nominee_Phone_No: item.Nominee_Phone_No, Nominee_Address: item.Nominee_Address };
+
+                                }));
+                            }
+                        });
+
+                    },
+
+                    select: function (event, ui) {
+                        $('#Applicant_Name').val(ui.item.Applicant_Name);
+                        $('#Father_Husband_Name').val(ui.item.Father_Husband_Name);
+                        $('#Occupation').val(ui.item.Occupation);
+                        $('#Present_Postel_Address').val(ui.item.Present_Postel_Address);
+                        $('#Permenent_Postel_Address').val(ui.item.Permenent_Postel_Address);
+                        $('#Office_No').val(ui.item.Office_No);
+                        $('#Cell_No').val(ui.item.Cell_No);
+                        $('#Email').val(ui.item.Email);
+                        $('#Nominee_Name').val(ui.item.Nominee_Name);
+                        $('#NomineeFather').val(ui.item.NomineeFather);
+                        $('#Country').val(ui.item.Country);
+                        $('#Nominee_CNIC').val(ui.item.Nominee_CNIC);
+                        $('#Relation').val(ui.item.Relation);
+                        $('#Nominee_Phone_No').val(ui.item.Nominee_Phone_No);
+                        $('#Nominee_Address').val(ui.item.Nominee_Address);
+                    }
+                });
+
+            });
+        </script>
+        <section class="content">
+            <form method="POST" id="form" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Registration Details</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-4 float-left">
+                                    @*<label for="inputName">Reference No: <span style="color:red">*</span></label>*@
+                                    <label for="inputName">E-REF No: <span style="color:red">*</span></label>
+
+                                    <input type="text" id="Reg_No" class="form-control" onkeyup="reg_no_check()" placeholder="Reference No" name="Reg_No" value="@Guid.NewGuid().ToString().Substring(24,10)" required readonly/>
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Application No: <span style="color:red">*</span></label>
+
+                                    <input type="text" id="Qm_No" class="form-control" placeholder="Application_No" name="Qm_No" />
+                                </div>
+                                <script>
+                                    var reg_no_chk = false;
+                                    function reg_no_check() {
+                                        value = $('#Reg_No').val();
+                                        $.ajax({
+                                            url: '/Member/reg_no_chk',
+                                            type: 'POST',
+                                            data: {
+                                                value: value,
+                                            },
+                                            success: function (data) {
+                                                reg_no_chk = false;
+
+                                                if (data == true) {
+
+                                                    reg_no_chk = true;
+
+                                                }
+
+
+                                            }
+                                        });
+
+
+                                    }
+                                </script>
+
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Reg Dated:<span style="color:red">*</span></label>
+
+                                    <input type="date" id="Date" class="form-control" placeholder="dd-mm-yyyy" name="Date" required value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                </div>
+                    
+                                <div class="col-md-4 float-left">
+                                    <label>Unit Type:</label>
+                                    <select placeholder="Type" name="Block" id="Block" class="form-control" required onchange="select_type()">
+                                        <option>Select Unit Type</option>
+                                        <option value="Plot">Plot</option>
+                                        <option value="House">House</option>
+                                        <option value="Appartment">Appartment</option>
+                                        <option value="Office">Office</option>
+                                        <option value="Shop">Shop</option>
+                                        
+
+                                    </select>
+                                </div>
+
+
+                    
+                                <script>
+                                
+
+                                    function select_type() {
+                                        var unitTypeId = $('#Block').val();
+                                        console.log('blaooooooooo' + unitTypeId);
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "/Member/GetNewPlotDataFloorandUnitNO",
+                                            data: { unitTypeId: unitTypeId },
+                                            success: function (data) {
+                                                var plotNoDropdown = $('#Plot_No');
+                                                plotNoDropdown.empty();  // Clear any existing options
+
+                                                // Add default option
+                                                var defaultOption = $('<option></option>').attr("value", "").text("Select Unit No");
+                                                plotNoDropdown.append(defaultOption);
+
+                                                if (Array.isArray(data) && data.length > 0) {
+                                                    data.forEach(function (item) {
+                                                        var option = $('<option></option>').attr("value", item.PlotNo).text(item.PlotNo);
+                                                        plotNoDropdown.append(option);
+                                                    });
+                                                } else {
+                                                    console.error("Error: Incorrect contents fetched, please reload.");
+                                                }
+                                            },
+                                            error: function (error) {
+                                                console.error("Error fetching items:", error);
+                                            }
+                                        });
+                                        updateLabel(unitTypeId);
+                                    }
+
+
+                                    function updateLabel(unitTypeId) {
+                                        debugger
+                                        var label = $("label[for='inputNameDealer']");
+                                        if (unitTypeId == "Plot") {
+                                            label.text("Plot (Sqr Ft):");
+                                        } else if (unitTypeId == "Office") {
+                                            label.text("Office (Sqr Ft):");
+                                        } else if (unitTypeId == "Shop") {
+                                            label.text("Shop (Sqr Ft):");
+                                        } else if (unitTypeId == "PentHouse") {
+                                            label.text("Pent House (Pr sq Ft):");
+                                        } else {
+                                            label.text("Dealer Apartment/Office/Shop/Pent House:");
+                                        }
+                                    }
+                                </script>
+
+                                @*<div class="form-group col-4  float-left">
+            <label for="inputName">Unit No:</label>
+            <input type="number" id="Plot_No" class="form-control" placeholder="Unit No" name="Plot_No" readonly />
+        </div>*@
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Unit No :</label>
+                                    <select id="Plot_No" class="form-control" name="Plot_No" onchange="select_StreetAndSize()">
+                                        <!-- Options will be added here dynamically -->
+                                        <option>Select Unit No</option>
+
+                                    </select>
+                                </div>
+
+
+                                <script>
+                                    function select_StreetAndSize() {
+
+
+                                        var unitTypeId = $('#Plot_No').val();
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "/Member/GetNewPlotDataStreetAndSize",
+                                            data: { unitTypeId: unitTypeId },
+                                            success: function (data) {
+                                                if (Array.isArray(data) && data.length > 0) {
+                                                    $('#Street').val(data[0].Floor); // Assuming all objects have the same Floor and wide values
+                                                    $('#Size').val(data[0].wide);
+                                                }
+                                                else {
+                                                    console.error("Error: Incorrect contents fetched, please reload.");
+                                                }
+                                            },
+                                            error: function (error) {
+                                                console.error("Error fetching items:", error);
+                                            }
+                                        });
+
+
+
+                                    }
+                                </script> 
+
+
+                                <div class="form-group col-4  float-left">
+                                    <label for="inputClientCompany">Unit Size/Per Sq Feet:</label>
+                                    <input type="text" class="form-control" placeholder="Per square Feet" name="Size" id="Size" readonly />
+                                </div>
+
+
+
+
+                                <div class="form-group col-4  float-left">
+                                    <label for="inputName">Street:</label>
+                                    <input type="text" id="Street" class="form-control" placeholder="Floor" name="Street" readonly />
+                                </div>
+
+
+
+ 
+
+                                <div class="form-group col-4 float-left">
+                                    @*<label for="inputName">MemberShip No:</label>*@
+                                    <label for="inputName">Registraion No:</label>
+                                    <input type="text" id="MemberShipNumber" class="form-control" placeholder="Registraion No" name="MemberShipNumber" />
+
+
+                                </div>
+                                <script>
+                                    function radio_update() {
+                                        var x = document.getElementById('old').checked;
+                                        if (document.getElementById('old').checked == true) {
+
+                                            document.getElementById('old').checked = true;
+
+                                        } else if (document.getElementById('old').checked == false) {
+                                            document.getElementById('old').checked = false;
+
+                                        }
+                                        $.ajax({
+                                            url: '/Member/change_plan',
+                                            type: 'POST',
+                                            data: {
+                                                x: x,
+                                            },
+                                            success: function (data) {
+                                                $('#Size').empty();
+                                                $('#Size').html('');
+                                                var options = '';
+                                                options += '<option value="Select">Select</option>';
+                                                for (var i = 0; i < data.length; i++) {
+                                                    options += '<option value="' + data[i].ID + '"  data-Booking="' + data[i].Booking + '" data-Allocation="' + data[i].Allocation + '" data-Confirmation="' + data[i].Confirmation + '" data-Monthly="' + data[i].Monthly + '" data-Half_Yearly="' + data[i].Half_Yearly + '" data-No_Of_Monthly="' + data[i].No_Of_Monthly + '" data-No_Of_Half_Yearly="' + data[i].No_Of_Half_Yearly + '"data-Pocession="' + data[i].Pocession + '"data-Plan_Name="' + data[i].Plan_Name + '"data-total_price="' + data[i].Total_Price + '" data-plot_type="' + data[i].Plot_Type + '">' + data[i].Plan_Name + '(' + data[i].Plot_Type + ')' + '</option>';
+                                                }
+
+                                                $('#Size').append(options);
+                                                $('#Plot_Type').val(data[i].Plot_Type);
+
+                                            }
+                                        });
+
+                                    }</script>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Member Details</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">Applicant_Name<span style="color:red">*</span></label>
+                                    <select type="text" id="Applicant_Start_Text" class="form-control" placeholder="Genger" name="Applicant_Start_Text" required>
+                                        <option>Mr.</option>
+                                        <option>Mrs.</option>
+                                        <option>Miss</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-5 float-left" style="margin-top:8px">
+                                    <label for="inputName"></label>
+                                    <input type="text" id="Applicant_Name" style="text-transform:uppercase" class="form-control" placeholder="Applicant_Name" name="Applicant_Name" required />
+                                </div>
+
+
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">Father_Husband_Name<span style="color:red">*</span></label>
+                                    <select type="text" id="Father_Husband_Start_Text" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Start_Text" required>
+                                        <option>S/O</option>
+                                        <option>D/O</option>
+                                        <option>W/O</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-5 float-left" style="margin-top:8px">
+                                    <label for="inputName"></label>
+                                    <input type="text" id="Father_Husband_Name" style="text-transform:uppercase" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Name" required />
+                                </div>
+
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputName">CNIC #</label>
+                                    <input type="text" id="CNIC" class="form-control" placeholder="CNIC" name="CNIC" />
+                                </div>
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputClientCompany">Occupation</label>
+                                    <input type="text" class="form-control" placeholder="Occupation" name="Occupation" id="Occupation" />
+                                </div>
+
+
+
+
+
+
+
+
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Present_Postel_Address</label>
+                                    <textarea type="email" class="form-control" placeholder="Present_Postel_Address" name="Present_Postel_Address" id="Present_Postel_Address"></textarea>
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Permenent_Postel_Address</label>
+                                    <textarea type="email" class="form-control" placeholder="Permenent_Postel_Address" name="Permenent_Postel_Address" id="Permenent_Postel_Address"></textarea>
+                                </div>
+
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Phone Office</label>
+                                    <input type="number" class="form-control" placeholder="Office_No" name="Office_No" id="Office_No" />
+                                </div>
+
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Cell_No</label>
+                                    <input type="number" class="form-control" placeholder="Cell_No" name="Cell_No" id="Cell_No" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Email</label>
+                                    <input type="Email" class="form-control" placeholder="Email" name="Email" id="Email" />
+                                </div>
+
+
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Country</label>
+                                    <input type="text" class="form-control" placeholder="Country" name="Country" id="Country" />
+                                </div>
+
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Nominee_Name</label>
+                                    <input type="text" class="form-control" placeholder="Nominee_Name" name="Nominee_Name" id="Nominee_Name" />
+                                </div>
+
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">Nominee_Father_Husband_Name<span style="color:red">*</span></label>
+                                    <select type="text" id="Father_Husband_Start_Text" class="form-control" placeholder="Father_Husband_Name" name="Father_Husband_Start_Text" required>
+                                        <option>S/O</option>
+                                        <option>D/O</option>
+                                        <option>W/O</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-5  float-left">
+                                    <label for="inputProjectLeader">&nbsp;</label>
+                                    <input type="text" class="form-control" placeholder="Nominee_Father" name="NomineeFather" id="NomineeFather" />
+                                </div>
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Nominee_CNIC</label>
+                                    <input type="text" class="form-control" placeholder="Nominee_CNIC" name="Nominee_CNIC" id="Nominee_CNIC" />
+                                </div>
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Relation</label>
+                                    <input type="text" class="form-control" placeholder="Relation" name="Relation" id="Relation" />
+                                </div>
+                                <div class="form-group col-6  float-left">
+                                    <label for="inputProjectLeader">Nominee_Phone_No</label>
+                                    <input type="number" class="form-control" placeholder="Nominee_Phone_No" name="Nominee_Phone_No" id="Nominee_Phone_No" />
+                                </div>
+                                <div class="form-group col-6 float-left">
+                                    <label for="inputProjectLeader">Nominee_Address</label>
+                                    <textarea type="text" class="form-control" placeholder="Nominee_Address" name="Nominee_Address" id="Nominee_Address"></textarea>
+                                </div>
+                                <div class="col-6 float-left">
+                                    <video hidden height="350" width="320" id="video"></video>
+                                    <img height="250" width="320" id="imagePreview" style="float:left">
+                                    <div class="file-input col-12 float-left mt-3 ">
+
+                                        <button type="button" class="file-button" id="startButton">Start Camera</button>
+                                        <button type="button" class="file-button" id="captureButton">Capture Image</button>
+                                        <input type="hidden" name="Profile_Image" id="Data" />
+
+                                        <input type="file" id="file" accept="image/*" onchange="handleFileSelect(event)">
+                                        <label for="file" class="file-button">Select Image</label>
+                                    </div>
+                                </div>
+                                <div class="file-input col-6 float-left">
+                                    <video hidden height="350" width="320" id="Thumbvideo"></video>
+                                    <img height="250" width="320" id="thumbPreview" style="float:left">
+                                    <div class="col-12 float-left mt-3 ">
+
+                                        <a href="myapp://" class="btn btn-info" id="scanButton">Start Finger Print Device</a>
+                                        <button type="button" class="btn btn-info" hidden id="startButton">Start Device</button>
+                                        <input type="hidden" name="thumb_Image" id="thumbImage" />
+
+                                    </div>
+                                </div>
+                                <script>
+                                    function handleFileSelect(event) {
+                                        var file = event.target.files[0];
+                                        var reader = new FileReader();
+
+                                        reader.onload = function () {
+                                            var dataInput = document.getElementById('Data');
+                                            var preview = document.getElementById('imagePreview');
+                                            preview.src = reader.result;
+                                            dataInput.value = reader.result;
+                                        };
+
+                                        reader.readAsDataURL(file);
+                                    }
+                                </script>
+                                <style>
+                                    .file-input {
+                                        position: relative;
+                                        display: inline-block;
+                                    }
+
+                                        .file-input input[type="file"] {
+                                            position: absolute;
+                                            left: -9999px;
+                                        }
+
+                                    .file-button {
+                                        display: inline-block;
+                                        padding: 5px 5px;
+                                        background-color: #007bff;
+                                        color: #fff;
+                                        border: none;
+                                        border-radius: 4px;
+                                        cursor: pointer;
+                                    }
+
+                                        .file-button:hover {
+                                            background-color: #0056b3;
+                                        }
+
+                                    /* CSS styles for the image */
+                                    img {
+                                        display: block; /* make the image a block element */
+                                        margin: auto; /* center the image horizontally */
+                                        /* set the width of the image to 50% of its container */
+                                        border: 2px solid black; /* add a border around the image */
+                                        box-shadow: 2px 2px 5px grey; /* add a box shadow effect to the image */
+                                    }
+                                </style>
+
+                                <script>
+                                    var scanButton = document.getElementById('scanButton');
+
+                                    var ThumbPreview = document.getElementById('thumbPreview');
+                                    var thumbImage = document.getElementById('thumbImage');
+                                    scanButton.addEventListener('click', function () {
+                                        $.ajax({
+                                            url: '/Member/ScanThumb',
+                                            type: 'GET',
+                                            success: function (result) {
+                                                console.log(result);
+                                                thumbPreview.src = result;
+                                                thumbImage.value = result;
+                                            }
+                                        });
+
+                                    });
+
+                                </script>
+
+                                <script>
+                                    var captureButton = document.getElementById('captureButton');
+                                    var startButton = document.getElementById('startButton');
+                                    var video = document.getElementById('video');
+                                    var imagePreview = document.getElementById('imagePreview');
+
+
+                                    startButton.addEventListener('click', function () {
+                                        // Request access to the camera
+                                        var video = document.getElementById('video');
+                                        video.hidden = false;
+                                        imagePreview.hidden = true;
+                                        var canvas = document.getElementById('canvas');
+                                        navigator.mediaDevices.getUserMedia({ video: true })
+                                            .then(function (stream) {
+                                                video.srcObject = stream;
+                                                video.play();
+                                            });
+
+                                        // Save image data to hidden field
+                                        var context = canvas.getContext('2d');
+                                        video.addEventListener('canplay', function () {
+                                            canvas.width = video.videoWidth;
+                                            canvas.height = video.videoHeight;
+                                            setInterval(function () {
+                                                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                                                //  imagePreview.src = canvas.toDataURL('image/jpeg');
+                                            }, 1000 / 30);
+                                        });
+                                    });
+                                    function captureImage() {
+                                        var dataInput = document.getElementById('Data');
+                                        video.hidden = true;
+                                        imagePreview.hidden = false;
+                                        var canvas = document.createElement('canvas');
+                                        canvas.width = video.videoWidth;
+                                        canvas.height = video.videoHeight;
+                                        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                                        var imageData = canvas.toDataURL('image/png');
+                                        console.log(imageData);
+                                        imagePreview.src = imageData;
+                                        dataInput.value = imageData;
+                                    } captureButton.addEventListener('click', function () {
+                                        captureImage();
+                                    });
+                                    // Capture image from web cam
+
+                                </script>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Attachments</h3>
+                            </div>
+                            <div class="card-body">
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 1</label>
+                                    <input type="file" class="form-control" name="Image1" accept="image/*" />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 2</label>
+                                    <input type="file" class="form-control" name="Image2" accept="image/*" />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 3</label>
+                                    <input type="file" class="form-control" name="Image3" accept="image/*" />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 4</label>
+                                    <input type="file" class="form-control" name="Image4" accept="image/*" />
+                                </div> <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 5</label>
+                                    <input type="file" class="form-control" name="Image5" accept="image/*" />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 6</label>
+                                    <input type="file" class="form-control" name="Image6" accept="image/*" />
+                                </div> <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 7</label>
+                                    <input type="file" class="form-control" name="Image7" accept="image/*" />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputProjectLeader">Attachment 8</label>
+                                    <input type="file" class="form-control" name="Image8" accept="image/*" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Cost Of Unit</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Rate Per Sq Feet:<span style="color:red">*</span></label>
+                                    <input type="number" id="RatePerSqFit" class="form-control" placeholder="Rate Per Square Feet" onkeyup="ratePerSqFit()" name="RatePerSqFit" required />
+                                </div>
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Price Of Unit:<span style="color:red">*</span></label>
+                                    <input type="number" id="Gross_Price_Plot" class="form-control" placeholder="Price Of Unit" onkeyup="t_amount()" name="Gross_Price_Plot" required readonly />
+                                </div>
+
+                   
+                                @*<script>
+                                    function updateTotalNet() {
+                                        var pricemAmount = $('#Gross_Price_Plot').val();
+                                        $('#total_net').val(pricemAmount);
+                                    }
+                                </script>*@
+                 
+
+                                <script>
+                                    function ratePerSqFit() {
+                                        debugger
+                                        var unitSizePerSquareFit = parseFloat($('#Size').val());
+                                        var ratePerSquareFit = parseFloat($('#RatePerSqFit').val());
+                                        var totalPricenet = unitSizePerSquareFit * ratePerSquareFit;
+                                      
+
+                                        $('#Gross_Price_Plot').val(totalPricenet);
+                                        var priceAmountGross = $('#Gross_Price_Plot').val();
+                                     
+                                      //  updateTotalNet();
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        $('#Net_Price_Plot').val(amount);
+                                       // $('#remaining_amount').val(amount);
+
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Booking').val("0");
+                                        $('#total_downpayment').val("0");
+                                        $('#extra_charge_percentage').val("0");
+                                        $('#Extra_Charge').val("0");
+                                        $('#Discount_percentage').val("0");
+                                        $('#Discount').val("0");
+                                        // $('#total_net').val(0);
+                                        $('#Adjustment_Amount').val("0");
+                                        total_extra_charge = 0;
+                                        total_discount_amount = 0;    
+
+                                        $('#total_net').val(priceAmountGross);
+                                        $('#remaining_amount').val(priceAmountGross);
+
+                                    }</script>
+
+
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Extra Charges:(Amount)</label>
+                                    <input type="number" id="Extra_Charge" class="form-control" placeholder="Extra Charges" onkeyup="extracharges_amount()" style="color:red" name="Extra_Charge" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Extra Charges:(%)</label>
+                                    <input type="text" id="extra_charge_percentage" class="form-control" placeholder="Extra Charges" onkeyup="extracharges_percentage()" name="extra_charge_percentage" />
+                                </div>
+                                <style>
+                                    input[type=number]::-webkit-inner-spin-button,
+                                    input[type=number]::-webkit-outer-spin-button {
+                                        -webkit-appearance: none;
+                                        -moz-appearance: none;
+                                        margin: 0;
+                                    }
+                                </style>
+                                <script>
+                                    var total_extra_charge = 0;
+                                    var total_discount_amount = 0;
+                                    var total_amount = 0;
+                                    function extracharges_percentage()
+                                    {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var percentage = $('#extra_charge_percentage').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+                                        var remaining = parseFloat(amount) + parseFloat(total);
+                                        $('#Extra_Charge').val(total);
+                                        total_extra_charge = total;
+
+                                        $('#Net_Price_Plot').val(remaining - total_discount_amount);
+                                        $('#remaining_amount').val(remaining - total_discount_amount);
+
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Booking').val("0");
+                                        $('#total_downpayment').val("0");
+ 
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("");
+
+
+                                        //$('#total_net').val(priceAmountGross);
+                                        // $('#remaining_amount').val(size.data('total_price'));
+                                        var discountAmount = $('#Discount').val();
+                                         if (!discountAmount || discountAmount === "0") {
+                                            discountAmount = 0;
+                                        } else {
+                                            discountAmount = parseFloat(discountAmount);
+                                        }
+                                        var amountGross = parseFloat(amount);
+                                        var priceAmountGross1 = amountGross + total + discountAmount;
+                                        $('#total_net').val(priceAmountGross1);
+                                       // $('#remaining_amount').val(priceAmountGross);
+
+                                    }
+                                    function extracharges_amount() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var extra_amount = $('#Extra_Charge').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+
+                                        var remaining = parseFloat(amount) + parseFloat(extra_amount);
+                                        $('#extra_charge_percentage').val(total.toFixed(4));
+
+                                        $('#Net_Price_Plot').val(remaining - total_discount_amount);
+                                        $('#remaining_amount').val(remaining - total_discount_amount);
+                                        total_extra_charge = extra_amount;
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Booking').val("0");
+                                        $('#total_downpayment').val("0");                                         
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("");
+                                        //$('#total_net').val(0);
+
+
+                                        var discountAmount = $('#Discount').val();
+                                        if (!discountAmount || discountAmount === "0") {
+                                            discountAmount = 0;
+                                        } else {
+                                            discountAmount = parseFloat(discountAmount);
+                                        }
+                                        var amountGross = parseFloat(amount);
+                                        var priceAmountGross1 = amountGross + total + discountAmount;
+                                        $('#total_net').val(priceAmountGross1);
+                                    }
+                                </script>
+
+
+
+
+
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Discount:(Amount)</label>
+                                    <input type="number" id="Discount" class="form-control" placeholder="Discount" name="Discount" onkeyup="discount_amount()" style="color:black" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Discount:(%)</label>
+                                    <input type="text" id="Discount_percentage" class="form-control" placeholder="Discount" onkeyup="discount_percentage()" />
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Description:</label>
+                                    <textarea type="text" id="description" class="form-control" placeholder="Description" name="description"></textarea>
+                                </div>
+                                <script>
+
+                                    function discount_percentage() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var percentage = $('#Discount_percentage').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+                                        $('#Discount').val(total);
+                                        total_discount_amount = total;
+                                        total_amount = parseFloat(amount) + parseFloat(total_extra_charge) - parseFloat(total_discount_amount);
+
+                                        $('#Net_Price_Plot').val(total_amount);
+                                        $('#remaining_amount').val(total_amount);
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Booking').val("0");
+                                        $('#total_downpayment').val("0");                                    
+                                        
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("0");
+                                        // $('#total_net').val(0);
+
+                                        var extra_amount = $('#Extra_Charge').val();
+
+                                        if (!extra_amount || extra_amount === "0") {
+                                            extra_amount = 0;
+                                        } else {
+                                            extra_amount = parseFloat(extra_amount);
+                                        }
+                                        var amountGross = parseFloat(amount);
+                                        var priceAmountGross1 = (amountGross - total) + extra_amount;
+                                        $('#total_net').val(priceAmountGross1);
+
+                                    }
+                                    function discount_amount() {
+
+                                        var amount = $('#Gross_Price_Plot').val();
+                                        var discount_amount = $('#Discount').val();
+
+                                        var total = (parseFloat(discount_amount) / parseFloat(amount)) * 100;
+
+                                        total_discount_amount = discount_amount;
+                                        $('#Discount_percentage').val(total.toFixed(4));
+                                        total_amount = parseFloat(amount) + parseFloat(total_extra_charge) - parseFloat(total_discount_amount);
+
+                                        $('#Net_Price_Plot').val(total_amount);
+                                        $('#remaining_amount').val(total_amount);
+                                        $('#Down_payment_percentage').val("0");
+                                        $('#Booking').val("0");
+                                        $('#total_downpayment').val("0"); 
+                                        $('#Pocession_Payment').val("0");
+                                        $('#total_pocession').val("0");
+                                        $('#Pocession_payment_percentage').val("0");
+                                        $('#Adjustment_Amount').val("0");
+                                        // $('#total_net').val(0);
+
+                                        var extra_amount = $('#Extra_Charge').val();
+
+                                        if (!extra_amount || extra_amount === "0") {
+                                            extra_amount = 0;
+                                        } else {
+                                            extra_amount = parseFloat(extra_amount);
+                                        }
+                                        var amountGross = parseFloat(amount);
+                                        var discount_amount = parseFloat(discount_amount);
+                                        var priceAmountGross1 = (amountGross - discount_amount) + extra_amount;
+                                        $('#total_net').val(priceAmountGross1);
+                                    }
+                                </script>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">Net Price Of Unit:(Amount)</label>
+                                    <input type="number" id="Net_Price_Plot" name="Net_Price_Plot" class="form-control" placeholder="net" readonly style="color:green;font:200" required />
+                                    <p style="color: red; display: none" id="show"> Total Amount Payable and Net Price Of Unit:(Amount) should be same</p>
+
+                                </div>
+                                <div class="form-group col-4 float-left">
+
+                                    <input type="hidden" id="remaining_amount" class="form-control" placeholder="Remaining"   style="color:black" required />
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div> <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Dealer Detail</h3>
+                            </div>
+                            <div class="card-body">
+
+                               
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Dealer Name: <span style="color:red"></span></label>
+
+                                    <select type="number" id="dealer_name" class="form-control" placeholder="Dealer Nam" name="dealer_name" onchange="select_Dealer()">
+                                        @*<option value="" selected disabled>Select Dealer</option>*@
+                                        @foreach (Dealer data in Model.dealerList)
+                                        {
+                                            <option>Please Select Dealer</option>
+                                            <option value="@data.Dealer_ID" data-Apartment="@data.DealerAppartmentPrice" data-Shop="@data.DealerShopPrice" data-Office="@data.DealerOfficePrice" data-PentHouse="@data.DealerPentHousePrice">@data.CEOName</option>
+                                        }
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputNameDealer">Apartment/Office/Shop/PentHouse:<span style="color:red"></span></label>
+                                    <input type="number" id="BookedByDealer" name="BookedByDealer" onkeyup="dealerCommissionNew()" disabled class="form-control" placeholder="Booked By Dealer" />
+                                </div>
+
+
+                                @*<input type="hidden" value="" name="dealer_id" id="dealer_id" />*@
+
+
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Dealer Share (Pr Sq Ft):</label>
+                                    <input type="number" id="Dealer_percentage" class="form-control" placeholder="Percentage" name="Percentage"  readonly/>
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Dealer Share Total:</label>
+                                    <input type="number" id="DealerShareTotal" class="form-control" placeholder="DealerShareTotal" name="Dealer Share Total" readonly />
+                                </div>
+
+                                <script>
+                                     function select_Dealer() {
+                                        debugger
+                                        var typeOfPlot = $('#Block option:selected').text();
+                                        var dealerName = $('#dealer_name').val();
+                                        var ratePerSquareFit = parseFloat($('#RatePerSqFit').val());
+                                        var sizeElement = document.getElementById('Size');
+
+                                         var unitsiz = sizeElement.value;      
+                                         var dealerName112 = $('#dealer_name option:selected').text();
+                                         var selectedOption = $('#dealer_name option:selected');
+
+                                         var appartmentPrice = selectedOption.data('apartment');
+                                        var shopPrice = selectedOption.data('shop');
+                                        var officePrice = selectedOption.data('office');
+                                         var pentHousePrice = selectedOption.data('penthouse');
+                                         
+
+                                        if (typeOfPlot == "Plot") {
+                                            var apartmentCom = ratePerSquareFit - appartmentPrice;
+                                            var totalCommissionDealer = unitsiz * apartmentCom;
+                                            $('#Dealer_percentage').val(apartmentCom);
+                                            $('#BookedByDealer').val(appartmentPrice);
+                                            $('#DealerShareTotal').val(totalCommissionDealer);
+
+                                        } else if (typeOfPlot == "Office") {
+                                            var officeCom = ratePerSquareFit - officePrice;
+                                            var totalCommissionDealer = unitsiz * officeCom;
+                                            $('#Dealer_percentage').val(officeCom);
+                                            $('#BookedByDealer').val(officePrice);
+                                            $('#DealerShareTotal').val(totalCommissionDealer);
+
+                                        }
+                                        else if (typeOfPlot == "Pent House") {
+                                            var penthouseCom = ratePerSquareFit - pentHousePrice;
+                                            var totalCommissionDealer = unitsiz * penthouseCom;
+                                            $('#Dealer_percentage').val(penthouseCom);
+                                            $('#BookedByDealer').val(pentHousePrice);
+                                            $('#DealerShareTotal').val(totalCommissionDealer);
+
+
+                                        } else if (typeOfPlot == "Shop") {
+                                            var ShopCom = ratePerSquareFit - shopPrice;
+                                            var totalCommissionDealer = unitsiz * ShopCom;
+                                            $('#Dealer_percentage').val(ShopCom);
+                                            $('#BookedByDealer').val(shopPrice);
+                                            $('#DealerShareTotal').val(totalCommissionDealer);
+
+
+                                        }
+
+                                    }
+
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+
+                        $("#dealer_name").autocomplete({
+
+                            source: function (request, response) {
+                                $.ajax({
+                                    url: "/Member/Index1",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: { Prefix: request.term },
+                                    success: function (data) {
+                                        response($.map(data, function (item) {
+
+
+                                            return { label: item.Company_Name, data: item, Company_Name: item.Company_Name, Dealer_ID: item.Dealer_ID, Percentage: item.Percentage };
+
+                                        }));
+                                    }
+                                });
+
+                            },
+
+                            select: function (event, ui) {
+                                $('#dealer_id').val(ui.item.Dealer_ID);
+                                $('#dealer_name').val(ui.item.Company_Name);
+                                $('#Dealer_percentage').val(ui.item.Percentage);
+
+
+                            }
+                        });
+
+                    });
+                </script>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Installments Details</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Booking</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" tabindex="0" id="" value="1" class="form-control" placeholder="no" name="" required readonly />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" tabindex="0" id="Booking" step="0.25" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="down_Payment()" name="Booking" required /> @*name="Down_Payment"*@
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="Down_payment_percentage" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="down_payment_percentage()" name="Down_payment_percentage" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_downpayment" class="form-control" value="0" placeholder="Total Monthly Installments" readonly name="total_downpayment" />
+                                </div>
+
+
+
+                                <script>
+
+                                    function down_payment_percentage() {
+                                        debugger
+
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var percentage = $('#Down_payment_percentage').val();
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Booking').val(total);
+                                        total_discount_amount = total;
+                                        $('#total_downpayment').val(total);
+                                       // $('#total_net').val(total + parseFloat(total_quaterly_installments_amount) + parseFloat(amount));
+                                        $('#total_net').val(total + parseFloat(total_quaterly_installments_amount));
+
+                                        if (percentage == "") {
+                                            $('#remaining_amount').val(amount);
+                                            // $('#total_net').val(0);
+                                        }
+                                    }
+
+
+                                    function down_Payment() {
+                                        debugger
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+
+                                        var amount = $('#Net_Price_Plot').val();
+                                        var extra_amount = $('#Booking').val();
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+                                        $('#Down_payment_percentage').val(total.toFixed(4));
+                                        $('#total_downpayment').val(extra_amount);
+                                       // $('#total_net').val(parseFloat(extra_amount) + parseFloat(total_quaterly_installments_amount) + parseFloat(amount));
+                                        var extra_amount_Of_Cost_unit_section = $('#Extra_Charge').val();
+                                        if (!extra_amount_Of_Cost_unit_section || extra_amount_Of_Cost_unit_section === "0") {
+                                            extra_amount_Of_Cost_unit_section = 0;
+                                        } else {
+                                            extra_amount_Of_Cost_unit_section = parseFloat(extra_amount_Of_Cost_unit_section);
+                                        }
+
+                                        var discountAmount = $('#Discount').val();
+                                        if (!discountAmount || discountAmount === "0") {
+                                            discountAmount = 0;
+                                        } else {
+                                            discountAmount = parseFloat(discountAmount);
+                                        }
+                                        var amountGross = parseFloat(amount);
+                                        var discount_amount = parseFloat(discount_amount);
+                                        var priceAmountGross1 = (amountGross - discount_amount) + extra_amount_Of_Cost_unit_section;
+                                        $('#total_net').val(
+                                            parseFloat(extra_amount) +
+                                            parseFloat(total_quaterly_installments_amount)
+                                        );
+
+
+
+
+
+                                        if (extra_amount == "") {
+                                            $('#remaining_amount').val(amount);
+                                            $('#total_net').val(0);
+                                        }
+
+
+                                      
+
+                                    }
+                                </script>
+
+
+
+
+
+
+
+
+                                @*<div class="form-group col-3 float-left" style="margin-top:30px">
+
+            <label class="_33fw587 NveTX4Z ">Quarterly installment<input type="checkbox" id="quaterly" onclick="quaterly1()"><span class="J8BZ6cq" style="margin-left:10px;margin-top:3px"></span></label>
+        </div>*@
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Quarterly installment</label>
+                                </div>
+                                @*<script>
+            function quaterly1() {
+                if (document.getElementById('quaterly').checked == true) {
+
+                    document.getElementById('no_of_quaterly_installments').disabled = false;
+                    document.getElementById('Single_quaterly_Installment').disabled = false;
+                    document.getElementById('single_quaterly_percentage').disabled = false;
+
+                } else if (document.getElementById('quaterly').checked == false) {
+                    document.getElementById('no_of_quaterly_installments').disabled = true;
+                    $('#no_of_quaterly_installments').val(0);
+                    document.getElementById('Single_quaterly_Installment').disabled = true;
+                    $('#Single_quaterly_Installment').val(0);
+                    document.getElementById('single_quaterly_percentage').disabled = true;
+                    $('#single_quaterly_percentage').val(0);
+                    $('#total_quaterly_installments_amount').val(0);
+
+                    var confirmation_t = $('#confirmation_t').val();
+                    if (confirmation_t == "") { confirmation_t = 0; }
+                    var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                    if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+                    var downpayment_amount = $('#total_downpayment').val();
+                    if (downpayment_amount == "") { downpayment_amount = 0; }
+                    var allocation_t = $('#allocation_t').val();
+                    if (allocation_t == "") { allocation_t = 0; }
+                    $('#total_net').val(parseFloat(downpayment_amount) + parseFloat(allocation_t) + parseFloat(confirmation_t) + parseFloat(total_quaterly_installments_amount));
+                }
+
+            }
+        </script>*@
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="NoOfQuaterly" value="0" onkeyup="no_of_quaterly()" class="form-control" placeholder="no" name="NoOfQuaterly" required /> @*name="no_of_quaterly_installments"*@
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Quatlerly_installment" class="form-control" onkeyup="quaterly_amount()" value="0" placeholder="Single_quaterly_Installment" name="Quatlerly_installment" required /> @*name="Single_quaterly_Installment"*@
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="single_quaterly_percentage" class="form-control" value="0" onkeyup="quaterly_per()" placeholder="single_quaterly_percentage" name="single_quaterly_percentage" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_quaterly_installments_amount" class="form-control" value="0" onkeyup="quaterly_total()" placeholder="total_quaterly_installments_amount" disabled name="total_quaterly_installments_amount" required />
+                                </div>
+                                <script>
+                                    function no_of_quaterly()
+                                    {
+
+
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+
+
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_quaterly_percentage').val();
+                                        var no_of_installment = $('#NoOfQuaterly').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Quatlerly_installment').val(total);
+                                        var total_quaterly_installments_amount = total * no_of_installment;
+                                        $('#total_quaterly_installments_amount').val(total_quaterly_installments_amount);
+
+                                        $('#total_net').val(total_quaterly_installments_amount + parseFloat(total_downpayment));
+
+
+                                    }
+                                    function quaterly_amount()
+                                    {
+                                        debugger
+
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+
+
+
+                                        var no_of_installment = $('#NoOfQuaterly').val();
+                                        var amount = $('#remaining_amount').val();
+                                        var extra_amount = $('#Quatlerly_installment').val();
+                                        
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+
+                                        var total_quaterly_installments_amount = extra_amount * no_of_installment;
+                                        $('#single_quaterly_percentage').val(total.toFixed(4));
+                                        //$('#total_net').val(total_quaterly_installments_amount + parseFloat(total_downpayment));
+
+                                        var totalAmount = (parseFloat(total_quaterly_installments_amount) + parseFloat(total_downpayment));
+                                        $('#total_net').val(totalAmount);
+
+                                        $('#total_quaterly_installments_amount').val(total_quaterly_installments_amount);
+                                    }
+                                    function quaterly_per() {
+
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+
+
+
+                                        var amount = $('#remaining_amount').val();
+                                        var percentage = $('#single_quaterly_percentage').val();
+                                        var no_of_installment = $('#NoOfQuaterly').val();
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+
+
+                                        $('#Quatlerly_installment').val(total);
+                                        var total_quaterly_installments_amount = total * no_of_installment;
+                                        $('#total_quaterly_installments_amount').val(total_quaterly_installments_amount);
+
+                                        $('#total_net').val(total_quaterly_installments_amount + parseFloat(total_downpayment));
+
+                                    }
+
+                                </script>
+                                @*//Price Adjusment*@
+
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Possession Charges</label>
+
+                                </div>
+                                <div class="form-group col-1 float-left">
+                                    <label for="inputName">#<span style="color:red">*</span></label>
+                                    <input type="number" id="" value="1" readonly class="form-control" placeholder="no" name="" required />
+                                </div>
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">(Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="Pocession_Payment" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="amount()" name="Pocession" required />
+                                </div>
+                                <div class="form-group col-2 float-left">
+                                    <label for="inputName">(%):<span style="color:red">*</span></label>
+                                    <input type="text" id="Pocession_payment_percentage" class="form-control" value="0" placeholder="Single Monthly Installments" onkeyup="percentage()" name="Pocession_payment_percentage" required />
+                                </div>
+
+                                <div class="form-group col-3 float-left">
+                                    <label for="inputName">Total (Amount):<span style="color:red">*</span></label>
+                                    <input type="number" id="total_pocession" class="form-control" value="0" placeholder="Total Monthly Installments" name="total_pocession" required />
+                                </div>
+
+                                <script>
+
+                                    function percentage() {
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+
+
+                                        var amount = $('#Net_Price_Plot').val();
+
+
+                                        var percentage = $('#Pocession_payment_percentage').val();
+
+
+
+                                        var total = parseFloat(amount) * parseFloat(percentage) / 100;
+                                        $('#Pocession_Payment').val(total);
+                                        $('#total_pocession').val(total);
+                                        if (percentage == "") { }
+                                        else {
+                                            $('#total_net').val(parseFloat(total) + parseFloat(total_downpayment) + parseFloat(total_quaterly_installments_amount));
+                                        }
+
+
+                                    }
+                                    function amount() {
+                                        debugger
+                                        var total_quaterly_installments_amount = $('#total_quaterly_installments_amount').val();
+                                        if (total_quaterly_installments_amount == "") { total_quaterly_installments_amount = 0; }
+
+                                        var total_downpayment = $('#total_downpayment').val();
+                                        if (total_downpayment == "") { total_downpayment = 0; }
+
+                                        var amount = $('#Net_Price_Plot').val();
+
+
+
+                                        var extra_amount = $('#Pocession_Payment').val();
+
+                                        var total = (parseFloat(extra_amount) / parseFloat(amount)) * 100;
+                                        if (extra_amount == "") { }
+                                        else { $('#total_net').val(parseFloat(extra_amount) + parseFloat(total_downpayment) + parseFloat(total_quaterly_installments_amount)); }
+
+                                        $('#total_pocession').val(extra_amount);
+                                        $('#Pocession_payment_percentage').val(total.toFixed(4));
+                                    }
+                                </script>
+                                @*PRICE ADJUSMENT*@
+
+
+                                <div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Total Amount Payable:</label>
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">&nbsp;</label>
+                                    <input type="text" id="total_net" class="form-control" value="0" placeholder="Total" name="net_total" readonly required>
+                                    <p style="color:red; display:none" id="showw"> Total Amount Payable and Net Price Of Unit:(Amount) should be same</p>
+                                </div>
+
+                                @*price different*@
+
+                                @*<div class="form-group col-3 float-left" style="margin-top:30px">
+                                    <label for="inputName">Price Difference:</label>
+                                </div>
+                                <div class="form-group col-4 float-left">
+                                    <label for="inputName">&nbsp;</label>
+                                    <input type="text" id="PriceDifferenceId" class="form-control" value="0" placeholder="Price Difference" name="PriceDifferenceId" readonly required>
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6" style="
+    align-items: center;
+">
+                        <button type="button" id="type" onclick="sub()" class="btn btn-success float-right" style="
+    margin-bottom: 10%;
+    margin-top: 3%;
+">
+                            Book new Registration
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script>
+
+        function sub() {
+            document.getElementById('type').setAttribute('type', 'button');
+            var first = parseFloat($('#total_net').val());
+            var second = parseFloat($('#remaining_amount').val());
+
+
+            if (reg_no_chk == true) {
+                if (confirm("Ref# is already exist! Would you like to continue?") == true) {
+                    document.getElementById('type').setAttribute('type', 'submit');
+                } else {
+
+                }
+            }
+            else if (first == second) {
+                var dialog = confirm("are you sure you want to register?");
+                if (dialog) {
+                    document.getElementById('type').setAttribute('type', 'submit');
+                }
+
+
+
+            }
+
+            else {
+                document.getElementById('showw').style.display = 'block';
+                document.getElementById('show').style.display = 'block';
+            }
+
+        }
+    </script>
+}

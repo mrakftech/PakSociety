@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Society.Data.Payment_Plan>
+@{
+    ViewBag.Title = "Member_Report";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Member List</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Member List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 20%">Member Name</th>
+                                    <th style="width: 10%">Date</th>
+                                    <th style="width: 10%">Phone Number</th>
+                                    <th style="width: 10%">CNIC</th>
+                                    <th style="width: 10%">Unit Price</th>
+                                    <th style="width: 10%">Total Paid</th>
+                                    <th style="width: 10%">Balance</th>
+                                    <th style="width: 10%">Unit Number</th>
+                                    <th style="width: 10%">Size</th>
+                                    <th style="width: 10%">Status</th>
+                                    <th style="width: 10%">Dealer</th>
+                                    <th style="width: 40%">Address</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;}
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@x.Plot.Member.Applicant_Name</td>
+                                    <td>@x.Plot.Member.Application_Date.ToString("dd-MM-yyyy")</td>
+                                    <td>@x.Plot.Member.Cell_No</td>
+                                    <td>@x.Plot.Member.CNIC</td>
+
+                                    <td>@x.Net_Price_Plot</td>
+                                    <td>@x.Installments.Sum(o => o.Monthly_Paid)</td>
+                                    @{ var data = x.Installments.Sum(o => o.Amount_Paid) - x.Installments.Sum(o => o.Monthly_Paid);}
+                                    <td>@data</td>
+                                    <td>@x.Plot.Plot_No</td>
+                                    <td>@x.Plot.Installment_Plan.Size</td>
+                                    @if (x.Plot.Member.Status == true)
+                                    {
+
+
+
+                                        <td><span class="badge badge-success">Active</span></td>
+
+
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="badge badge-warning">Canceled</span>
+                                            @if (x.Plot.Member.Refund_Check == true)
+                                            {
+
+
+                                                <span class="badge badge-warning">Refund</span>
+
+                                            }
+                                            else
+                                            {<span class="badge badge-warning">Transfer</span>}
+                                        </td>
+                                    }
+                                    <td>@x.Plot.Member.Dealer_Name</td>
+                                    <td>@x.Plot.Member.Permenent_Postel_Address</td>
+
+                                </tr>
+                                count = count + 1;
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+                                }

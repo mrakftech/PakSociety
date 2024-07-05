@@ -1,0 +1,358 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "print";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px" class="divToPrint">
+        <div class="content-wrapper" style="background-color:white">
+
+            <div class="row print-container" style="font-size:20px">
+
+                <div style="margin-top:50px">
+                    <img style="height:80px" src="~/images/logo/Lake View Heights Logo-01.png" />
+                    <div class="float-right" style="margin-left:10px">
+                        <h2 style="font-weight:600;font-size:x-large">Lake View Heights</h2>
+                        <h2 style="font-weight: 400; font-size: x-large">Registration Details (REG-@Model.data.Plot.Reg_No)</h2>
+                    </div>
+
+                </div>
+                <div class="col-12" style="border-bottom: 1px solid #000000; text-align: center;margin-top:20px "></div>
+                <div class="col-md-12">
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="row" style="margin-top:30px;height:30px">
+                                <div class="col-md-6 bg-black">
+                                    <div> <span class="fw-bolder"><b>Member Details</b></span> </div>
+                                </div>
+                                <div class="col-md-6 bg-black">
+                                    <div> <span class="fw-bolder"><b></b></span> </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">REGISTRATION NO:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Reg_No</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">UNIT TYPE:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Block</b></div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">UNIT NO</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Installment_Plan.Plan_Name</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">UNIT SIZE:-</span>  </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Installment_Plan.Size</b></div>
+
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">Floor</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Street</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">TYPE</span>  </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b></b></div>
+                            </div>
+
+
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-6 bg-black">
+                                    <div> <span class="fw-bolder"><b>File Details</b></span> </div>
+                                </div>
+                                <div class="col-md-6 bg-black">
+                                    <div> <span class="fw-bolder"><b>Financial Details</b></span> </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">CNIC:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Member.CNIC</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">NAME:-</span>  </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Member.Applicant_Start_Text  @Model.data.Plot.Member.Applicant_Name </b></div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">SO/DO/WO:-</span> </div>
+                                </div>
+
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>  @Model.data.Plot.Member.Father_Husband_Name </b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">MEMBERSHIP#:-</span> </div>
+                                </div>
+
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>  @Model.data.Plot.Member.MemberShipNumber </b></div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">PHONE NO:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Member.Cell_No</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">NOMINEE NAME:-</span>  </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>  @Model.data.Plot.Member.Nominee_Name </b></div>
+                            </div>
+
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">ADDRESS:-</span> </div>
+                                </div>
+
+                                <div class="col-md-10" style="border-bottom: 1px solid #dedede; text-align: center "><b>  @Model.data.Plot.Member.Permenent_Postel_Address </b></div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-4">
+                                    <div> <span class="fw-bolder"><b><u>PAYMENT DETAIL</u></b>:-</span> </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">BOOKING DATE:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Plot.Date.ToString("dd-MM-yyyy")</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">UNIT PRICE:-</span>  </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Gross_Price_Plot.ToString("n0")</b></div>
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">EXTRA CHARGE:-</span> </div>
+                                </div>
+                                @if (Model.data.Extra_Charge == null)
+                                {
+                                    <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>0.00</b></div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Extra_Charge.ToString("n0")</b></div>
+                                }
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">DISCOUNT:-</span>  </div>
+                                </div>
+                                @if (Model.data.Discount == null)
+                                {
+                                    <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>0.00</b></div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Discount.ToString("n0")</b></div>
+                                }
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">NET PRICE:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.data.Net_Price_Plot.ToString("n0")</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">DEVELOPMENT CHARGES:-</span>  </div>
+                                </div>
+
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>0.00</b></div>
+
+
+                            </div>
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">PAID  AMOUNT:-</span> </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.paid_amount.ToString("n0")</b></div>
+                                <div class="col-md-2">
+                                    <div> <span class="fw-bolder">REMAINING AMOUNT:-</span>  </div>
+                                </div>
+                                <div class="col-md-4" style="border-bottom: 1px solid #dedede; text-align: center "><b>@Model.remaining_amount.ToString("n0")</b></div>
+                            </div>
+
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-6 bg-black">
+                                    <div> <span class="fw-bolder"><b>Installment Details</b></span> </div>
+                                </div>
+                                <div class="col-md-6 bg-black">
+                                    <div> <span class="fw-bolder"><b></b></span> </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class=" table  border border-dark text-black" style="border-right-color:black;margin-top:20px">
+                            <thead class="text-center">
+                                <tr style="line-height:0.5">
+                                    <th scope="col" class="border border-dark text-black" style="width:5%">#.</th>
+                                    <th scope="col" class="border border-dark text-black" style="width:12%">Due Date</th>
+                                    <th scope="col" class="border border-dark text-black" style="width: 13%">Due Amount</th>
+                                    <th scope="col" class="border border-dark text-black" style="width: 15%">Paid Date</th>
+                                    <th scope="col" class="border border-dark text-black" style="width: 15%">Paid Amount</th>
+                                    <th scope="col" class="border border-dark text-black" style="width: 15%">Receipt No</th>
+                                    <th scope="col" class="border border-dark text-black" style="width:22%">Narration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (Installment i in Model.installment_detail)
+                                {
+                                    double line_height;
+                                    if (i.Sub_Installment.Count > 1) { line_height = 0.9; }
+                                    else
+                                    {
+                                        line_height = 0.4;
+                                    }
+                                    <tr style="line-height:@line_height">
+                                        <td class="border border-dark text-black">@i.Installment_No</td>
+                                        <td class="border border-dark text-black">@i.Payment_Month.ToString("dd-MM-yyyy")</td>
+
+
+                                        @{double amount = (double)i.Amount_Paid;
+                                            double amount1 = (double)i.Monthly_Paid;}
+                                        <td class="border border-dark text-black">@amount.ToString("n0")</td>
+                                        <td class="border border-dark text-black">
+                                            @{foreach (Sub_Installment a in i.Sub_Installment.ToList())
+                                                {
+                                                    <u>@a.Date.ToString("dd-MM-yyyy")</u><br />
+
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="border border-dark text-black">
+                                            @{foreach (Sub_Installment a in i.Sub_Installment.ToList())
+                                                {
+                                                    double amount2 = (double)a.Amount;
+                                                    <u>@amount2.ToString("n0")</u><br />
+
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="border border-dark text-black">
+                                            @{foreach (Sub_Installment a in i.Sub_Installment.ToList())
+                                                {
+
+                                                    <u>@a.Receipt_No</u><br />
+
+                                                }
+                                            }
+
+                                        </td>
+                                        <td class="border border-dark text-black">@i.Comment</td>
+
+                                    </tr>
+
+                                }
+
+
+                                @{double first = Model.data.Net_Price_Plot;
+                                    double second = Model.paid_amount;
+                                    double third = first - second;}
+                                @{int count = 1;
+                                    double sum = 0;
+                                }
+
+
+                                @if (ViewBag.development.Count > 0)
+                                {
+                                    <tr style="line-height:0.5">
+                                        <th scope="col" class="border border-dark text-black">#.</th>
+
+                                        <th scope="col" class="border border-dark text-black">Paid Date</th>
+                                        <th scope="col" class="border border-dark text-black">Paid Amount</th>
+
+                                        <th scope="col" class="border border-dark text-black">Narration</th>
+                                        <th scope="col" class="border border-dark text-black">Receipt No</th>
+                                        <th scope="col" class="border border-dark text-black"></th>
+                                        <th scope="col" class="border border-dark text-black">Development Charges</th>
+                                    </tr>
+
+                                    foreach (Development_Charges d in ViewBag.development)
+                                    {
+
+
+                                        <tr style="background-color:gray;line-height:0.8">
+                                            <td class="border border-dark text-black">@count</td>
+
+                                            <td class="border border-dark text-black">@d.Paid_Date.ToString("dd-MM-yyyy")</td>
+
+                                            <td class="border border-dark text-black">@d.Amount.ToString("n0")</td>
+                                            <td class="border border-dark text-black">@d.Narration</td>
+                                            <td class="border border-dark text-black">@d.receipt_No</td>
+                                            <td class="border border-dark text-black">-</td>
+                                            <td class="border border-dark text-black">Development Charges</td>
+                                        </tr>
+                                        sum = sum + d.Amount;
+                                        count = count + 1;
+                                    }
+
+
+
+                                }
+                                <tr style="background-color:gray;line-height:0.8">
+                                    <td colspan="2" class="border border-dark text-black font-weight-bold ">Total Due</td>
+                                    <td class="border border-dark text-black font-weight-bold ">@Model.data.Net_Price_Plot.ToString("n0")</td>
+                                    <td class="border border-dark text-black font-weight-bold ">Total Paid</td>
+                                    <td class="border border-dark text-black font-weight-bold ">@Model.paid_amount.ToString("n0")</td>
+                                    <td class="border border-dark text-black font-weight-bold ">Balance</td>
+                                    <td class="border border-dark text-black font-weight-bold">@third.ToString("n0")</td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <style>
+                @@media print {
+                    body * {
+                        visibility: hidden;
+                    }
+
+                    .divToPrint, .divToPrint * {
+                        visibility: visible;
+                    }
+                }
+            </style>
+
+        </div>
+
+    </div>
+
+    <script>window.addEventListener("load", window.print());</script>
+
+    <script>
+
+
+
+        var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+        var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        function inWords(num) {
+            if ((num = num.toString()).length > 9) return 'overflow';
+            n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return; var str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
+            return str;
+        }
+        $(document).ready(function () {
+            $('#AmountInWords').html(" " + inWords() + "only"); //inWords(your amount)
+        })
+    </script>
+}
+

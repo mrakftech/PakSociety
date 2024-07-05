@@ -1,0 +1,68 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "Trial_Balance";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Trail Balance</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Reports</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="row">
+
+
+                <div class="card col-12">
+                    <div class="card-body p-1">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+
+                                    <td colspan="2" rowspan="2" class="text-center">
+                                        <img src="~/images//logo/Lake View Heights Logo-01.png" alt="Logo" style="width:100px;height:auto;">
+                                    </td>
+                                    <td colspan="2" class="text-center"><h2></h2></td>
+                                </tr>
+                                <tr>
+                                    <td><h4>Trail Balance Report</h4></td>
+                                    <td>@DateTime.Now</td>
+                                </tr>
+                                <tr>
+                                    <th>Element Account</th>
+                                    <th>Control Account</th>
+                                    <th>Ledger Account</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Ledger_Account l in Model.ledger_list)
+                                {
+                                    <tr><th>@l.Element_Account.Account_Title</th><th>@l.Control_Account.Control_Account_Title</th><th>@l.Ledger_Account_Title</th><th>@l.Balance</th></tr>
+
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+}

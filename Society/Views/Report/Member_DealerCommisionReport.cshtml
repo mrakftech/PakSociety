@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Society.Data.dealer_data>
+@{
+    ViewBag.Title = "Member_Report";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">Dealer Commission Report</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">Member List</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 10%">Member Name</th>
+                                    <th style="width: 10%">Dealer</th>
+                                    <th style="width: 10%">Unit Number</th>
+                                    <th style="width: 10%">Unit Type</th>
+                                    <th style="width: 10%">Rebate</th>
+                                </tr>
+                            </thead>
+                            @{ int count = 1;
+                                double? totalSalePrice = 0;
+                            }
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@x.Member_Name</td>
+                                    <td>@x.Dealer_Name</td>
+                                    <td>@x.Unit__</td>
+                                    <td>@x.Type</td>
+                                    <td>@x.Sale_Price</td>
+
+                                </tr>
+                                count = count + 1;
+                                totalSalePrice += x.Sale_Price;
+                            }
+
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" style="text-align:right"><strong>Total:</strong></td>
+                                    <td><strong>@totalSalePrice</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}

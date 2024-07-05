@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Society.Data.Plot_History>
+
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px">
+        <div class="content-wrapper" style="background-color:white">
+            <form>
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0">SUB Plot History</h1>
+                            </div><!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active">SUB Plot History</li>
+                                </ol>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <!-- Content Wrapper. Contains page content -->
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+                <!-- ./start table-------------------------------------------------------------------------------------------------------------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable with default features</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects" id="example1">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 15%">Member Name</th>
+                                    <th style="width: 12%">Reg Date</th>
+                                    <th style="width: 12%">CNIC</th>
+                                    <th style="width: 12%">Cell No</th>
+                                    <th style="width: 15%">Address</th>
+                                    <th style="width: 15%">Status</th>
+
+                                </tr>
+                            </thead>
+
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@x.History_No</td>
+                                    <td>@x.Name</td>
+                                    @if (x.H_Date != null)
+                                    {
+
+                                        DateTime d = (DateTime)x.H_Date;
+                                        <td>@d.ToString("dd-MM-yyyy")</td>
+                                    }
+
+                                    <td>@x.CNIC</td>
+
+
+
+
+                                    <td>@x.Phone_Number</td>
+                                    <td>@x.Address</td>
+                                    @if (x.Status == true)
+                                    {
+
+                                        <td><span class="badge badge-success">Active</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="badge badge-warning">Canceled</span></td>
+                                    }
+
+
+
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+
+
+

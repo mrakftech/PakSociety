@@ -1,0 +1,566 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "Add_Bank_Rec_Voucher";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key==false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>@Model.heading</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Vouchers</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">@Model.heading</h3>
+                        </div>
+                        <div class="card-body">
+
+
+                            <div class="form-group col-md-3 float-left">
+                                <label>Voucher Number</label>
+
+                                <input type='text' id='txtVoucherNumber' name='txtVoucherNumber' class='form-control' value="@(Model.getreciept_vouchersinfo.VoucherNum + 1)" disabled>
+
+                            </div>
+                            <div class="form-group col-md-3 float-left">
+                                <label>Voucher Date</label>
+                                <input type="date" id='txtVoucherDate' name='txtVoucherDate' class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-3 float-left" @Model.display>
+                                <label>Cheque Number</label>
+                                <input type="text" id='txtChequeNumber' name='txtChequeNumber' class="form-control">
+                            </div>
+                            <div class="form-group col-md-3 float-left" @Model.display>
+                                <label>Cheque Date</label>
+                                <input type="date" id="txtChequeDate" name="txtChequeDate" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3 float-left" @Model.display>
+                                <label>Drown On bank</label>
+                                <input id="txtChequeStatus" name="txtChequeStatus" class="form-control">
+
+
+                            </div>
+                          
+
+                            <div class="form-group col-md-6 float-left">
+                                <label>Niration</label>
+                                <input type="text" id="txtComments" name="txtComments" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3 float-left">
+                                <label>Paid Amount</label>
+                                <input type="text" id="amount" name="amount" onkeyup="amount()" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function amount() {
+
+                            var a = $('#amount').val();
+                            $('#txtAmount_0').val(a);
+                        }
+                    </script>
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Accounts</h3>
+                        </div>
+                        <table class="table" id="tblRowMain">
+                            <thead>
+                                <tr>
+                                    <th style="width:  5%;">D/C</th>
+                                    <th style="width: 35%;">Account Code</th>
+                                    <th style="width: 40%;">Particulars</th>
+                                    <th style="width: 15%;">Amount</th>
+                                    <th style="width: 10%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="tblRow_0">
+                                    <td>
+                                        <select class="form-control-sm">
+                                            @if (Model.type == "BRV" || Model.type == "CRV")
+                                            {
+                                                <option value="D">D</option>
+}
+                                            else if (Model.type == "JV")
+                                            {
+
+
+<option value="D">D</option>
+
+
+<option value="C">C</option>
+                }
+                else
+                {
+                                        <option value="C">C</option>
+                }
+
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <select class="form-control" id="cmbLedgerAcc0" name="cmbLedgerAcc0"
+                                                        onChange="getLedgerAcc(0)">
+                                                    <option value="-1">Select Ledger Account</option>
+                                                    @foreach (Ledger_Account x in Model.getledgeraccountinfo1)
+                                                    {
+                                                        <option value='@x.Element_Account_Code.@x.Control_Account_Code.@x.Ledger_Account_Code'>@x.Ledger_Account_Title</option>
+                                                    }
+
+
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label>Acc Code:</label> <span id="lblAccCode_0">0.0.0</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <textarea style="width: 100%;" class="form-control"
+                                                  placeholder="Enter Comments"></textarea>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" class="form-control" id="txtAmount_0"
+                                               onchange="getDebitAmount()" readonly/>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success mb-1 btnToAddRow" onclick="addnewrow('C', '@Model.type')">
+                                            <i class="fa fa-plus" title="Add New Row"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td style="width: 30%;">
+                                                    <label>Total Credit: </label>
+                                                    <label id="lblCreditAmount"></label>
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    <label>Total Debit:</label>
+                                                    <label id="lblDebitAmount"></label>
+                                                </td>
+                                                <td style="width: 40%;">
+                                                    <label>Total Difference:</label>
+                                                    <label id="lblTotalAmount"></label>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <script>
+                        var counter = 1;
+
+                        function addnewrow(CorD,type) {
+                    
+                            var x = document.getElementById("tblRowMain").rows.length;
+                            for (var i = 1; i < x - 1; i++) {
+                                var r = document.getElementById("tblRowMain").rows[i].cells[4].getElementsByClassName(
+                                    "btnToAddRow")[0];
+                                if (typeof r != 'undefined') {
+                                    r.style.display = "none";
+                                }
+                                r = document.getElementById("tblRowMain").rows[i].cells[4].getElementsByClassName(
+                                    "btnToRemoveRow")[0];
+                                if (typeof r != 'undefined') {
+                                    r.style.display = "none";
+                                }
+                            }
+                            var dataID = "";
+                            if (CorD == 'D') {
+                                dataID = "data-CreditID = " + (counter - 1);
+                            }
+                            var cols = "<tr id='tblRow_" + counter + "' " + dataID + ">";
+                            if (CorD == 'C') {
+                                if (type == "BRV" || type == "CRV") {
+                                    cols +=
+                                        '<td><select class="form-control-sm"><option value="C" selected>C</option></select></td>';
+                                }
+                                else if (type == "JV") {
+                                    cols +=
+                                        '<td><select class="form-control-sm"><option value="D" selected>D</option><option value="C" >C</option></select></td>';
+                                }
+                                else {
+                                    cols +=
+                                    '<td><select class="form-control-sm"><option value="D" selected>D</option></select></td>';}
+                               
+                            } else {
+                               
+                                cols +=
+                                    '<td><select class="form-control-sm"><option value="C">C</option><option value="D" selected>D</option></select></td>';
+                            }
+                            cols +=
+                                '<td><div class="row"><div class="col-6"><select class="form-control" id="cmbLedgerAcc' +
+                                counter + '" name="cmbLedgerAcc' + counter + '" onChange="getLedgerAcc(' + counter +
+                                ')"> <option value = "-1" > Select Ledger Account </option>';
+
+                            cols += '@foreach (Ledger_Account x in Model.getledgeraccountinfo)
+                            {
+                                                     <option value="@x.Element_Account_Code.@x.Control_Account_Code.@x.Ledger_Account_Code">@x.Ledger_Account_Title</option>}';
+
+
+
+                                cols +=
+                            '</select> </div> <div class = "col-6"> <label> Acc Code: </label> <span id="lblAccCode_' +
+                                counter + '">0.0.0</span></div> </div></td>';
+                            cols +=
+                                '<td > <textarea style = "width: 100%;" class = "form-control" placeholder="Enter Comments"> </textarea></td>';
+                            if (CorD == 'D') {
+                                id = counter - 1;
+                                var val = $('#txtAmount_' + id).val();
+                                cols +=
+                                    '<td><input type = "number" min = "0" class = "form-control" onchange="getDebitAmount()" id=\"txtAmount_' +
+                                    counter + '\" value=\"' + val + '\"/> </td> ';
+                            } else {
+                                cols +=
+                                    '<td><input type = "number" min = "0" onchange="getDebitAmount()" class = "form-control" id=\"txtAmount_' +
+                                    counter + '\" value="0"/> </td> ';
+                            }
+                            cols +=
+                                '<td><button class = "btn btn-sm btn-success mb-1 btnToAddRow" onclick="addnewrow(\'C\')"> <i class = "fa fa-plus" title = "Add New Row"> </i></button>';
+                            cols +=
+                                '<button class = "btn btn-sm btn-danger btnToRemoveRow" onclick="removeRow(' + counter +
+                                ')"> <i class = "fa fa-trash" title = "Delete Row"> </i></button></td>';
+                            cols += '</tr>';
+                            $("table#tblRowMain").append(cols);
+                            counter++;
+                            var Deb = 0,
+                                Cer = 0,
+                                total = 0;
+
+                            var x = document.getElementById("tblRowMain").rows.length;
+                            for (var i = 1; i < x - 1; i++) {
+                                r = document.getElementById("tblRowMain").rows[i].cells[0].getElementsByTagName(
+                                    "select")[0];
+                                if (typeof r != 'undefined') {
+                                    var type = r.value;
+                                    amnt = document.getElementById("tblRowMain").rows[i].cells[3]
+                                        .getElementsByTagName(
+                                            "input")[0];
+                                    if (typeof amnt != 'undefined') {
+                                        console.log(amnt.value);
+                                        if (type == 'C') {
+                                            Cer += Number(amnt.value);
+                                        } else if (type == 'D') {
+                                            Deb += Number(amnt.value);
+                                        }
+                                    }
+                                }
+                            }
+                            total = Number(Cer) - Number(Deb);
+                            if (total < 0) total = total * -1;
+                            $('#lblCreditAmount').html('Rs. ' + Cer);
+                            $('#lblDebitAmount').html('Rs. ' + Deb);
+                            $('#lblTotalAmount').html('Rs. ' + total);
+                        }
+
+                        function removeRow(id) {
+
+                            var lid = id - 1;
+                            $('#tblRow_' + id).remove();
+                            counter -= 1;
+                            var x = document.getElementById("tblRow_" + lid).cells[4].getElementsByClassName(
+                                "btnToAddRow")[
+                                0];
+                            if (typeof x != 'undefined') {
+                                x.style.display = "block";
+                            }
+                            if (id > 0) {
+                                x = document.getElementById("tblRow_" + lid).cells[4].getElementsByClassName(
+                                    "btnToRemoveRow")[0];
+                                if (typeof x != 'undefined') {
+                                    x.style.display = "block";
+                                }
+                            }
+                            var Deb = 0,
+                                Cer = 0,
+                                total = 0;
+
+                            var x = document.getElementById("tblRowMain").rows.length;
+                            for (var i = 1; i < x - 1; i++) {
+                                r = document.getElementById("tblRowMain").rows[i].cells[0].getElementsByTagName(
+                                    "select")[0];
+                                if (typeof r != 'undefined') {
+                                    var type = r.value;
+                                    amnt = document.getElementById("tblRowMain").rows[i].cells[3]
+                                        .getElementsByTagName(
+                                            "input")[0];
+                                    if (typeof amnt != 'undefined') {
+                                        console.log(amnt.value);
+                                        if (type == 'C') {
+                                            Cer += Number(amnt.value);
+                                        } else if (type == 'D') {
+                                            Deb += Number(amnt.value);
+                                        }
+                                    }
+                                }
+                            }
+                            total = Number(Cer) - Number(Deb);
+                            if (total < 0) total = total * -1;
+                            $('#lblCreditAmount').html('Rs. ' + Cer);
+                            $('#lblDebitAmount').html('Rs. ' + Deb);
+                            $('#lblTotalAmount').html('Rs. ' + total);
+                        }
+
+                        function getDebitAmount() {
+                            var amnt = document.getElementById("tblRowMain").rows[counter].ceModelodelodelodelodells[3]
+                                .getElementsByTagName(
+                                    "input")[0];
+                            var r = document.getElementById("tblRowMain").rows[counter].cells[0].getElementsByTagName(
+                                "select")[0];
+                            if (amnt.value != '' && Number(amnt.value) > 0 && r.value == 'C') {
+                                var Deb = 0,
+                                    Cer = 0,
+                                    total = 0;
+                                addnewrow('D');
+
+                                var x = document.getElementById("tblRowMain").rows.length;
+                                for (var i = 1; i < x - 1; i++) {
+                                    r = document.getElementById("tblRowMain").rows[i].cells[0].getElementsByTagName(
+                                        "select")[0];
+                                    if (typeof r != 'undefined') {
+                                        var type = r.value;
+                                        amnt = document.getElementById("tblRowMain").rows[i].cells[3]
+                                            .getElementsByTagName(
+                                                "input")[0];
+                                        if (typeof amnt != 'undefined') {
+                                            console.log(amnt.value);
+                                            if (type == 'C') {
+                                                Cer += Number(amnt.value);
+                                            } else if (type == 'D') {
+                                                Deb += Number(amnt.value);
+                                            }
+                                        }
+                                    }
+                                }
+                                total = Number(Cer) - Number(Deb);
+                                if (total < 0) total = total * -1;
+                                $('#lblCreditAmount').html('Rs. ' + Cer);
+                                $('#lblDebitAmount').html('Rs. ' + Deb);
+                                $('#lblTotalAmount').html('Rs. ' + total);
+                            }
+                        }
+
+                        function getElementAcc(c) {
+
+                            var eleID = $('#cmbElementAcc' + c + ' option:selected').val();
+                            if (eleID > -1) {
+                                var code = $('#lblAccCode_' + c).html();
+                                var newCode = eleID + ".";
+                                newCode += code.split('.')[1] + ".";
+                                newCode += code.split('.')[2];
+                                $('#lblAccCode_' + c).html(newCode);
+                            }
+                        }
+
+                        function getControlAcc(c) {
+
+                            var eleID = $('#cmbControlAcc' + c + ' option:selected').val();
+                            if (eleID > -1) {
+                                var code = $('#lblAccCode_' + c).html();
+                                var newCode = code.split('.')[0] + ".";
+                                newCode += eleID + ".";
+                                newCode += code.split('.')[2];
+                                $('#lblAccCode_' + c).html(newCode);
+                            }
+                        }
+
+                        function getLedgerAcc(c) {
+
+                            var eleID = $('#cmbLedgerAcc' + c + ' option:selected').val();
+                            if (eleID === '-1') {
+                                $('#lblAccCode_' + c).html("0.0.0");
+                            } else {
+                                $('#lblAccCode_' + c).html(eleID);
+                            }
+                            // if (eleID > -1) {
+                            //     var code = $('#lblAccCode_' + c).html();
+                            //     var newCode = code.split('.')[0] + ".";
+                            //     newCode += code.split('.')[1] + ".";
+                            //     newCode += eleID;
+                            //     $('#lblAccCode_' + c).html(newCode);
+                            // }
+                        }
+                        </script>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <input type="button" value="Create new Voucher" onclick="insertVoucherToDatabase()"
+                           class="btn btn-success float-right">
+                </div>
+            </div>
+            <script type="text/javascript">
+                function insertVoucherToDatabase() {
+                    
+
+
+                    var voucherNum = $.trim($('#txtVoucherNumber').val());
+                    var voucherDate = $.trim($('#txtVoucherDate').val());
+                    var tvtype = "@Model.type";
+                    var vcmnt = $('#txtComments').val();
+
+                    var chequeNum = '0';
+                    var chequeDate = '2020-12-21';
+                    var chequeStatus = 'NILL';
+                    var chequeType = 'NILL';
+                    if (tvtype == 'BRV' || tvtype == 'BPV') {
+                        chequeNum = $.trim($('#txtChequeNumber').val());
+                        chequeDate = $.trim($('#txtChequeDate').val());
+                        chequeStatus = $('#txtChequeStatus').val();
+                        chequeType = $('#txtChequeType').val();
+                    }
+                    var x = document.getElementById("tblRowMain").rows.length;
+                    var transection = [];
+
+                   if (voucherDate == '') {
+                        alert('Select Voucher Date First.');
+                        $('#txtVoucherDate').focus();
+                    } else if (chequeNum == '') {
+                        alert('Select Cheque Number First.');
+                        $('#txtChequeNumber').focus();
+                    } else if (chequeDate == '') {
+                        alert('Select Cheque Date First.');
+                        $('#txtChequeDate').focus();
+                    } else if (chequeStatus == '') {
+                        alert('Select Cheque Status First.');
+                        $('#txtChequeStatus').focus();
+                    } else if (chequeType == '') {
+                        alert('Select Cheque Type First.');
+                        $('#txtChequeType').focus();
+                    } else if (x <= 2) {
+                        alert('Insert atleast 1 transection record.');
+                        $('#cmbElementAcc0').focus();
+                    } else {
+                        var flag = true;
+                        var c = 0;
+                        for (var i = 1; i < x - 1; i++) {
+                            var row = document.getElementById("tblRowMain").rows[i];
+                            var tType = row.cells[0].getElementsByTagName("select")[0].value;
+                            //alert($('#cmbLedgerAcc' + c + " option:selected").val());
+                            var d = $('#cmbLedgerAcc' + c + " option:selected").val().split(".");
+                            var eAcc = d[0];
+                            var cAcc = d[1];
+                            var lAcc = d[2];
+                            //alert(eAcc + '\n' + cAcc + '\n' + lAcc);
+                            var cmnt = row.cells[2].getElementsByTagName("textarea")[0].value;
+                            var amnt = row.cells[3].getElementsByTagName("input")[0].value;
+                            if (eAcc == '-1') {
+                                alert("Select Element Account at Row : " + i);
+                                $('#cmbElementAcc' + c).focus();
+                                flag = false;
+                                break;
+                            } else if (cAcc == '-1') {
+                                alert("Select Control Account at Row : " + i);
+                                $('#cmbControlAcc' + c).focus();
+                                flag = false;
+                                break;
+                            } else if (lAcc == '-1') {
+                                alert("Select Ledger Account at Row : " + i);
+                                $('#cmbLedgerAcc' + c).focus();
+                                flag = false;
+                                break;
+                            } else if ($.trim(amnt) == '') {
+                                alert("Insert Amount at Row : " + i);
+                                flag = false;
+                                break;
+                            } else {
+                                var localArray = [tType, eAcc, cAcc, lAcc, cmnt, amnt];
+                                transection.push(localArray);
+                                c++;
+                               
+                            }
+                       }
+                   
+                       if (flag === true) {
+                           var sum = 0;
+                           var sum1 = 0;
+                           
+                          
+                           for (var i = 0; i < transection.length; i++) {
+                              
+                               if (transection[i][0] == "C") {
+                                   sum = sum + parseFloat( transection[i][5]);
+                                
+                               } else {
+                                   sum1 = sum1 + parseFloat( transection[i][5]);
+                               }
+                               }
+
+                           if (sum != sum1) { alert("Amount are not Equal"); }
+                           else {
+
+
+                               $.ajax({
+                                   url: '/Manage_Bank_Rec_Voucher/insert',
+                                   type: 'POST',
+                                   data: {
+
+
+
+                                       voucherNum: voucherNum,
+                                       voucherDate: voucherDate,
+                                       chequeNum: chequeNum,
+                                       chequeDate: chequeDate,
+                                       chequeStatus: chequeStatus,
+                                       chequeType: chequeType,
+                                       voucherComments: vcmnt,
+                                       transection: JSON.stringify(transection),
+                                       rType: "@Model.type"
+                                   },
+                                   success: function (data) {
+
+
+
+                                       if (data == 1) {
+                                           alert('Voucher Added Successfully.');
+                                           window.location.href = "/Manage_Bank_Rec_Voucher/voucherpreview?VoucherNum=" + voucherNum;
+
+                                           // window.location.href = "<?php //echo $goto?>";
+                                       } else {
+                                           $.alert('Something went wrong.');
+                                       }
+                                       return dataResult;
+                                   },
+                                   error: function () {
+
+                                   }
+                               });
+                           }
+                        }
+                    }
+                }
+            </script>
+        </section>
+
+    </div>
+}

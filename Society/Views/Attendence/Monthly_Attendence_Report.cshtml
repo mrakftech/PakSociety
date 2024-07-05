@@ -1,0 +1,262 @@
+﻿@using Society.Data;
+
+
+@model dynamic
+@{
+    ViewBag.Title = "Monthly_Attendence_Report";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee") { Response.Redirect("/Login/Login"); }
+else
+{
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Monthly Attendence</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-item active">Attendence</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Employee INFO </h3>
+                </div>
+
+                <div class="card-body">
+
+
+                    <div class="col-md-3 float-left">
+                        <label>Employee Name:</label>
+                        <span style="color:red">*</span>
+                        <select name="employe_id" id="employe_id" class="form-control"
+                                required>
+                            <option value="" selected disabled>Select</option>
+                            @foreach (Employee e in Model.emp_List)
+                            {
+                                <option value="@e.Employee_ID">@e.F_Name @e.L_Name</option>
+                            }
+
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>From Date:</label>
+                        <span style="color:red">*</span>
+                        <input type="date" placeholder="Control Account Code" name="fromdate"
+                               id="fromdate" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-3 float-left">
+                        <label>
+                            To Date:
+                            <span style="color:red">*</span>
+                        </label>
+
+                        <input type="date" placeholder="Control Account Code" name="todate"
+                               id="todate" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-2 float-left">
+                        <label> &nbsp;</label>
+                        <button class="btn btn-primary form-control" onclick="Filter()">
+                            Filter
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Monthly Attendence</h3>
+
+
+                </div>
+
+                <div class="card-body p-0" id="card">
+                    <table class="table table-striped projects" name="tb" id="example1">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">ID</th>
+                                <th style="width: 20%">Employee Name</th>
+                                <th style="width: 11%">In Time</th>
+                                <th style="width: 11%">Out Time</th>
+                                <th style="width: 15%">Attendence Date</th>
+                                <th style="width: 11%">Over Time</th>
+                                <th style="width: 12%">Shift</th>
+                                <th style="width: 12%">Status</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <script>
+
+            function PrintElem(elem) {
+
+                var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+                mywindow.document.write('<html><head><title>Attendence Report</title>');
+                mywindow.document.write('</head><body >');
+                mywindow.document.write('<h1>Attendence Report</h1>');
+                mywindow.document.write(document.getElementById(elem).innerHTML);
+                mywindow.document.write('</body></html>');
+
+                mywindow.document.close(); // necessary for IE >= 10
+                mywindow.focus(); // necessary for IE >= 10*/
+
+                mywindow.print();
+                //mywindow.close();
+
+                return true;
+            }
+            function Filter() {
+                var emp_id = $('#employe_id').val();
+                var fromdate = $('#fromdate').val();
+                var todate = $('#todate').val();
+                if (emp_id == null) {
+                    alert("select employee first");
+                    $('#employe_id').focus();
+                } else if (fromdate == "") {
+                    alert("select fromdate first");
+                    $('#fromdate').focus();
+                } else if (todate == "") {
+                    alert("select todate first");
+                    $('#todate').focus();
+                } else {
+                    $.ajax({
+                        url: '/Attendence/Monthly_Attendence_Report_json',
+                        type: 'POST',
+                        data: {
+                            emp_id: emp_id,
+                            fromdate: fromdate,
+                            todate: todate
+
+                        },
+                        cache: false,
+                        success: function (data) {
+
+                            if (data == false) {
+                                var table = $('#example1').DataTable();
+                                table.clear();
+                                table.draw();
+                                $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Total Working days:</b></td><td><b>0</b> DAYS</td></tr>');
+
+                                $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Total Present:<b/></td><td><b>0</b> DAYS</td></tr>');
+                                $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Total Absence:<b/></td><td><b>0</b> DAYS</td></tr>');
+                                $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Over Time:<b/></td><td><b>0</b> HOURS</td></tr>');
+                            } else {
+                                var table = $('#example1').DataTable();
+                                table.clear();
+
+
+                                var obj = JSON.parse(data);
+                                var tr;
+
+
+                                var count_absent = 0;
+                                var count_present = 0;
+                                var count_overtime = 0;
+
+
+                                //Append each row to html table
+                                for (var i = 0; i < obj.length; i++) {
+                                    tr = $('<tr>');
+                                    tr.append("<td>" + obj[i].Employee_ID + "</td>");
+                                    tr.append("<td>" + obj[i].Employee_Name + "</td>");
+                                    var in_time = obj[i].IN_Time;
+                                    if (in_time == null) {
+                                        tr.append("<td>" + "-" + "</td>");
+                                    } else {
+                                        tr.append("<td>" + obj[i].IN_Time + "</td>");
+                                    }
+                                    var out = obj[i].OUT_Time;
+                                    if (out == null) {
+                                        tr.append("<td>" + "-" + "</td>");
+                                    } else {
+                                        tr.append("<td>" + obj[i].OUT_Time + "</td>");
+                                    }
+
+
+                                    var today = new Date(obj[i].Attendence_date);
+                                    var dd = today.getDate();
+
+                                    var mm = today.getMonth() + 1;
+                                    var yyyy = today.getFullYear();
+                                    if (dd < 10) {
+                                        dd = '0' + dd;
+                                    }
+
+                                    if (mm < 10) {
+                                        mm = '0' + mm;
+                                    }
+                                    today = yyyy + '-' + mm + '-' + dd;
+
+                                    tr.append("<td>" + today + "</td>");
+                                    var over_time = obj[i].Over_Time;
+                                    if (over_time == null) {
+                                        tr.append("<td>" + "-" + "</td>");
+                                    } else {
+                                        count_overtime = count_overtime + over_time;
+                                        tr.append("<td>" + obj[i].Over_Time + "(HOURS)</td>");
+                                    }
+                                    var shift = obj[i].Shift;
+                                    if (shift == null) {
+                                        tr.append("<td>" + "-" + "</td>");
+                                    } else {
+                                        tr.append("<td>" + obj[i].Shift + "</td>");
+                                    }
+                                    var Attendence_Status = obj[i].Attendence_Status;
+                                    if (Attendence_Status == true) {
+                                        count_present = count_present + 1;
+                                        tr.append("<td>" + "<span class='badge badge-success'>Present</span>" + "</td>");
+                                    } else {
+                                        count_absent = count_absent + 1;
+                                        tr.append("<td>" + "<span class='badge badge-danger'>Absent</span>" + "</td>");
+                                    }
+
+
+
+                                    table.row.add(tr);
+                                    table.draw();
+                                    $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Total Working days:</b></td><td><b>' + obj.length + '</b> DAYS</td></tr>');
+
+                                    $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Total Present:<b/></td><td><b>' + count_present + '</b> DAYS</td></tr>');
+                                    $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Total Absence:<b/></td><td><b>' + count_absent + '</b> DAYS</td></tr>');
+                                    $('#example1').append('<tr><td colspan="5"></td><td colspan="2"><b>Over Time:<b/></td><td><b>' + count_overtime + '</b> HOURS</td></tr>');
+
+                                }
+                            }
+
+
+
+
+
+                        }
+
+
+                    });
+                }
+            }
+        </script>
+    </div>
+
+}

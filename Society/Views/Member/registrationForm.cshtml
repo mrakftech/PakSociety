@@ -1,0 +1,680 @@
+﻿@model dynamic
+@using Society.Data
+@{
+    ViewBag.Title = "print";
+}
+@if (Session["CNIC"] == null || Session["type"].ToString() == "Employee" || ViewBag.Key == false) { Response.Redirect("/Login/Login"); }
+else
+{
+    <div style="margin: 8px 8px" class="divToPrint  print-container">
+        <div class="content-wrapper" style="background-color:white">
+            <br /><br/>
+            <div style="margin-top: -10px; margin-bottom: -10px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                @*<img id="firstImage" style="height: 150px; margin-right: 1px;" src="~/images/logo/img1.png" /> 
+                <img id="thirdImage" style="height: 231px; margin-left: 1px; margin-top: 0px;" src="~/images/logo/img3.png" />*@
+            </div>
+
+            <div style="text-align: center;">
+                <h3><b>APPLICATION FORM</b></h3>
+            </div>
+
+            <div style="margin-top: 50px;">
+
+
+                <style>
+                    .image-preview {
+                        margin-right: 180px;
+                        width: 115px;
+                        height: 104px;
+                        border: 2px solid #ccc;
+                        border-radius: 4px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        overflow: hidden;
+                        float: right;
+                        margin-top: 11px;
+                    }
+
+                        .image-preview img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: unset;
+                        }
+                </style>
+                <div class="image-preview">
+                    @if (Model.data.Plot.Member.Profile_Img != null)
+                    {
+                        <img class="preview-image" id="imagePreview" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.data.Plot.Member.Profile_Img))" />
+                    }
+                </div>
+
+
+
+                <div class="row d-flex justify-content-center">
+                    <h2 style="font-weight:600;font-size:x-large"></h2>
+
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <h2 style="font-weight: 400; font-size: x-large"></h2>
+                </div>
+
+
+
+                <div class="row" style="line-height: 3">
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">REGISTRATION NO:</span> </div>
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.MemberShipNumber</b></div>
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">APPLICATION NO:</span> </div>
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Qm_No</b></div>
+                </div>
+
+                <div class="row" style="line-height: 3">
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Shop/Office/Apartment:</span> </div>
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Installment_Plan.Plan_Name </b></div>
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Floor NO:</span> </div>
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.newPlot.Street</b></div>
+                </div>
+
+                <div class="row" style="line-height: 3">
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Size:</span> </div>
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.newPlot.wide </b></div>
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Type:</span> </div>
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.newPlot.Block</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Name:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Applicant_Name</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-3">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Father's/Husband Name':</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black; margin-left: -88px;"><b>@Model.data.Plot.Member.Father_Husband_Name</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Postal Address:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Permenent_Postel_Address</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Residential Address:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Present_Postel_Address</b></div>
+                </div>
+                <div class="row" style="white-space: nowrap; line-height: 2">
+                    <div class="col-2" style="display: inline-block; white-space: normal;">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Phone Off.#:</span> </div>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal; border-bottom: 1px solid black;">
+                        <b>@Model.data.Plot.Member.Office_No</b>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal;">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Res.#:</span> </div>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal; border-bottom: 1px solid black; margin-left: -123px;">
+                        <b>NILL ??</b>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal;">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Mobile.#:</span> </div>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal; border-bottom: 1px solid black; margin-left: -59px;">
+                        <b>@Model.data.Plot.Member.Cell_No</b>
+                    </div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Email:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                </div>
+
+                <div class="row" style="white-space: nowrap; line-height: 2">
+                    <div class="col-2" style="display: inline-block; white-space: normal;">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Occupation:</span> </div>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal; border-bottom: 1px solid black;">
+                        <b>@Model.data.Plot.Member.Occupation</b>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal;">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Age:</span> </div>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal; border-bottom: 1px solid black; margin-left: -123px;">
+                        <b>NILL ??</b>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal;">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Nationality.#:</span> </div>
+                    </div>
+                    <div class="col-2" style="display: inline-block; white-space: normal; border-bottom: 1px solid black; margin-left: -59px;">
+                        <b>@Model.data.Plot.Member.Country</b>
+                    </div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">CNIC:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.CNIC</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Name of Nominee:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Nominee_Name</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Relation:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Relation</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">Address Of Nominee:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Nominee_Address</b></div>
+                </div>
+                <div class="row" style="line-height: 3">
+                    <div class="col-2">
+                        <div> <span class="fw-bolder" style="font-weight:bold">CNIC:</span> </div>
+                    </div>
+                    <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Nominee_CNIC</b></div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                @*<div style="margin-top:20px;">
+            <h2><b>DECLARATION:</b></h2>
+            <div class="row" style="">
+                <div class="col-10">
+                    <div>
+                        <span class="fw-bolder" style="box-sizing: border-box; font-size: large; color: black; line-height: 2;">
+                            I hereby declare that i have read and understood the terms and conditions.
+                            <br />
+                            I further agree to pay regularly the installments and dues etc, and abide by all the existing rules and regulations
+                            and those, which may be prescribed by "Lake View Height" from time to time.
+                            <br />
+                            I enclose here with a sum of Rs.  <b style="border-bottom: 1px solid black;"> </b> by Bank Draft/pat Order No. <b style="border-bottom: 1px solid black;"></b>
+                            Dated   <b style="border-bottom: 1px solid black;"> </b >  drawn on    <b style="border-bottom: 1px solid black;">Lake View Heights</b>an account of
+                            booking of the above unit.
+
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+                <div style="margin-top:20px;">
+                    <h2><b>DECLARATION:</b></h2>
+                    <div class="row">
+                        <div class="col-10">
+                            <div>
+                                <span class="fw-bolder" style="box-sizing: border-box; font-size: large; color: black; line-height: 2;">
+                                    I hereby declare that I have read and understood the terms and conditions.
+                                    <br />
+                                    I further agree to pay regularly the installments and dues etc., and abide by all the existing rules and regulations
+                                    and those, which may be prescribed by "Lake View Height" from time to time.
+                                    <br />
+                                    I enclose here with a sum of Rs. <b style="border-bottom: 1px solid black; display: inline-block; min-width: 100px;"></b>
+                                    by Bank Draft/Pay Order No. <b style="border-bottom: 1px solid black; display: inline-block; min-width: 100px;"></b>
+                                    Dated <b style="border-bottom: 1px solid black; display: inline-block; min-width: 100px;"></b>
+                                    drawn on <b style="border-bottom: 1px solid black; display: inline-block; min-width: 100px;">Lake View Heights</b>
+                                    an account of booking of the above unit.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="row" style="font-size:20px">
+
+                    <div class="row" style="height:45px;padding-top:60px">
+                        <div style="width:450px;height:9px;margin-right:50px;margin-left:60px">
+                            <div style="float:left;width:200px;border-bottom:solid 1px">
+                            </div>
+                        </div>
+                        <div style="width: 950px; height: 40px; margin-right: 50px; margin-left: 60px">
+                            <div class="d-flex justify-content-center" style="float: left; width: 200px; font-weight: 700">Dated:</div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="height:45px;">
+                        <div style="width:450px;height:9px;margin-right:50px;margin-left:554px">
+                            <div style="float: right; width: 200px; border-bottom: solid 1px; margin-right: 95px;">
+                            </div>
+                        </div>
+                        <div style="width: 950px; height: 40px; margin-right: 50px; margin-left: 60px">
+                            <div class="d-flex justify-content-center" style="float: right; width: 200px; font-weight: 700; margin-right:95px;">Signature & Stamp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div style="width: 1330px; border-block-color: black; border-width: unset; margin: auto; padding: 10px; margin-left:50px;margin-right:50px ">
+                    <div style="margin-top:50px;">
+                        <div class="d-flex justify-content-center"><h2>TERMS AND CONDITIONS</h2> </div>
+
+
+                        <ul style="list-style-type: none; padding: 0; margin: 0;">
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>NAME OF THE PROJECT: </b>Name of the project shall be <b>'LAKE VIEW HEIGHTS' </b>which is being built/constructed on Plot No. 26 & 27, Downtown, Park View City, Islamabad.
+                                The Company shall construct <b>'LAKE VIEW HEIGHTS'</b> project where in flats and shops are offered for sale on ownership basis
+                            </li>
+
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>BOOKING:</b> All Pakistani ens and non-resident Pakistanis living abroad are eligible to apply for the
+                                offered units.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>ALLOCATION:</b> Alloca of a number of Shops/Offices/Apartments etc. in the project is
+                                provisional and will be confirmed only a er receiving full and final payment.
+                                If any ee has booked a unit (which is treated as provisional booking) and paid the booking amount, as
+                                it isa mandatory requirement and later on if he/she fails to pay confirma and/or alloca amounts as
+                                prescribed in the payment schedule, signed by the ee, the booking amount shall be non-refundable.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>BOOKING & PAYMENT PROCEDURE:</b> All applica for booking/allotment shall be ed on the
+                                prescribed filled in and signed by the Applicant.
+                                The schedule fixed for each and every installment for the payments shall be the essence of the contract.
+                                All the payments shall be made by the ee/Purchaser of the shops/offices/apartments via pay
+                                order/demand dra cross cheque only, drawn in the name of 'LAKE VIEW HEIGHTS' Cash will only be
+                                accepted in specific conditions.
+                                The Applicant shall make the payment of installments by the 5th of every month, if he fails to pay in a
+                                late payment charge of 2% will be levied on outstanding dues.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>SURRENDER:</b> In case of failure to pay installment, demand of een (15) days shall be served tothe
+                                buyer by registered post/acknowledgement due or urgent mail service and/or TCS or renowned courier
+                                service. Another reminder will follow this a er thirty (30) days for the payment of the installment at the
+                                address provided in the applica form.
+                                If the payment is not received within the s ted period, the Company shall serve a final and
+                                cancel the booking/allotment/alloca The amount received by 'LAKE VIEW HEIGHTS' that shall
+                                be refunded twelve (12) months a er the comple of this project subject to rebooking of the unit. An
+                                amount equal to 15% of the total price of the shops/offices/apartments agreed shall be deducted from the
+                                refundable amount as service & establishment charges.
+                                In case an Applicant subsequently wishes to surrender his/her shops/offices/apartments or it stands
+                                cancelled, the amount will be refundeda er comple of this project subject to rebooking and deduction
+                                of 15% of the total agreed price of the shops/offices/apartments will be made from the instaliments
+                                deposited by the Applicant, being the service and establishment charges.
+                                The cost of shops/office/apartments as given in the payment schedule, does not include ground rent,
+                                registra fees, ownership transfer fee, documenta charges, c and meter charges of
+                                electricity, gas, water and sewerage and others, which shall be paid by the ee/Purchaser in CASH to
+                                the Company within een (15) days on demand and in no circumstances Trusted Worldwide.refundable
+                                <ul>
+                                    <li>
+                                        Prior to taking over the physical possession of the ed unit a twenty four (24) months advance
+                                        expense onaccount of maintenance charges Le. services salaries of care takes, watchman
+                                        (chowkidars), plumbers,electricians, air-c maintenance etc. and also other administra e
+                                        overhead charges will be payable by ee on demand, as the Company shall be responsible for
+                                        maintenance of the project commencing from the dateof handing over the POSSESSION of the first unit
+                                        in the project.
+                                    </li>
+                                    <li>
+                                        The Alla ee shall form a registered associa before the end of maintenance period managed by the
+                                        Companyotherwise the Company will not be responsible a er the end of maintenance period regarding
+                                        common and general services and proper upkeep/cleanliness of the project.
+                                    </li>
+                                </ul>
+
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                In case of change of address, the ee shall inform the Company in about the change within
+                                General Terms & Conditions
+                                fifteen (15) days. In case of recovery, default or cancella the address men in the applica form
+                                shall be treated as the final address. All le ers shall be sent by the Company through registered
+                                post/acknowledgement due or urgent mail service and/or TCS orrenowned courier service. Nonavailability reported by the above agencies of the ee at the address given shall be deemed as a valid
+                                service of the notice/letter.
+                                The allotment shall be liable to cancellation in case monthly instaliments are not paid for three (3) months continuosly.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>ESCALATION IN PRICES:</b> There shall be no unilateral escala towards the basic cost of the unit and the
+                                Company undertakes to deliver the possession within the s ted except dues to unavoidable
+                                circumstances beyond the control of the Company and the ee shall have to pay the difference in the
+                                cost of flat/shop etc. as and when necessary.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>CHANGE IN THE NAME AND PLANS:</b> That the Company reserves the right to seek change of the project's
+                                name, at anystage for whatsoever r ee(s) by the Company and
+                                can also make change in thebuilding plans of the project. The Company retains and reserves the right at all
+                                times to make any changes in designs and specifica at the sole discre of the Company.
+                                The use of exterior walls, front and common areas is reserved by the Company for any commercial or other
+                                use at the discre of the Company.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>TRANSFER:</b> The ee shall not, sublet, sell, transfer or assign the unit prior to taking over possession of
+                                the same, subject to wri en consent of the Company/Promoter/Builder. However, the
+                                shops/offices/apartments can be transferred a er clearance of outstanding dues payable before or on the
+                                date of transfer. The Company will charge Transfer Fee at the me of transfer of the
+                                shops/offices/apartments.
+                                The ee is not ed to install or hang any kind of neon-sign or display board in free at the office
+                                building ind/or his ed unit.
+                                The comple period of flaty/shops will be according to specified schedule and possession of the
+                                shops/offic e s/ape rtments sha l l be handedove r subj e c t to the c l e a ranc e of ful l
+                                payment/documents/cheques
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>UTILITY SERVICES BY UTILITY DEPARTMENTS:</b> Company will arrange for was all the underground
+                                watertanks of the project. In case water supply is not received or disrupted, Company shals have no
+                                responsibility and no e will have any claim against the Company nor the Company shall be
+                                approached by the ees in this connection. That the Company shall not be responsible for any delay in
+                                respect of the supply or individual connection of gas, electricity, water, sewerage etc. by the concerned
+                                authorities/agencies. The Company will, however, make every effort to apply in to the authorities
+                                concerned for the services.
+                                That in case of delay by concerned authori es/agencies in providing permanent electricity
+                                c ter in the units booked by the ee, Company shall in the interim period provide
+                                electricity to the ed unit through generators at the Commercial Rates for which sub-meters will be
+                                installed at the ees cost.
+                                That the Allottee shall be bound to pay to the Company on demand any excess amount of electricity, gas,
+                                water and sewerage c payable to the r e department.
+                                The Company according approved Layout Plan of the Project shall lay water and sewerage lines and the
+                                Allottees shall not object to it. The r e Departments/Organiza will lay the rest of the utility
+                                services. That the ee shall be responsible for the payments of Le, water, sewerage, electricity,
+                                gas, telephones etc. and property and other taxes of concerned agencies. The Company shall,
+                                in no case, be responsible for any consequences for theto the non-payment of such bills by the Allottee.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>POSSESSION:</b> The ees MUST take over possession of the booked units of the project within een
+                                (15) days of theissuance of s ted period. The Company shall not be responsible for the maintenance or
+                                damages to the property including the and damages to the of the bathrooms, kitchen, doors,
+                                windows, electricity or gas any kind of the internal or external parts of the property, Company shall
+                                not be responsible for any encroachment by any outsider, of the unoccupied unit.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>COMPLETION:</b> The cons of project is supposed to be completed within specified period. However,
+                                if for reasons of force-majeure, which includes Act of God, riots, war (declared or undeclared), civil
+                                c natural disaster, hos fire, flood, earthquake, explosions, blockades and any other
+                                c which are beyond the control of the Company. This also includes, changes in fiscal policies of the
+                                government. In such c the builder shall be at liberty to revise/int cons schedule.
+                                It is clearly understood that in such eventuality the ee will not claim interest or damages ofany nature
+                                whatsoever from the Company.
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>MISCELLANEOUS:</b> The Company shall however, not be responsible for non-delivery of any le er or
+                                notices(s) etc. due to anyreason whatsoever or change of the ee's address. For all contacts and
+                                correspondence, Company will use the ee's last given address as per record. Any change in address of
+                                Allottee shall be to the Company in writing
+                            </li>
+                            <li id="paragraph" class="col-12" style="font-size: 16px; font-family: 'Arial'; text-align: justify; margin-bottom: 10px;">
+                                <b>The Applicant agrees:</b>
+                                <ul>
+                                    <li>
+                                        To maintain the shops/office/apartments on his/her own cost in good c and shall not do any act
+                                        of endanger, damage or impair the building and the common area of the 'LAKE VIEW HEIGHTS' or do
+                                        any act against the law, by-laws and regula of the concerned Government Agencies.
+                                    </li>
+                                    <li>
+                                        Not to bring inside the project or shop offices/apartments of the project any goods and/or machinery
+                                        which are hazardous/and combus and shall not use the unit for any purpose other than
+                                        for which it is constructed and ed.
+                                    </li>
+                                    <li>
+                                        To pay all taxes etc. levied by the Federal Government, Local Bodies and Municipal Bodies and/or any
+                                        other agencies including those exis at present and those that may be levied by the
+                                        above-men and/ or other in future.
+                                    </li>
+                                    <li>
+                                        That a er the comple of the project, and common dividing walls, the width of the dividing walls
+                                        shall be dividedand included equally between the concerned covered area. Any varia in size shall be
+                                        adjusted at the rate of thecost of standards size of the concerned variation.
+                                    </li>
+                                    <li>
+                                        Not to make an era y holes, a achment or adhesions of any nature
+                                        without the consent of the Company. Covered area of unit will include ancillary and services area such
+                                        as wall passages,corridors, staircase, balcony, underground and overhead tanks etc. These
+                                        res will con even a er the Applicant takes the possession of the unit.
+                                    </li>
+                                    <li>
+                                        Not open butcher/chicken shop, vegetable/fruit shop, Tandoor/milk shop, hardware sanitary shop.
+                                    </li>
+                                    <li>
+                                        Appartments used for residencial purpose only, appartments can not be used for any commercial ativities.
+                                    </li>
+                                    <li>
+                                        Not to demand any extra work to be carried out by the Company on request of the Applicant under
+                                        anycircumstances during the cons of the project.
+                                    </li>
+                                    <li>
+                                        Not to misuse the provided by the Company nor they will cover/encroach the areas or
+                                        lobbies.
+                                    </li>
+
+                                    <li>
+                                        To use the unit for the purpose as specified and approved by the Company.
+                                    </li>
+                                    <li>
+                                        To visit the office of the company/office of the agencies as and when required for any
+                                        signatures.
+                                    </li>
+                                    <li>
+                                        <b>
+                                            If an Allottee fails to pay 2 successive Installments within the prescribed period. The allotment
+                                            shall liable to be cancelled, in such case the paid amount shall be refunded to Allottee ater
+                                            deduction of 10% of total price of plot as service charges
+                                        </b>
+                                    </li>
+                                    <li>
+                                        <b>
+                                            In case of withdrawal of an Application by the Applicant, an amount of 10% of total price of unit.
+                                        </b>
+                                    </li>
+                                    <li>
+                                        <b>
+                                            In case of cancelation due to non payment the member will have no rights to challenge the
+                                            decision of management at any forum.
+                                        </b>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                The rights of the roof shall be retained by the Company at all and units Occupants/Applicant will have
+                                no share, claimor interest in and over the roof of the top floor. Further the Company reserves the full right
+                                of using top floor (roof) for er floors fixing neon-sign on/over the roof of the top floor on all
+                                blocks of the building and the Applicant binds himself/herself not to raise any or claim over the
+                                roof of the building. The Company shall have first lien, daim and charge on the shops/offices/apartments,
+                                its foxtures and and contents there in, regarding any amount liable to be paid by the Applicant to
+                                the Company.
+                            </li>
+                            <li>
+                                All serial numbers and/or other iden a numbers and marking given in the layout plans, booking
+                                and/or alloca le ers pertaining to units are on adhoc, temporary and tenta e basis and Company
+                                reserves the right to amend/change/renumberthe same if found necessary.
+                                The price of apartment does not include any cost of items displayed in modo apartmeni, such as false
+                                ceiling, fixtures, furniture, wallpaper and others.
+                            </li>
+                            <li>
+                                <b>ABANDONMENT OF THE PROJECT:</b> That if for any reason, the project is abandoned, Company shall refund
+                                the amountreceived from the ee within the earliest convenience of the Company It is however,
+                                clearly understood that in such an eventuality, the ees shall not be en to any claim as damages,
+                                Interests or profit etc. of whatever nature
+                            </li>
+                            <li>
+                                <b>
+                                    DECLARATION BY APPLICANT:
+                                </b>
+                                <br /> 
+                                I/We, <b style="border-bottom: 1px solid black;"> @Model.data.Plot.Member.Applicant_Name </b> S/o, D/o, W/o, <b style="border-bottom: 1px solid black;"> @Model.data.Plot.Member.Father_Husband_Name </b> do hereby
+                                declare that 1/We have read/understood the terms and c of booking/alloca of the project
+                                and accept the same and further declare that I/We shall abide by all the exis rules, regulations,
+                                conditions, requirement etc. or which may be prescribed and approved by the Company, from to time
+                                1/We also undertake to make full payment of the price and other documenta and c
+                                charges according to the payment schedule decided by the Company
+                            </li>
+                            <li>
+
+
+                            </li>
+                        </ul>
+
+
+                        <div style=" border: 4px solid black; border-radius: 30px; padding-left: 48px; margin-top: 12px; padding-bottom: 20px;">
+                            <div style="border: 4px solid black; border-radius: 32px; padding: 18px; display: flex; justify-content: center; align-items: center; height: 0px; margin-top: 11px; text-align: center; width: 305px; margin-left: 268px; background-color: #e33c3c; color: white; ">
+                                <h3>FOR OFFICE USE ONLY</h3>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-3">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Shop/Office/Apartment No:</span> </div>
+                                </div>
+                                <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Installment_Plan.Plan_Name</b></div>
+                                <div class="col-3">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Floor NO:</span> </div>
+                                </div>
+                                <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.newPlot.Street</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-3">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Size:</span> </div>
+                                </div>
+                                <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.newPlot.wide</b></div>
+                                <div class="col-3">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Type:</span> </div>
+                                </div>
+                                <div class="col-2" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.newPlot.Block</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-2">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Total Cost Rs.:</span> </div>
+                                </div>
+                                <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-2">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Cash Amount Rs.:</span> </div>
+                                </div>
+                                <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-2">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Cheque/P.O. No.:</span> </div>
+                                </div>
+                                <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-2">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Receipt No.:</span> </div>
+                                </div>
+                                <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-2">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Date:Booked by:</span> </div>
+                                </div>
+                                <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                            </div>
+                            <div class="row" style="line-height: 3">
+                                <div class="col-2">
+                                    <div> <span class="fw-bolder" style="font-weight:bold">Name & Signature:</span> </div>
+                                </div>
+                                <div class="col-8" style="border-bottom: 1px solid black;"><b>@Model.data.Plot.Member.Email</b></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row" style="font-size:20px; margin-top:5px;">
+
+                            <div class="row" style="height:45px;padding-top:60px">
+                                <div style="width:450px;height:9px;margin-right:50px;margin-left:60px">
+                                    <div style="float:left;width:200px;border-bottom:solid 1px">
+                                    </div>
+                                </div>
+                                <div style="width: 950px; height: 40px; margin-right: 50px; margin-left: 60px">
+                                    <div class="d-flex justify-content-center" style="float: left; width: 200px; font-weight: 700">Authorised Signature:</div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="height:45px;">
+                                <div style="width:450px;height:9px;margin-right:50px;margin-left:554px">
+                                    <div style="float: right; width: 200px; border-bottom: solid 1px; margin-right: 95px;">
+                                    </div>
+                                </div>
+                                <div style="width: 950px; height: 40px; margin-right: 50px; margin-left: 60px">
+                                    <div class="d-flex justify-content-center" style="float: right; width: 200px; font-weight: 700; margin-right:95px;">
+                                        Signature and thumb impression
+                                        of purchaser
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 90px; margin-bottom: -10px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                            <img id="firstImage" style="height: 150px; margin-right: 1px;" src="~/images/logo/img1.png" />
+                            <img id="thirdImage" style="height: 231px; margin-left: 1px; margin-top: 0px;" src="~/images/logo/img3.png" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <style>
+                @@media print {
+                    body * {
+                        visibility: hidden;
+                    }
+
+                    .divToPrint, .divToPrint * {
+                        visibility: visible;
+                    }
+                }
+            </style>
+
+        </div>
+
+    </div>
+
+    <script>window.addEventListener("load", window.print());</script>
+
+    <script>
+
+
+
+        var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+        var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        function inWords(num) {
+            if ((num = num.toString()).length > 9) return 'overflow';
+            n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return; var str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
+            return str;
+        }
+        $(document).ready(function () {
+            $('#AmountInWords').html(" " + inWords() + "only"); //inWords(your amount)
+        })
+    </script>
+}
+

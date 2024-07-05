@@ -1,0 +1,140 @@
+﻿@model Society.Data.Development_Charges
+@using Society.Data;
+@{
+    ViewBag.Title = "print";
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NPF CIGHU Agro FarmHouse</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="https://npm-assets.fiverrcdn.com/assets/uploads/domaine-display.css" rel="stylesheet" type="text/css">
+    <link href="~/plugins/fiverr1.css" rel="stylesheet" />
+
+    <link href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/plugins/jquery/jspdf.min.js"></script>
+
+    <script src="~/plugins/jquery/jQuery.print.js"></script>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+    <script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Theme style -->
+    <link href="~/dist/css/adminlte.min.css" rel="stylesheet" />
+    <script src="~/alert.js" type="text/javascript"></script>
+
+    <link href="~/plugins/boot.min.css" rel="stylesheet" />
+
+
+
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Main content -->
+        <div style="width: 1350px; height: 400px; border-block-color: black; border-width:unset;  margin: auto; padding: 10px;">
+
+
+            <div style="margin-top:5px;width:100%;height:60px">
+
+                <div style="width:150px;margin-left:32px;height:30px"><h3 style="font-size:medium;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"></h3></div>
+                <div style="width:100%;margin-top:60px"><div style="float:right;background-color:black;width:40%;margin-right:31px;color:white;font-weight:900">Development charges</div></div>
+                <div style="height:220px;margin-top:100px;width:90%;margin-left:45px">
+                   
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Receipt No</span> </div>
+                        </div>
+                        <div class="col-md-5" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.receipt_No</b></div>
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Paid date</span>  </div>
+                        </div>
+                        <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Paid_Date.ToString("dd-MM-yyyy")</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Receipt Type</span> </div>
+                        </div>
+                        <div class="col-md-5" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@ViewBag.type</b></div>
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Narration</span> </div>
+                        </div>
+                        <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Narration</b></div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Name</span> </div>
+                        </div>
+                        <div class="col-md-5" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Payment_Plan.Plot.Member.Applicant_Name</b></div>
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">EB No</span>  </div>
+                        </div>
+                        <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>EB-@Model.Payment_Plan.Plot.Reg_No</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">SO/DO/WO</span> </div>
+                        </div>
+                        <div class="col-md-5" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Payment_Plan.Plot.Member.Father_Husband_Name</b></div>
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">File Size</span>  </div>
+                        </div>
+                        <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Payment_Plan.Plot.Member.Plots.FirstOrDefault(o => o.Member_ID == Model.Payment_Plan.Plot.Member_ID).Installment_Plan.Plan_Name</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">CNIC</span> </div>
+                        </div>
+                        <div class="col-md-5" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Payment_Plan.Plot.Member.CNIC</b></div>
+                        <div class="col-md-2">
+                            <div> <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Plot Type</span>  </div>
+                        </div>
+                        <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Payment_Plan.Plot.Plot_Type</b></div>
+                    </div>
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Amount Received</span>
+                        </div>
+
+                        <div class="col-md-4" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@Model.Amount.ToString("n0")</b></div>
+                        <div class="col-md-2">
+                            <span class="fw-bolder" style="font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black">Remaining</span>
+                        </div>
+                        <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>@ViewBag.amount.ToString("n0")</b></div>
+
+
+                    </div>
+
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-md-12 offset-3">
+                            <span class="fw-bolder" style="font-size: x-large; font-family: 'Century Gothic'; color: black">Generated By: <b>ADMIN</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Printed By: <b>ADMIN</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Print date:<b> @DateTime.Now.ToString("dd-MMM-yyyy")</b></span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 20px; font-size: x-large; font-family: 'Century Gothic'; color: black"><b>Signature:</b>  <div class="col-md-3" style="border-bottom: 1px solid black; text-align: center; font-weight: 900; font-family: 'Century Gothic'; color: black"><b></b></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>window.addEventListener("load", window.print());</script>
+</body>
+</html>
