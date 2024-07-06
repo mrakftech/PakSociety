@@ -7,6 +7,8 @@ using System.Dynamic;
 using Newtonsoft.Json;
 using System.Data.Entity;
 using Society.Data;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 
 namespace Society.Controllers
@@ -164,17 +166,33 @@ namespace Society.Controllers
             
         }
 
+
         [HttpPost]
         public ActionResult DeletePlot(int id)
         {
-            var plot = dbm.newPlots.Find(id);
-            if (plot != null)
+            try
             {
-                dbm.newPlots.Remove(plot);
-                dbm.SaveChanges();
-                return Json(new { success = true });
+                var plot = dbm.newPlots.Find(id);
+                if (plot != null)
+                {
+                    dbm.newPlots.Remove(plot);
+                    dbm.SaveChanges();
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false });
             }
-            return Json(new { success = false });
+            catch (DbUpdateException ex)
+            {
+                var innerException = ex.InnerException;
+                if (innerException is SqlException sqlException && sqlException.Number == 547) // Check for foreign key constraint violation error number
+                {
+                    // Handle the specific case where the delete operation violates a foreign key constraint
+                    // For example, you can return a JSON response indicating the failure
+                    return Json(new { success = false, message = "Cannot delete plot due to existing references." });
+                }
+                // Handle other types of DbUpdateException or rethrow if needed
+                return Json(new { success = false, message = "Cannot delete plot due to existing references." });
+            }
         }
         public ActionResult print(int id) {
             if (Session["emp_id"] == null) return RedirectToAction("UnAuthorized", "Login");

@@ -273,25 +273,30 @@ else
             }
         });
     });
-
-    $('.delete-plot').on('click', function () {
-        var plotID = $(this).data('id');
-        if (confirm('Are you sure you want to delete this plot?')) {
-            $.ajax({
-                url: '@Url.Action("DeletePlot", "Party")',
-                type: 'POST',
-                data: { id: plotID },
-                success: function (result) {
-                    // Handle success
-                    location.reload();
-                },
-                error: function (error) {
-                    // Handle error
-                    alert('Error deleting plot');
+$('.delete-plot').on('click', function () {
+    var plotID = $(this).data('id');
+    if (confirm('Are you sure you want to delete this plot?')) {
+        $.ajax({
+            url: '@Url.Action("DeletePlot", "Party")',
+            type: 'POST',
+            data: { id: plotID },
+            success: function (result) {
+                if (result.success) {
+                    // Handle success if needed
+                    location.reload(); // Reload the page or update UI as needed
+                } else {
+                    // Handle failure with custom message
+                    alert('Assigned Unit can not be deleted.First Un-Assign this Unit and then Delete');
                 }
-            });
-        }
-    });
+            },
+            error: function (error) {
+                // Handle AJAX error
+                alert('Error deleting plot');
+            }
+        });
+    }
+});
+
 });
         </script>
 
